@@ -1,0 +1,38 @@
+{
+  "name": "saint-joseph-sjo2",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Site dynamique du Projet SJO2 — Église Saint Joseph & Centre Paroissial (Le Rouret), Paroisse Saint-Arnoux.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "check:og": "node scripts/check-og.mjs"
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "gray-matter": "^4.0.3",
+    "next": "^15.3.0",
+    "papaparse": "^5.4.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
+    "@types/node": "^22.0.0",
+    "@types/papaparse": "^5.3.14",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^15.3.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
