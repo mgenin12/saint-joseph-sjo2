@@ -77,24 +77,20 @@ Le site relit le Sheet au plus toutes les **10 minutes**. Pour une mise à jour 
 
 ---
 
-## 3. Événements (onglet « Evenements », à créer)
+## 3. Événements (Google Agenda)
 
-Créez un onglet `Evenements` et renseignez son `gid` (dans l'URL du Sheet, `#gid=…`) dans `SHEET_GID_EVENEMENTS`.
-Tant qu'il n'existe pas, les événements proviennent de `content/evenements.ts`.
+Le calendrier du site (`/calendrier`) est connecté directement au **Google Agenda du projet**
+(`9f2cb93155d97884909c3bcb4fb4c887a2659636e5c6059d68c6e43ad0b842e5@group.calendar.google.com`) :
 
-| Colonne | Rôle |
-| --- | --- |
-| **Titre** | obligatoire |
-| **Date** | `JJ/MM/AAAA`, obligatoire · `Date fin` facultative (événement sur plusieurs jours) |
-| Heure début / Heure fin | `10:30` ou `10h30` |
-| Lieu | texte libre |
-| Catégorie | Messe, Fête, Étape du projet, Réunion, Chantier… (libre) |
-| Description | Markdown ; affichée quand on clique sur la date |
-| **Lien inscription** | URL (Google Form, HelloAsso…) → bouton « S'inscrire » |
-| Places / Inscrits | nombres ; « Complet » affiché si Inscrits ≥ Places |
-| Image | URL (facultatif) |
-| Publié | `oui` / `non` (vide = oui) |
-| Lien info | URL externe facultative (ex. événement Facebook) |
+1. Dans les **Paramètres de Google Agenda**, sélectionnez l'agenda puis cochez **« Rendre disponible publiquement »** (*Afficher tous les détails de l'événement*), **ou** copiez l'*Adresse secrète au format iCal* dans la variable d'environnement `GOOGLE_CALENDAR_ICS_URL`.
+2. Créez ou modifiez vos événements directement dans Google Agenda :
+   - **Titre** : utilisez optionnellement un préfixe `[Catégorie] Titre` (ex. `[Célébration] Messe sur le terrain`).
+   - **Dates / Horaires** : journée entière, sur plusieurs jours, ou avec horaires (convertis automatiquement au fuseau `Europe/Paris`).
+   - **Lieu** : champ *Lieu* de Google Agenda.
+   - **Description & bouton « S'inscrire »** : tout lien `https://...` placé dans la description (ou sur une ligne `Inscription : https://...`) active automatiquement le bouton **« S'inscrire »** sur le site. Vous pouvez aussi indiquer `Catégorie : ...`, `Info : https://...`, `Places : 150`.
+3. Pour importer les 6 jalons de 2026 dans votre Google Agenda, téléchargez `/calendrier/export.ics` puis importez-le dans *Google Agenda → Paramètres → Importer et exporter*.
+
+*(En secours, si l'agenda Google n'est pas encore public ou est vide, le site utilise un éventuel onglet `Evenements` du Google Sheet ou `content/evenements.ts`.)*
 
 Chaque événement a sa page `/calendrier/<slug>`, un fichier `.ics` (`/calendrier/<slug>/ics`) et un lien « Ajouter à Google Agenda ».
 

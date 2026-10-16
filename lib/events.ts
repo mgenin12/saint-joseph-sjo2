@@ -1,8 +1,9 @@
 import { cache } from "react";
 import type { Evenement } from "./types";
-import { loadSheet, rowsToObjects, isSheetConfigured, type SheetRow } from "./sheets";
+import { loadSheet, rowsToObjects, isSheetConfigured, REVALIDATE_SECONDS, type SheetRow } from "./sheets";
 import { slugify, splitList, parseBool, driveImageUrl } from "./text";
 import { toIsoDate, todayIso } from "./dates";
+import { googleCalendarIcsUrl, parseIcsEvents } from "./ics";
 import { EVENEMENTS_DEMARRAGE } from "@/content/evenements";
 
 function pick(row: SheetRow, ...keys: string[]): string | undefined {
@@ -53,7 +54,41 @@ export function buildEvents(rows: SheetRow[]): Evenement[] {
   return out;
 }
 
-const loadEvents = cache(async (): Promise<{ events: Evenement[]; source: "sheet" | "repo" }> => {
+let gcalWarned = false;
+
+async function fetchGoogleCalendarEvents(): Promise<Evenement[] | null> {
+  if (process.env.GOOGLE_CALENDAR_ID === "none") return null;
+  const url = googleCalendarIcsUrl();
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: REVALIDATE_SECONDS },
+      redirect: "follow",
+      headers: { Accept: "text/calendar,*/*;q=0.8" },
+    });
+    if (!res.ok) {
+      if (!gcalWarned) {
+        gcalWarned = true;
+        console.warn(
+          `[gcal] Agenda Google (${res.status}) inaccessible : vérifiez que « Rendre disponible publiquement » est coché dans les paramètres de Google Agenda (ou définissez GOOGLE_CALENDAR_ICS_URL avec l'adresse secrète au format iCal). Utilisation des événements de secours.`,
+        );
+      }
+      return null;
+    }
+    const text = await res.text();
+    if (!text.includes("BEGIN:VCALENDAR")) return null;
+    return parseIcsEvents(text);
+  } catch {
+    return null;
+  }
+}
+
+export type EventsSource = "gcal" | "sheet" | "repo";
+
+const loadEvents = cache(async (): Promise<{ events: Evenement[]; source: EventsSource }> => {
+  const gcal = await fetchGoogleCalendarEvents();
+  if (gcal && gcal.length > 0) {
+    return { events: gcal.filter((e) => e.publie), source: "gcal" };
+  }
   if (isSheetConfigured("evenements")) {
     const sheet = await loadSheet("evenements");
     if (sheet.source === "live" && sheet.rows.length > 1) {
@@ -72,6 +107,12 @@ export function sortEvents(events: Evenement[]): Evenement[] {
 export async function getEvents(): Promise<Evenement[]> {
   return sortEvents((await loadEvents()).events);
 }
+
+export async function getEventsWithSource(): Promise<{ events: Evenement[]; source: EventsSource }> {
+  const res = await loadEvents();
+  return { events: sortEvents(res.events), source: res.source };
+}
+
 
 export async function getEvent(slug: string): Promise<Evenement | undefined> {
   return (await getEvents()).find((e) => e.slug === slug);

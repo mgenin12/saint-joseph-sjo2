@@ -3,7 +3,7 @@ import { toIsoDate, formatDateLong, formatDateFull, monthOrCurrent, formatHeure 
 import { computeClocher, coutReel, CLOCHER_METRES } from "@/lib/collecte";
 import { splitBlocks, usesBlock } from "@/lib/blocks";
 import { buildEvents } from "@/lib/events";
-import { eventToIcs, googleCalendarUrl } from "@/lib/ics";
+import { eventToIcs, googleCalendarUrl, parseIcsEvents, googleCalendarSubscribeUrl } from "@/lib/ics";
 import { rowsToObjects } from "@/lib/sheets";
 
 describe("dates", () => {
@@ -86,5 +86,55 @@ describe("événements", () => {
     expect(ics).toContain("DTSTART;TZID=Europe/Paris:20260920T103000");
     expect(ics).toContain("SUMMARY:Messe sur le terrain");
     expect(googleCalendarUrl(events[0])).toContain("dates=20260920T103000%2F20260920T113000");
+  });
+  it("parse un flux iCal (.ics) Google Agenda", () => {
+    const sampleIcs = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "BEGIN:VEVENT",
+      "DTSTART:20261115T093000Z",
+      "DTEND:20261115T110000Z",
+      "SUMMARY:[Célébration] Messe des Bâtisseurs",
+      "LOCATION:Terrain du Rouret",
+      "DESCRIPTION:Venez nombreux !\\nInscription : https://forms.gle/batisseurs\\nPlaces : 200",
+      "STATUS:CONFIRMED",
+      "END:VEVENT",
+      "BEGIN:VEVENT",
+      "DTSTART;VALUE=DATE:20261201",
+      "DTEND;VALUE=DATE:20261204",
+      "SUMMARY:Exposition du projet",
+      "DESCRIPTION:Ouvert à tous https://helloasso.com/sjo2",
+      "END:VEVENT",
+      "BEGIN:VEVENT",
+      "DTSTART;VALUE=DATE:20261210",
+      "SUMMARY:Événement annulé",
+      "STATUS:CANCELLED",
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].join("\r\n");
+
+    const parsed = parseIcsEvents(sampleIcs);
+    expect(parsed).toHaveLength(2);
+    expect(parsed[0]).toMatchObject({
+      slug: "2026-11-15-messe-des-batisseurs",
+      titre: "Messe des Bâtisseurs",
+      categorie: "Célébration",
+      date: "2026-11-15",
+      heureDebut: "10:30",
+      heureFin: "12:00",
+      lieu: "Terrain du Rouret",
+      description: "Venez nombreux !",
+      lienInscription: "https://forms.gle/batisseurs",
+      places: 200,
+    });
+    expect(parsed[1]).toMatchObject({
+      slug: "2026-12-01-exposition-du-projet",
+      date: "2026-12-01",
+      dateFin: "2026-12-03",
+      lienInscription: "https://helloasso.com/sjo2",
+    });
+    expect(googleCalendarSubscribeUrl("9f2cb93155d97884909c3bcb4fb4c887a2659636e5c6059d68c6e43ad0b842e5@group.calendar.google.com")).toBe(
+      "https://calendar.google.com/calendar/r?cid=OWYyY2I5MzE1NWQ5Nzg4NDkwOWMzYmNiNGZiNGM4ODdhMjY1OTYzNmU1YzYwNTlkNjhjNmU0M2FkMGI4NDJlNUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t",
+    );
   });
 });
