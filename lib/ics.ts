@@ -264,6 +264,10 @@ function buildEventFromVevent(
   const status = getProp("STATUS")?.value.trim().toUpperCase();
   if (status === "CANCELLED") return undefined;
 
+  // Les événements marqués « Privé » ou « Confidentiel » dans Google Agenda sont ignorés.
+  const visibility = getProp("CLASS")?.value.trim().toUpperCase();
+  if (visibility === "PRIVATE" || visibility === "CONFIDENTIAL") return undefined;
+
   const dtStartProp = getProp("DTSTART");
   if (!dtStartProp) return undefined;
   const start = parseIcsDateTime(dtStartProp.value, dtStartProp.params);
@@ -271,6 +275,19 @@ function buildEventFromVevent(
 
   let rawTitle = unescapeIcs(getProp("SUMMARY")?.value ?? "").replace(/\s+/g, " ").trim();
   if (!rawTitle) return undefined;
+
+  const rawDesc = cleanIcsHtml(unescapeIcs(getProp("DESCRIPTION")?.value ?? ""));
+
+  // Filtre optionnel : si GOOGLE_CALENDAR_FILTER_TAG est défini (ex. "#site"),
+  // seuls les événements contenant ce mot-clé dans le titre ou la description sont affichés.
+  const filterTag = process.env.GOOGLE_CALENDAR_FILTER_TAG?.trim();
+  if (filterTag) {
+    const lowerTag = filterTag.toLowerCase();
+    if (!rawTitle.toLowerCase().includes(lowerTag) && !rawDesc.toLowerCase().includes(lowerTag)) {
+      return undefined;
+    }
+    rawTitle = rawTitle.replace(new RegExp(filterTag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "ig"), "").trim();
+  }
 
   let categorie = unescapeIcs(getProp("CATEGORIES")?.value ?? "").split(",")[0]?.trim() || "";
   const bracketMatch = rawTitle.match(/^\[([^\]]+)\]\s*(.+)$/);
@@ -294,13 +311,14 @@ function buildEventFromVevent(
   }
 
   const lieu = unescapeIcs(getProp("LOCATION")?.value ?? "").replace(/\s+/g, " ").trim() || undefined;
-  const rawDesc = cleanIcsHtml(unescapeIcs(getProp("DESCRIPTION")?.value ?? ""));
 
   let lienInscription: string | undefined;
   let lienInfo: string | undefined;
   let places: number | undefined;
   let inscrits: number | undefined;
   let image: string | undefined;
+  const photos: string[] = [];
+  const videos: string[] = [];
 
   const bodyLines: string[] = [];
   for (const line of rawDesc.split("\n")) {
@@ -315,9 +333,20 @@ function buildEventFromVevent(
       lienInscription = inscMatch[1].trim();
       continue;
     }
-    const infoMatch = trimmed.match(/^(?:lien\s+info|info|en\s+savoir\s+plus|lien)\s*[:=-]\s*(https?:\/\/\S+)$/i);
+    const infoMatch = trimmed.match(/^(?:lien\s+info|info|en\s+savoir\s+plus|lien)\s*[:=-]\s*(https?:\/\/\S+|\/\S+)$/i);
     if (infoMatch) {
       lienInfo = infoMatch[1].trim();
+      continue;
+    }
+    const photoMatch = trimmed.match(/^photos?\s*[:=-]\s*(https?:\/\/\S+|\/\S+)$/i);
+    if (photoMatch) {
+      const u = driveImageUrl(photoMatch[1].trim()) ?? photoMatch[1].trim();
+      photos.push(u);
+      continue;
+    }
+    const videoMatch = trimmed.match(/^vid[ée]os?\s*[:=-]\s*(https?:\/\/\S+)$/i);
+    if (videoMatch) {
+      videos.push(videoMatch[1].trim());
       continue;
     }
     const placesMatch = trimmed.match(/^places\s*[:=-]\s*(\d+)$/i);
@@ -370,6 +399,8 @@ function buildEventFromVevent(
     places,
     inscrits,
     image,
+    photos: photos.length ? photos : undefined,
+    videos: videos.length ? videos : undefined,
     publie: true,
   };
 }

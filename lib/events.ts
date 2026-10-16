@@ -57,7 +57,9 @@ export function buildEvents(rows: SheetRow[]): Evenement[] {
 let gcalWarned = false;
 
 async function fetchGoogleCalendarEvents(): Promise<Evenement[] | null> {
-  if (process.env.GOOGLE_CALENDAR_ID === "none") return null;
+  const enabled =
+    process.env.GOOGLE_CALENDAR_ENABLED === "true" || Boolean(process.env.GOOGLE_CALENDAR_ICS_URL?.trim());
+  if (!enabled || process.env.GOOGLE_CALENDAR_ID === "none") return null;
   const url = googleCalendarIcsUrl();
   try {
     const res = await fetch(url, {
@@ -69,7 +71,7 @@ async function fetchGoogleCalendarEvents(): Promise<Evenement[] | null> {
       if (!gcalWarned) {
         gcalWarned = true;
         console.warn(
-          `[gcal] Agenda Google (${res.status}) inaccessible : vérifiez que « Rendre disponible publiquement » est coché dans les paramètres de Google Agenda (ou définissez GOOGLE_CALENDAR_ICS_URL avec l'adresse secrète au format iCal). Utilisation des événements de secours.`,
+          `[gcal] Agenda Google (${res.status}) inaccessible : vérifiez que « Rendre disponible publiquement » est coché dans les paramètres de Google Agenda (ou définissez GOOGLE_CALENDAR_ICS_URL avec l'adresse secrète au format iCal). Utilisation des événements de js/content.js.`,
         );
       }
       return null;
@@ -85,9 +87,14 @@ async function fetchGoogleCalendarEvents(): Promise<Evenement[] | null> {
 export type EventsSource = "gcal" | "sheet" | "repo";
 
 const loadEvents = cache(async (): Promise<{ events: Evenement[]; source: EventsSource }> => {
+  const localEvents = EVENEMENTS_DEMARRAGE.filter((e) => e.publie !== false);
   const gcal = await fetchGoogleCalendarEvents();
   if (gcal && gcal.length > 0) {
-    return { events: gcal.filter((e) => e.publie), source: "gcal" };
+    const bySlug = new Map(localEvents.map((e) => [e.slug, e]));
+    for (const ev of gcal.filter((e) => e.publie !== false)) {
+      if (!bySlug.has(ev.slug)) bySlug.set(ev.slug, ev);
+    }
+    return { events: [...bySlug.values()], source: "gcal" };
   }
   if (isSheetConfigured("evenements")) {
     const sheet = await loadSheet("evenements");
@@ -95,7 +102,7 @@ const loadEvents = cache(async (): Promise<{ events: Evenement[]; source: Events
       return { events: buildEvents(rowsToObjects(sheet.rows)).filter((e) => e.publie), source: "sheet" };
     }
   }
-  return { events: EVENEMENTS_DEMARRAGE.filter((e) => e.publie), source: "repo" };
+  return { events: localEvents, source: "repo" };
 });
 
 export function sortEvents(events: Evenement[]): Evenement[] {

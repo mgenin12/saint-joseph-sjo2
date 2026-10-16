@@ -1,174 +1,160 @@
-# Église Saint Joseph — Projet SJO2 (site v2, dynamique)
+# Église Saint Joseph — Projet SJO2 (Le Rouret · Paroisse Saint-Arnoux)
 
-Site du projet de construction de l'église Saint Joseph et de son centre paroissial au Rouret
-(Paroisse Saint-Arnoux, Diocèse de Nice). Il remplace le site vitrine monopage (v1) par un site
-**multi-pages** dont les **articles** et les **événements** sont pilotés depuis un **Google Sheet**.
+Site web dynamique du projet de construction de l'**église Saint-Joseph** et de son **centre paroissial** au Rouret
+(Paroisse Saint-Arnoux, Diocèse de Nice).
 
-- **Next.js 15 (App Router) · React 19 · TypeScript** — hébergé sur Vercel.
-- **Contenus** : Google Sheet (articles, catégories, événements, config) + fichiers du dépôt (`content/`).
-- **Pages** : Accueil · Le projet (articles + recherche) · Article · Soutenir · Calendrier · Événement · Contact · Newsletter · Mentions légales · Confidentialité.
-- **Menu** (4 entrées) : Découvrir · Le projet · Soutenir · **Faire un don** (bouton direct vers la plateforme du Diocèse).
-- Chaque page se termine par deux liens : **« M'inscrire à la newsletter »** et **« Donner »**.
-- Partage social optimisé (Open Graph + Twitter Cards, image générée par article, données structurées Schema.org).
+- **Site en ligne** : **https://saint-joseph-sjo2.vercel.app**
+- **Code source** : **https://github.com/mgenin12/saint-joseph-sjo2**
+- **Fichier unique pour modifier tout le contenu du site (sans toucher au code)** : **[`js/content.js`](./js/content.js)**
 
 ---
 
-## 1. Démarrer
+## ✏️ Guide pratique (en français) : comment modifier le site sans toucher au code
+
+Toute l'équipe paroissiale habilitée peut modifier **les articles, le calendrier des événements, les photos/vidéos, le montant de la collecte, les textes d'accueil, l'équipe et la FAQ** dans **un seul fichier** : **`js/content.js`**.
+
+### Étape par étape directement depuis votre navigateur (sur GitHub)
+
+1. Connectez-vous sur **[github.com](https://github.com)** et ouvrez le fichier :
+   👉 **[`js/content.js`](https://github.com/mgenin12/saint-joseph-sjo2/blob/main/js/content.js)**
+2. Cliquez sur l'icône **crayon ✏️ (« Edit this file »)** en haut à droite du fichier.
+3. Effectuez vos modifications (voir les exemples ci-dessous).
+4. Cliquez sur le bouton vert **« Commit changes… »** en haut à droite, puis validez.
+
+---
+
+## 📰 1. Modifier ou ajouter un article (`ARTICLES` dans `js/content.js`)
+
+Dans `js/content.js`, cherchez la section **`export const ARTICLES = [`**.
+Trois articles complets y figurent déjà :
+1. **`projet-eglise-saint-joseph-le-rouret`** — *Au Rouret, un projet à 6 millions d'euros unique dans les Alpes-Maritimes pour bâtir l'église Saint-Joseph* (d'après le reportage de *Nice-Matin*).
+2. **`qui-est-bao-dinh`** — *Père Paul Bao-Dinh Ly : portrait du « curé bâtisseur » de la paroisse Saint-Arnoux*.
+3. **`budget-equipe-et-questions-frequentes`** — *Budget de 6 M€, déduction fiscale et bénévolat : comment participer concrètement à l'aventure des Bâtisseurs*.
+
+### Pour ajouter un nouvel article
+
+Copiez-collez un bloc `{ ... }` au début de `export const ARTICLES = [` :
+
+```javascript
+  {
+    slug: "mon-nouvel-article", // URL de la page : /articles/mon-nouvel-article (sans espaces ni accents)
+    titre: "Titre de mon nouvel article",
+    categories: ["Projet", "Avancement"], // Choisir parmi CATEGORIES
+    date: "2026-11-30", // Format AAAA-MM-JJ
+    auteur: "Paroisse Saint-Arnoux",
+    image: "/assets/img/hero-eglise-nuit.jpeg", // Image de couverture (optionnelle)
+    motsCles: ["kermesse", "architectes", "Le Rouret"],
+    publie: true, // Mettre false pour masquer temporairement l'article (brouillon)
+    resume: "Court résumé d'une ou deux phrases affiché dans la liste des articles et lors d'un partage sur Facebook / WhatsApp.",
+    contenu: `Écrivez ici le texte complet de votre article.
+
+## Un sous-titre de section
+
+Vous pouvez écrire plusieurs paragraphes, mettre des mots en **gras** ou en *italique*, et créer des listes :
+- Premier point
+- Deuxième point
+
+> « Une citation mise en valeur. »`,
+  },
+```
+
+### Blocs interactifs que vous pouvez insérer dans un article
+
+En écrivant l'un de ces mots seul sur une ligne dans `contenu`, le site insère automatiquement le bloc interactif correspondant :
+- `[[budget]]` : les 3 cartes du budget + le camembert interactif + le calendrier de réalisation
+- `[[equipe]]` : la fiche du père Paul Bao-Dinh Ly + les 8 compétences + le trombinoscope des 19 bénévoles
+- `[[avancement]]` : la frise chronologique des étapes du projet
+- `[[clocher]]` : l'infographie du clocher de 22 m et du Mur des Bâtisseurs
+- `[[missions]]` : les 9 fiches de missions bénévoles
+- `[[faq]]` : l'accordéon des questions fréquentes
+
+---
+
+## 📅 2. Modifier le calendrier, choisir quels événements sont visibles et ajouter des photos / vidéos (`CALENDRIER` dans `js/content.js`)
+
+Dans `js/content.js`, cherchez la section **`export const CALENDRIER = [`**.
+
+Chaque événement possède automatiquement :
+- son apparition dans le calendrier mensuel (`/calendrier`) et dans la liste « À venir » / « Événements passés »,
+- une fiche qui s'ouvre lorsqu'on clique sur la date (avec sa description et le bouton **« S'inscrire »**),
+- **sa propre page web dédiée** (`/calendrier/<slug>`) où s'affichent ses **photos** et ses **vidéos**.
+
+### Exemple complet d'événement avec inscription, photos et vidéo YouTube
+
+```javascript
+  {
+    slug: "2026-11-28-kermesse-et-exposition-des-maquettes-d-architectes",
+    titre: "Kermesse paroissiale & consultation participative des 5 maquettes d'architectes",
+    date: "2026-11-28",       // Date de début (AAAA-MM-JJ)
+    dateFin: "2026-11-29",    // Optionnel : date de fin si l'événement dure plusieurs jours
+    heureDebut: "10:00",      // Optionnel
+    heureFin: "18:00",        // Optionnel
+    categorie: "Événement",   // "Célébration", "Événement", "Étape du projet", "Réunion"...
+    lieu: "Salle Charvet, Le Rouret",
+    description: "Description affichée quand on clique sur la date et sur la page de l'événement.",
+    lienInscription: "https://forms.gle/votre-formulaire", // Active le bouton doré « S'inscrire »
+    lienInfo: "/articles/projet-eglise-saint-joseph-le-rouret", // Bouton « En savoir plus »
+    publie: true,             // 👉 Mettez false pour masquer cet événement sur le site !
+    photos: [
+      {
+        url: "/assets/img/ma-photo-1.jpg",
+        legende: "Présentation des maquettes à la salle Charvet",
+      },
+    ],
+    videos: [
+      {
+        url: "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+        titre: "Vidéo récapitulative de la journée",
+      },
+    ],
+  },
+```
+
+### Où stocker les photos et les vidéos d'un événement ?
+
+- **Pour les photos** :
+  - **Sur GitHub (recommandé, gratuit)** : sur GitHub, ouvrez le dossier [`public/assets/img/`](https://github.com/mgenin12/saint-joseph-sjo2/tree/main/public/assets/img), cliquez sur **« Add file » → « Upload files »**, glissez vos photos (`.jpg` ou `.png`), validez, puis indiquez `/assets/img/nom-de-la-photo.jpg` dans `photos`.
+  - **Ou sur Google Drive** : partagez la photo en lecture (« Tous les utilisateurs disposant du lien ») et collez le lien Google Drive dans `url`.
+- **Pour les vidéos** :
+  - **Sur YouTube (recommandé, gratuit et sans aucune limite de taille)** : publiez la vidéo sur la chaîne YouTube de la paroisse (en mode *Public* ou *Non répertorié*) et collez simplement le lien `https://www.youtube.com/watch?v=...` dans `videos` : le lecteur vidéo s'intègre automatiquement sur la page de l'événement !
+
+---
+
+## 💶 3. Mettre à jour le montant de la collecte (clocher de 22 m)
+
+Au tout début de `js/content.js` :
+
+```javascript
+  collecte: {
+    montantCollecte: 1_400_000, // 👈 Changez ce chiffre (en euros)
+    objectif: 6_000_000,
+  },
+```
+
+Dès que vous modifiez `montantCollecte`, **tout le site se recalcule automatiquement** :
+- la hauteur atteinte sur le clocher de **22 mètres** (ex. `1 400 000 €` → **5,13 m**, soit **23 %**),
+- le nombre de **pierres posées** (1 pierre = 10 €) et de **murs bâtis** (1 mur = 100 pierres = 1 000 €),
+- le reste à financer.
+
+---
+
+## 💻 4. Lancer ou déployer le site (pour les administrateurs techniques)
 
 ```bash
 npm install
-cp .env.example .env.local   # puis compléter (voir §5)
-npm run dev                  # http://localhost:3000
+npm run dev      # Lance le site en local sur http://localhost:3000
+npm test         # Lance les 32 tests unitaires (Vitest)
+npm run lint     # Vérifie le code (ESLint)
+npm run build    # Compile le site pour la production
 ```
 
-Scripts : `npm run build` · `npm start` · `npm test` (Vitest) · `npm run lint` · `npm run check:og [URL…]`.
-
----
-
-## 2. Publier un article (Google Sheet)
-
-Le classeur « Idées d'articles pour site web et newsletter » est la source des articles.
-
-| Colonne (onglet « Articles ») | Rôle |
-| --- | --- |
-| **Article** | Titre (obligatoire). Sert aussi à fabriquer l'URL : `Qui est Bao Dinh ?` → `/articles/qui-est-bao-dinh`. |
-| **Catégorie** | Une ou plusieurs catégories séparées par des virgules (`Budget, Présentation`). Doivent exister dans l'onglet « Catégories d'articles (mots clés) ». |
-| **Contenu en quelques mots** | Résumé de travail. Affiché comme chapô si aucune colonne `Résumé` n'existe, et utilisé pour la recherche. |
-| **Cible principale** | Information interne (non affichée, mais indexée pour la recherche). |
-| **Rédacteur** | Nom affiché sous le titre. |
-| **Date de publication** | `JJ/MM/AAAA`. Sert au tri (plus récents d'abord). **Une date future masque l'article** jusqu'à cette date. |
-
-Colonnes **facultatives** reconnues si vous les ajoutez (n'importe où, l'ordre n'a pas d'importance) :
-`Slug`, `Résumé` (ou `Chapô`), `Contenu` (Markdown complet de l'article), `Image` (URL ou lien de partage Google Drive),
-`Mots clés`, `Statut`.
-
-### Règle de publication
-
-> Un article est **publié par défaut** dès qu'il a un titre.
-> Il est masqué (brouillon) si **`Statut`** contient autre chose que « Publié » (ex. « Brouillon », « En cours ») **ou** si la **`Date de publication`** est dans le futur.
-
-Les brouillons restent visibles dans les déploiements de prévisualisation Vercel et en local (`npm run dev`),
-avec un bandeau « Brouillon », ce qui permet de relire avant publication.
-
-### D'où vient le texte d'un article ?
-
-1. Colonne **`Contenu`** du Sheet si elle existe et est remplie (Markdown) ;
-2. sinon le fichier **`content/articles/<slug>.md`** du dépôt (c'est le cas des 11 articles actuels + 3 articles « dépôt seul ») ;
-3. sinon le « Contenu en quelques mots » est affiché avec la mention « Article en préparation ».
-
-Pour relier un fichier du dépôt à une ligne dont le titre a changé, ajoutez l'ancien slug dans `aliases:` de l'en-tête du fichier.
-Un fichier avec `publie: true` dans son en-tête est publié **même sans ligne** dans le Sheet (FAQ, réduction d'impôt, bénévoles).
-
-### Blocs dynamiques dans un article
-
-Un jeton seul sur sa ligne insère un composant interactif :
-`[[budget]]` (cartes + camembert + calendrier budgétaire) · `[[equipe]]` (curé, compétences, trombinoscope) · `[[avancement]]` (frise des jalons) ·
-`[[calendrier]]` (calendrier complet) · `[[clocher]]` (clocher + mur des bâtisseurs) · `[[faq]]` · `[[missions]]` (missions bénévoles).
-
-### Délai de mise à jour
-
-Le site relit le Sheet au plus toutes les **10 minutes**. Pour une mise à jour immédiate :
-`curl -X POST "https://<site>/api/revalidate?secret=<REVALIDATE_SECRET>"` (ou un déclencheur Apps Script « à la modification »).
-
-> [!IMPORTANT]
-> La lecture « en direct » nécessite que le classeur soit partagé en **« Tous les utilisateurs disposant du lien : Lecteur »**.
-> Tant que ce n'est pas le cas, le site utilise la copie embarquée `content/sheet-snapshot/*.csv` (mise à jour à la main :
-> *Fichier → Télécharger → CSV* de chaque onglet).
-
----
-
-## 3. Événements (Google Agenda)
-
-Le calendrier du site (`/calendrier`) est connecté directement au **Google Agenda du projet**
-(`9f2cb93155d97884909c3bcb4fb4c887a2659636e5c6059d68c6e43ad0b842e5@group.calendar.google.com`) :
-
-1. Dans les **Paramètres de Google Agenda**, sélectionnez l'agenda puis cochez **« Rendre disponible publiquement »** (*Afficher tous les détails de l'événement*), **ou** copiez l'*Adresse secrète au format iCal* dans la variable d'environnement `GOOGLE_CALENDAR_ICS_URL`.
-2. Créez ou modifiez vos événements directement dans Google Agenda :
-   - **Titre** : utilisez optionnellement un préfixe `[Catégorie] Titre` (ex. `[Célébration] Messe sur le terrain`).
-   - **Dates / Horaires** : journée entière, sur plusieurs jours, ou avec horaires (convertis automatiquement au fuseau `Europe/Paris`).
-   - **Lieu** : champ *Lieu* de Google Agenda.
-   - **Description & bouton « S'inscrire »** : tout lien `https://...` placé dans la description (ou sur une ligne `Inscription : https://...`) active automatiquement le bouton **« S'inscrire »** sur le site. Vous pouvez aussi indiquer `Catégorie : ...`, `Info : https://...`, `Places : 150`.
-3. Pour importer les 6 jalons de 2026 dans votre Google Agenda, téléchargez `/calendrier/export.ics` puis importez-le dans *Google Agenda → Paramètres → Importer et exporter*.
-
-*(En secours, si l'agenda Google n'est pas encore public ou est vide, le site utilise un éventuel onglet `Evenements` du Google Sheet ou `content/evenements.ts`.)*
-
-Chaque événement a sa page `/calendrier/<slug>`, un fichier `.ics` (`/calendrier/<slug>/ics`) et un lien « Ajouter à Google Agenda ».
-
----
-
-## 4. Textes de l'accueil, équipe, FAQ, budget, montant de la collecte
-
-Tout est dans **`content/site.ts`** (commenté). En particulier :
-
-- `collecte.montantCollecte` / `collecte.objectif` : le clocher de **22 m** représente l'objectif ; 1 pierre = 10 €, 1 mur = 100 pierres.
-  Avec 1,4 M€ sur 6 M€ : 5,13 m, 140 000 pierres, 1 400 murs, 1 m ≈ 272 727 €.
-- `avancement.jalons`, `valeurs`, `equipe.membres` (photos dans `public/assets/img/`), `missions`, `faq`, `budget`, `don` (IBAN, chèque, fiscalité).
-- `MENU_PROJET` : sous-entrées du menu « Le projet » (catégories) · `FOOTER_LINKS` : liens du pied de page.
-
-Un onglet **`Config`** (colonnes `Clé` / `Valeur`) peut surcharger sans redéploiement : `montant_collecte`, `objectif`, `url_don`,
-`url_newsletter`, `url_formulaire_contact`, `email_contact`, `telephone_contact`, `reseaux_instagram`, `reseaux_linkedin`…
-(renseigner `SHEET_GID_CONFIG`).
-
----
-
-## 5. Variables d'environnement
+### Variables d'environnement (`.env.example`)
 
 | Variable | Rôle |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | URL publique (canonical, Open Graph, sitemap). Ex. `https://saint-joseph-sjo2.vercel.app` |
-| `NEXT_PUBLIC_URL_DON` | Plateforme de don (défaut : plateforme diocésaine dans `content/site.ts`) |
-| `SHEET_ID` | Identifiant du classeur (défaut : classeur du projet) |
-| `SHEET_GID_ARTICLES` / `SHEET_GID_CATEGORIES` | `0` / `659450165` (défauts) |
-| `SHEET_GID_EVENEMENTS` / `SHEET_GID_CONFIG` | onglets facultatifs |
-| `REVALIDATE_SECRET` | secret de `/api/revalidate` |
-| `CONTACT_WEBHOOK_URL` / `NEWSLETTER_WEBHOOK_URL` | réception des formulaires (JSON en POST) — voir §6 |
-| `AFFICHER_BROUILLONS` | `true` pour afficher les brouillons en production (déconseillé) |
-
----
-
-## 6. Formulaires contact / newsletter
-
-Les formulaires envoient un JSON (`{ type, nom, email, sujet, message }` ou `{ type, email, prenom }`) vers l'URL configurée.
-Sans URL, ils affichent les moyens de contact alternatifs. Solution gratuite recommandée : un **Google Apps Script** déployé en
-application web qui ajoute une ligne dans un Google Sheet dédié :
-
-```js
-function doPost(e) {
-  const d = JSON.parse(e.postData.contents);
-  const sheet = SpreadsheetApp.openById("ID_DU_CLASSEUR").getSheetByName(d.type === "newsletter" ? "Newsletter" : "Contact");
-  sheet.appendRow([new Date(), d.nom || d.prenom || "", d.email, d.sujet || "", d.mission || "", d.message || ""]);
-  return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
-}
-```
-
-Déployer → *Application web* → accès « Tout le monde », puis copier l'URL `/exec` dans la variable d'environnement.
-Vous pouvez aussi brancher Brevo/Mailchimp (newsletter) via Make ou Zapier.
-
----
-
-## 7. Déploiement (Vercel)
-
-1. Importer le dépôt GitHub dans Vercel (framework détecté : Next.js).
-2. Renseigner les variables d'environnement (§5), au minimum `NEXT_PUBLIC_SITE_URL`.
-3. Chaque `git push` sur `main` déploie en production ; les branches donnent des URL de prévisualisation (brouillons visibles, `robots` en `noindex`).
-4. Domaine : ajouter `saint-joseph.saint-arnoux.fr` dans *Settings → Domains* et créer l'enregistrement CNAME indiqué.
-
-Vérifier le partage social après déploiement : `SITE_URL=https://<site> npm run check:og`, puis
-[Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) / [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/).
-
----
-
-## 8. Structure du dépôt
-
-```
-app/            pages (App Router), actions serveur, sitemap, robots, API de revalidation
-components/     en-tête, pied de page, bandeau CTA, recherche, calendrier, clocher, simulateur…
-content/        site.ts (textes), evenements.ts, articles/*.md, sheet-snapshot/*.csv
-lib/            accès au Sheet, articles, événements, recherche, dates, SEO, ICS, règles de la collecte
-public/         images, og-image.jpg
-styles/         globals.css (design system navy / or / parchemin)
-tests/          tests unitaires (Vitest)
-scripts/        check-og.mjs
-```
-
-Anciennes URL (v1) redirigées : `/don`, `/budget`, `/equipe`, `/faq`, `/rejoindre`, `/avancement`, `/valeurs` et les ancres `/#budget`, `/#don`…
+| `NEXT_PUBLIC_SITE_URL` | URL publique du site (`https://saint-joseph-sjo2.vercel.app` puis `https://saint-joseph.saint-arnoux.fr`) |
+| `NEXT_PUBLIC_URL_DON` | URL de la plateforme de don diocésaine |
+| `GOOGLE_CALENDAR_ENABLED` | `false` par défaut (les événements viennent de `js/content.js`). Mettre `true` pour fusionner en plus les événements publics du Google Agenda |
+| `GOOGLE_CALENDAR_ID` | ID du Google Agenda (`9f2cb93155d97884909c3bcb4fb4c887a2659636e5c6059d68c6e43ad0b842e5@group.calendar.google.com`) |
+| `GOOGLE_CALENDAR_FILTER_TAG` | Optionnel (ex. `#site`) : n'affiche que les événements Google Agenda contenant ce mot-clé |
+| `CONTACT_WEBHOOK_URL` / `NEWSLETTER_WEBHOOK_URL` | URL optionnelle recevant les formulaires de contact et de newsletter |

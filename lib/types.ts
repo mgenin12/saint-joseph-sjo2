@@ -28,6 +28,9 @@ export type Article = {
   ordre: number;
 };
 
+export type EventPhoto = string | { url: string; legende?: string };
+export type EventVideo = string | { url: string; titre?: string };
+
 export type Evenement = {
   slug: string;
   titre: string;
@@ -45,8 +48,12 @@ export type Evenement = {
   inscrits?: number;
   image?: string;
   publie: boolean;
-  /** Lien externe d'information (ex. événement Facebook) */
+  /** Lien d'information (article du site ou lien externe) */
   lienInfo?: string;
+  /** Photos affichées sur la page dédiée de l'événement (/calendrier/[slug]) */
+  photos?: EventPhoto[];
+  /** Vidéos (liens YouTube ou fichiers .mp4) affichées sur la page de l'événement */
+  videos?: EventVideo[];
 };
 
 export type SiteConfig = {

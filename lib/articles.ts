@@ -1,11 +1,9 @@
-import fs from "node:fs/promises";
-import path from "node:path";
-import matter from "gray-matter";
 import { cache } from "react";
 import type { Article, ArticleStatut, Categorie } from "./types";
-import { loadSheet, rowsToObjects, firstColumn, type SheetRow, type SheetSource } from "./sheets";
+import { type SheetRow, type SheetSource } from "./sheets";
 import { slugify, splitList, normalize, truncate, stripMarkdown, driveImageUrl } from "./text";
 import { toIsoDate, todayIso } from "./dates";
+import { ARTICLES as RAW_ARTICLES, CATEGORIES as RAW_CATEGORIES } from "@/js/content.js";
 
 /** Catégories officielles (copie de l'onglet « Catégories d'articles (mots clés) »). */
 export const DEFAULT_CATEGORIES = [
@@ -45,36 +43,6 @@ export function includeDrafts(): boolean {
     process.env.NODE_ENV === "development"
   );
 }
-
-const loadSeeds = cache(async (): Promise<Seed[]> => {
-  const dir = path.join(process.cwd(), "content", "articles");
-  let files: string[] = [];
-  try {
-    files = (await fs.readdir(dir)).filter((f) => f.endsWith(".md"));
-  } catch {
-    return [];
-  }
-  const seeds: Seed[] = [];
-  for (const file of files.sort()) {
-    const raw = await fs.readFile(path.join(dir, file), "utf8");
-    const { data, content } = matter(raw);
-    const slug = slugify(String(data.slug || file.replace(/\.md$/, "")));
-    seeds.push({
-      slug,
-      titre: String(data.titre || data.title || slug),
-      categories: Array.isArray(data.categories) ? data.categories.map(String) : splitList(data.categories),
-      resume: data.resume ? String(data.resume) : undefined,
-      auteur: data.auteur ? String(data.auteur) : undefined,
-      date: toIsoDate(data.date ? String(data.date) : undefined),
-      image: data.image ? String(data.image) : undefined,
-      motsCles: Array.isArray(data.motsCles) ? data.motsCles.map(String) : splitList(data.motsCles),
-      aliases: (Array.isArray(data.aliases) ? data.aliases.map(String) : splitList(data.aliases)).map(slugify),
-      publie: data.publie === true,
-      contenu: content.trim(),
-    });
-  }
-  return seeds;
-});
 
 /** Règle de publication (voir README) : publié par défaut, sauf statut explicite ou date future. */
 export function computeStatut(statut: string | undefined, date: string | undefined, today = todayIso()): ArticleStatut {
@@ -193,10 +161,35 @@ function canonicalizer(official: string[]): (name: string) => string {
 }
 
 const loadAll = cache(async (): Promise<{ articles: Article[]; categories: string[]; source: SheetSource }> => {
-  const [sheet, cats, seeds] = await Promise.all([loadSheet("articles"), loadSheet("categories"), loadSeeds()]);
-  const officialCategories = cats.rows.length ? firstColumn(cats.rows) : DEFAULT_CATEGORIES;
-  const articles = buildArticles(rowsToObjects(sheet.rows), seeds, officialCategories);
-  return { articles, categories: officialCategories, source: sheet.source };
+  const officialCategories = Array.isArray(RAW_CATEGORIES) && RAW_CATEGORIES.length ? [...RAW_CATEGORIES] : DEFAULT_CATEGORIES;
+  const canon = canonicalizer(officialCategories);
+  const items = (RAW_ARTICLES as Array<Record<string, unknown>>).map((raw, i): Article => {
+    const titre = String(raw.titre ?? "");
+    const slug = slugify(String(raw.slug || titre || `article-${i + 1}`));
+    const contenu = String(raw.contenu ?? "").trim();
+    const resume = raw.resume ? String(raw.resume) : truncate(stripMarkdown(contenu), 180);
+    const date = toIsoDate(raw.date ? String(raw.date) : undefined);
+    const categories = (Array.isArray(raw.categories) ? raw.categories.map(String) : splitList(String(raw.categories ?? ""))).map(canon);
+    const motsCles = Array.isArray(raw.motsCles) ? raw.motsCles.map(String) : splitList(String(raw.motsCles ?? ""));
+    const publie = raw.publie !== false;
+    return {
+      slug,
+      titre,
+      categories,
+      brief: resume,
+      resume,
+      contenu,
+      contenuSource: "repo",
+      auteur: raw.auteur ? String(raw.auteur) : undefined,
+      date,
+      image: raw.image ? String(raw.image) : undefined,
+      motsCles,
+      statut: publie ? computeStatut(raw.statut ? String(raw.statut) : undefined, date) : "brouillon",
+      source: "repo",
+      ordre: i,
+    };
+  });
+  return { articles: sortArticles(items), categories: officialCategories, source: "snapshot" };
 });
 
 /** Tous les articles visibles (publiés, + brouillons selon l'environnement). */

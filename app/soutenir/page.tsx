@@ -195,8 +195,8 @@ export default async function SoutenirPage() {
             ))}
           </div>
           <div className="row mt-4">
-            <Link className="btn btn--navy" href="/articles/rejoindre-les-benevoles">
-              Voir les missions bénévoles
+            <Link className="btn btn--navy" href="/articles/budget-equipe-et-questions-frequentes">
+              Voir le budget &amp; les missions bénévoles
             </Link>
             <Link className="btn btn--outline" href="/newsletter">
               Recevoir la newsletter
@@ -213,7 +213,7 @@ export default async function SoutenirPage() {
           </div>
           <Faq items={SITE.faq} />
           <p className="mt-2">
-            <Link href="/articles/questions-frequentes">Toutes les questions fréquentes →</Link>
+            <Link href="/articles/budget-equipe-et-questions-frequentes">Budget, déduction fiscale &amp; questions fréquentes →</Link>
           </p>
         </div>
       </section>

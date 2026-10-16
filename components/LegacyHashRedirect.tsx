@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 
 /** Ancres de l'ancien site (v1 monopage) → nouvelles pages. */
 const MAP: Record<string, string> = {
-  "#budget": "/articles/budget",
-  "#equipe": "/articles/qui-sommes-nous",
-  "#equipes": "/articles/qui-sommes-nous",
-  "#faq": "/articles/questions-frequentes",
-  "#recrutement": "/articles/rejoindre-les-benevoles",
-  "#rejoindre": "/articles/rejoindre-les-benevoles",
+  "#budget": "/articles/budget-equipe-et-questions-frequentes",
+  "#equipe": "/articles/qui-est-bao-dinh",
+  "#equipes": "/articles/qui-est-bao-dinh",
+  "#faq": "/articles/budget-equipe-et-questions-frequentes",
+  "#recrutement": "/articles/budget-equipe-et-questions-frequentes",
+  "#rejoindre": "/articles/budget-equipe-et-questions-frequentes",
   "#don": "/soutenir",
   "#collecte": "/soutenir",
   "#soutenir": "/soutenir",
