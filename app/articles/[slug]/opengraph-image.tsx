@@ -14,7 +14,6 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const titre = article?.titre ?? "Église Saint Joseph — Projet SJO2";
   const cat = article?.categories[0] ?? "Le projet";
   const date = article?.date ? formatDateLong(article.date) : "";
-  const image = article?.image;
 
   return new ImageResponse(
     (
@@ -29,15 +28,6 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           fontFamily: "serif",
         }}
       >
-        {image && (
-          <img
-            src={image}
-            alt=""
-            width={1200}
-            height={630}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35 }}
-          />
-        )}
         <div
           style={{
             display: "flex",
