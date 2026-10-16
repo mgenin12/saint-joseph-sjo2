@@ -1,35 +1,46 @@
 export type ArticleStatut = "publie" | "brouillon";
 
+export type MediaPhoto = {
+  url: string;
+  legende?: string;
+};
+
+export type MediaVideo = {
+  /** URL YouTube (watch?v=... ou youtu.be/...), Vimeo, ou fichier .mp4 */
+  url: string;
+  titre?: string;
+};
+
 export type Article = {
   /** Identifiant d'URL (/articles/[slug]) */
   slug: string;
+  /** Anciens slugs redirigés vers cet article */
+  aliases?: string[];
   titre: string;
-  /** Catégories (plusieurs possibles, séparées par des virgules dans le Sheet) */
+  /** Catégories (plusieurs possibles) */
   categories: string[];
-  /** « Contenu en quelques mots » du Sheet (résumé de travail) */
+  /** Résumé court */
   brief: string;
   /** Chapô affiché dans les listes et utilisé comme description Open Graph */
   resume: string;
   /** Corps de l'article en Markdown */
   contenu: string;
-  /** Provenance du corps : colonne Contenu du Sheet, fichier du dépôt, ou brief seul */
+  /** Provenance du corps */
   contenuSource: "sheet" | "repo" | "brief";
-  /** « Cible principale » (information interne, non affichée) */
   cible?: string;
   auteur?: string;
   /** Date ISO (AAAA-MM-JJ) si connue */
   date?: string;
   image?: string;
+  /** Galerie photos affichée en bas de l'article */
+  photos?: (string | MediaPhoto)[];
+  /** Vidéos (YouTube, Vimeo ou .mp4) intégrées dans la page de l'article */
+  videos?: (string | MediaVideo)[];
   motsCles: string[];
   statut: ArticleStatut;
-  /** Provenance de la ligne : Sheet ou article défini uniquement dans le dépôt */
   source: "sheet" | "repo";
-  /** Ordre d'apparition dans le Sheet (pour le tri des articles sans date) */
   ordre: number;
 };
-
-export type EventPhoto = string | { url: string; legende?: string };
-export type EventVideo = string | { url: string; titre?: string };
 
 export type Evenement = {
   slug: string;
@@ -47,13 +58,16 @@ export type Evenement = {
   places?: number;
   inscrits?: number;
   image?: string;
+  /** Galerie photos affichée sur la page dédiée de l'événement (/calendrier/[slug]) */
+  photos?: (string | MediaPhoto)[];
+  /** Vidéos (YouTube, Vimeo ou .mp4) affichées sur la page dédiée de l'événement */
+  videos?: (string | MediaVideo)[];
+  /** true = visible sur le site, false = masqué aux visiteurs */
   publie: boolean;
-  /** Lien d'information (article du site ou lien externe) */
+  /** Alias de publie dans js/content.js (visible: true / false) */
+  visible?: boolean;
+  /** Lien externe d'information (ex. événement Facebook ou article de presse) */
   lienInfo?: string;
-  /** Photos affichées sur la page dédiée de l'événement (/calendrier/[slug]) */
-  photos?: EventPhoto[];
-  /** Vidéos (liens YouTube ou fichiers .mp4) affichées sur la page de l'événement */
-  videos?: EventVideo[];
 };
 
 export type SiteConfig = {

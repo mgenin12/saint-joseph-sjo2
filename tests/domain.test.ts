@@ -136,5 +136,27 @@ describe("événements", () => {
     expect(googleCalendarSubscribeUrl("9f2cb93155d97884909c3bcb4fb4c887a2659636e5c6059d68c6e43ad0b842e5@group.calendar.google.com")).toBe(
       "https://calendar.google.com/calendar/r?cid=OWYyY2I5MzE1NWQ5Nzg4NDkwOWMzYmNiNGZiNGM4ODdhMjY1OTYzNmU1YzYwNTlkNjhjNmU0M2FkMGI4NDJlNUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t",
     );
+
+    const selectiveIcs = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "BEGIN:VEVENT",
+      "DTSTART;VALUE=DATE:20261120",
+      "SUMMARY:Réunion interne paroisse",
+      "END:VEVENT",
+      "BEGIN:VEVENT",
+      "DTSTART;VALUE=DATE:20261128",
+      "SUMMARY:[Site] Kermesse et exposition des maquettes",
+      "END:VEVENT",
+      "BEGIN:VEVENT",
+      "DTSTART;VALUE=DATE:20261225",
+      "SUMMARY:Messe de Noël",
+      "CLASS:PUBLIC",
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].join("\r\n");
+
+    const filtered = parseIcsEvents(selectiveIcs, { filterVisibility: true });
+    expect(filtered.map((e) => e.titre)).toEqual(["Kermesse et exposition des maquettes", "Messe de Noël"]);
   });
 });

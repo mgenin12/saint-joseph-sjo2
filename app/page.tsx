@@ -102,7 +102,7 @@ export default async function HomePage() {
           </div>
           <Timeline />
           <p className="mt-4">
-            <Link href="/articles/projet-eglise-saint-joseph-le-rouret">Lire l&apos;article complet sur le projet →</Link>
+            <Link href="/articles/messe-de-rentree-et-vie-du-projet">Lire le point d&apos;étape complet →</Link>
           </p>
         </div>
       </section>

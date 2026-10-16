@@ -1,41 +1,40 @@
 /* ============================================================================
-   FICHIER UNIQUE DE CONTENU DU SITE — js/content.js
-   Projet SJO2 · Église Saint-Joseph & Centre Paroissial (Le Rouret)
-   Paroisse Saint-Arnoux · Diocèse de Nice
+   FICHIER CENTRAL DES CONTENUS DU SITE — PROJET SJO2 (ÉGLISE SAINT-JOSEPH)
    ============================================================================
+   Ce fichier (`js/content.js`) regroupe TOUS les contenus modifiables du site
+   afin que l'équipe paroissiale puisse mettre à jour le site sans toucher au
+   code technique :
 
-   👉 TOUT LE CONTENU DU SITE SE MODIFIE ICI, SANS TOUCHER AU CODE :
-   1. Chiffres de la collecte et coordonnées (SITE.collecte, SITE.contact…)
-   2. Textes de la page d'accueil, frise d'avancement, équipe, budget, FAQ (SITE)
-   3. Les articles du site (ARTICLES)
-   4. Les événements du calendrier, avec photos et vidéos (CALENDRIER)
-
-   💡 Comment modifier ce fichier directement sur GitHub :
-   - Ouvrez https://github.com/mgenin12/saint-joseph-sjo2/blob/main/js/content.js
-   - Cliquez sur l'icône crayon ✏️ (« Edit this file ») en haut à droite
-   - Modifiez les textes entre guillemets, puis cliquez sur « Commit changes… »
+   1. SITE              : Montant de la collecte, textes d'accueil, avancement,
+                          budget, équipe, missions bénévoles, FAQ, RIB, contacts.
+   2. ARTICLES          : Les articles du site (titre, catégorie, résumé, image,
+                          photos, vidéos et texte complet en Markdown).
+   3. EVENEMENTS        : Les événements du calendrier (date, lieu, description,
+                          lien d'inscription, galerie photos, vidéos YouTube,
+                          et `visible: true / false` pour afficher ou masquer).
+   4. CALENDRIER_GOOGLE : Optionnel — permet de synchroniser le Google Agenda
+                          en filtrant uniquement les événements marqués `[Site]`.
    ============================================================================ */
 
 export const SITE = {
   nom: "Saint Joseph",
   sousTitre: "Paroisse Saint-Arnoux · Le Rouret",
-  adresse: "1104 route de Nice · 30 Allée du Pré des Roures · 06650 Le Rouret",
+  adresse: "30 Allée du Pré des Roures · 06650 Le Rouret",
   devise: "Pour aujourd'hui, pour demain, pour la Mission.",
   valeursLigne: "Foi · Transmission · Fraternité · Espérance",
   afficherValeurs: true,
 
-  /* --------------------------------------------------------------------------
-     1. COLLECTE & OBJECTIF (le clocher de 22 m se calcule automatiquement)
-     -------------------------------------------------------------------------- */
   collecte: {
-    // Montant déjà réuni (terrain inclus) et objectif global, en euros :
+    // Montant déjà réuni (terrain inclus) et objectif global, en euros.
     montantCollecte: 1_400_000,
     objectif: 6_000_000,
   },
 
   liens: {
     don: "https://don-nice.catholique.fr/centre-paroissial-st-arnoux-rouret/",
+    // Formulaire externe d'inscription à la newsletter (Google Form, Brevo…) — vide = formulaire du site
     newsletter: "",
+    // Formulaire de contact externe (Google Form…) — vide = formulaire du site
     formulaireContact: "",
     diocese: "https://nice.catholique.fr/",
     paroisseFacebook: "https://www.facebook.com/saint.arnoux",
@@ -44,7 +43,7 @@ export const SITE = {
   },
 
   contact: {
-    email: "",
+    email: "secretariat@saint-arnoux.fr",
     telephone: "04 93 77 28 33",
     donsEtLegs: {
       nom: "Anne-Marie Floréan",
@@ -62,16 +61,13 @@ export const SITE = {
     x: "",
   },
 
-  /* --------------------------------------------------------------------------
-     2. PAGE D'ACCUEIL (« Découvrir », « L'avancement », « Nos valeurs »)
-     -------------------------------------------------------------------------- */
   hero: {
     titre: ["Bâtir un lieu de ", "Foi", ", de ", "Vie", " et d'", "Espérance", "."],
     meta: [
       "≈ 1 000 m² sur 1 ha de terrain",
       "Un budget global de 6 M€",
       "400 personnes accueillies",
-      "Horizon 2030–2031",
+      "Livraison prévue en 2030",
     ],
   },
 
@@ -79,7 +75,7 @@ export const SITE = {
     surtitre: "Le projet",
     titre: "Un projet immobilier structuré et conçu pour la mission.",
     intro:
-      "La Paroisse Saint-Arnoux, qui rassemble dix communes autour du Rouret, bâtit un centre paroissial et l'église Saint-Joseph pour répondre à la forte croissance démographique et missionnaire du territoire.",
+      "La Paroisse Saint-Arnoux, qui fédère dix communes et localités de l'arrière-pays grassois autour du Rouret, bâtit un centre paroissial et son église Saint-Joseph pour accueillir une communauté en pleine croissance.",
     compteurs: [
       { valeur: 8736, suffixe: " m²", label: "Parcelle acquise" },
       { valeur: 6, suffixe: " M€", label: "Budget" },
@@ -102,20 +98,12 @@ export const SITE = {
       {
         titre: "L'Église",
         capacite: "+ 300 personnes",
-        points: [
-          "Nef principale lumineuse",
-          "Clocher de 22 m",
-          "Parvis & espaces extérieurs sous les oliviers",
-          "Lieu liturgique durable et écologique",
-        ],
+        points: ["Nef principale", "Clocher de 22 m", "Parvis & espaces extérieurs", "Lieu liturgique durable"],
       },
       {
         titre: "Le Presbytère",
         capacite: "3 logements",
-        points: [
-          "3 logements (T3) de prêtres",
-          "Lieu de vie de la communauté sacerdotale",
-        ],
+        points: ["3 logements (T3) de prêtres", "Lieu de vie de la communauté sacerdotale"],
       },
     ],
   },
@@ -124,43 +112,44 @@ export const SITE = {
     surtitre: "L'avancement",
     titre: "Une dynamique déjà lancée.",
     intro:
-      "Après l'achat du terrain et le feu vert du Diocèse de Nice, le projet entre dans sa phase concrète : concours d'architectes, exposition participative des maquettes, autorisations, puis travaux. Étape après étape, suivez ici le chemin qui mène à l'ouverture du centre paroissial, puis de l'église Saint Joseph.",
+      "Après l'achat du terrain et le feu vert du Diocèse de Nice, le projet entre dans sa phase concrète : études, concours d'architectes, autorisations, puis travaux. Étape après étape, suivez ici le chemin qui mène à l'ouverture du centre paroissial, puis de l'église Saint Joseph, à l'horizon 2030.",
     jalons: [
       {
         periode: "2025",
         etat: "done",
         titre: "Acquisition du terrain",
-        texte: "Achat et paiement intégral du terrain arboré de 8 736 m² au Rouret, près du collège du Pré-des-Roures.",
+        texte: "Achat et paiement intégral de la parcelle arborée de 8 736 m² près du collège du Pré-des-Roures au Rouret.",
       },
       {
         periode: "2025",
         etat: "done",
         titre: "Premiers grands donateurs",
-        texte: "Les premiers soutiens s'engagent aux côtés du projet et permettent de réunir 1,4 M€ (terrain inclus).",
+        texte: "Les premiers soutiens s'engagent aux côtés du projet et lancent la dynamique financière.",
       },
       {
         periode: "Mai 2026",
         etat: "done",
-        titre: "Validation du Diocèse",
-        texte: "Faisabilité et plan de financement approuvés par le Comité d'Investissement Diocésain (CID le 7 mai) et la Commission Diocésaine d'Art Sacré (CDAE le 19 mai).",
+        titre: "Validation du Diocèse de Nice",
+        texte: "Faisabilité et plan de financement approuvés lors du CID le 7 mai, puis avis favorable de la CDAE le 19 mai.",
       },
       {
-        periode: "Automne 2026",
+        periode: "Sept.–Déc. 2026",
         etat: "now",
-        titre: "Concours des 33 architectes & appel aux dons",
-        texte: "Messe de rentrée devant plus de 400 fidèles sur le terrain, sélection de 10 puis 5 cabinets finalistes et exposition des maquettes les 28–29 novembre à la salle Charvet.",
+        titre: "Campagne de dons & concours d'architectes",
+        texte:
+          "Messe de rentrée devant plus de 400 fidèles sur le terrain, lancement de l'appel aux dons et consultation participative des 5 projets d'architectes finalistes les 28 et 29 novembre.",
       },
       {
-        periode: "Noël 2026 – 2027",
+        periode: "2026–2027",
         etat: "now",
-        titre: "Choix de l'architecte & études réglementaires",
-        texte: "Dévoilement du projet lauréat à Noël, consolidation des études techniques, environnementales et dépôt du permis de construire.",
+        titre: "Fiabilisation technique & réglementaire",
+        texte: "Consolidation des études avec l'architecte retenu, dépôt du permis de construire et autorisations.",
       },
       {
         periode: "2027–2030",
         etat: "todo",
         titre: "Travaux & ouverture",
-        texte: "Consultation des entreprises, construction puis inauguration du centre paroissial et de l'église Saint-Joseph.",
+        texte: "Consultation des entreprises, chantier éco-responsable puis ouverture du centre paroissial et de l'église Saint-Joseph.",
       },
     ],
   },
@@ -177,18 +166,15 @@ export const SITE = {
     ],
   },
 
-  /* --------------------------------------------------------------------------
-     3. ÉQUIPE PROJET, MISSIONS BÉNÉVOLES, FAQ, BUDGET & DONS
-     -------------------------------------------------------------------------- */
   equipe: {
     intro:
       "Le projet est porté par la Paroisse Saint-Arnoux et l'Association Diocésaine de Nice, accompagnées d'une équipe d'experts structurée et bénévole.",
     cure: {
       nom: "Père Paul Bao Dinh LY",
-      role: "Curé de la Paroisse Saint-Arnoux",
+      role: "Curé de la Paroisse Saint-Arnoux · Doyen du Pays de Grasse",
       photo: "/assets/img/pere-paul-bao-dinh-ly.jpeg",
       citation: "Ce n'est pas un bâtiment que nous allons ériger, c'est une mission. Nous sommes tous des bâtisseurs.",
-      bio: "Ordonné prêtre le 11 octobre 2009 en la cathédrale Sainte-Réparate de Nice, curé de la paroisse Saint-Arnoux et membre du conseil épiscopal du Diocèse de Nice, le Père Paul Bao-Dinh Ly est le pilote principal du projet SJO2. Surnommé le « curé bâtisseur », il fédère les dix communes de la paroisse autour de la construction de l'église Saint-Joseph et de son centre paroissial au Rouret.",
+      bio: "Prêtre du Diocèse de Nice, curé de la Paroisse Saint-Arnoux et doyen du Pays de Grasse, le Père Paul Bao Dinh LY pilote le projet en tant que représentant du maître d'ouvrage diocésain. Surnommé le « curé bâtisseur », il porte la vision pastorale et missionnaire du futur ensemble paroissial Saint-Joseph.",
     },
     competences: [
       "Pilotage professionnel",
@@ -201,7 +187,7 @@ export const SITE = {
       "Gestion de projet",
     ],
     benevoles:
-      "Plus de 100 bénévoles sont engagés autour du projet, avec une exigence partagée : maîtrise des coûts et des risques, sécurité, pérennité constructive et infrastructures.",
+      "Plus de 100 bénévoles sont engagés autour du projet, avec une exigence partagée : maîtrise des coûts et des risques, sécurité, pérennité constructive et respect de l'environnement.",
     citation: "« Là où deux ou trois sont réunis en mon nom, je suis au milieu d'eux » — Mt 18, 20",
     membres: [
       { nom: "François Muller", photo: "francois-muller", role: "Commission Finance", bio: "Toute une carrière dans la banque, achevée à la Direction Générale d'une banque régionale. Expérience en conseil économique paroissial (EAP, END, Vision) et engagements associatifs (Banque Alimentaire, conseil municipal)." },
@@ -260,19 +246,19 @@ export const SITE = {
   faq: [
     {
       q: "Pourquoi la paroisse fait-elle appel à la générosité de ses fidèles ?",
-      a: "En France, les nouvelles églises construites depuis 1905 sont intégralement financées par les fidèles et les mécènes. Face à la forte croissance démographique des dix communes de la paroisse Saint-Arnoux, les locaux actuels sont devenus trop étroits. La générosité de chacun permet de bâtir un lieu d'accueil, de prière et de fraternité pour les générations futures.",
+      a: "En France, les nouvelles églises construites après 1905 sont intégralement financées par les fidèles et les mécènes. Face à l'afflux de paroissiens dans les dix communes de Saint-Arnoux, ce nouvel ensemble paroissial et liturgique est indispensable pour accueillir, célébrer, catéchiser et accompagner chaque génération.",
     },
     {
       q: "Comment aider si je ne peux pas donner financièrement ?",
-      a: "En relayant notre appel auprès de votre entourage, en priant pour le projet, ou en rejoignant nos équipes de bénévoles (communication, ambassadeurs, construction, accueil lors des événements comme la kermesse des 28 et 29 novembre).",
+      a: "En relayant notre appel auprès de votre entourage, en participant aux consultations paroissiales et en rejoignant nos équipes de bénévoles (communication, ambassadeurs, construction et art sacré).",
     },
     {
       q: "Mon don peut-il vraiment faire la différence ?",
-      a: "Oui. Chaque don compte, petit ou grand : dès 10 €, vous posez une pierre de l'édifice et faites s'élever le clocher de 22 mètres. C'est par l'engagement de tous que ce projet verra le jour.",
+      a: "Oui. Chaque don compte, petit ou grand : dès 10 €, vous posez une pierre de plus au clocher de 22 mètres. C'est par l'engagement de tous les bâtisseurs que ce projet verra le jour.",
     },
     {
       q: "Puis-je bénéficier d'une déduction fiscale ?",
-      a: "Oui. Les dons consentis à l'Association Diocésaine de Nice ouvrent droit, pour les particuliers imposables, à une réduction d'impôt sur le revenu de 66 % du montant du don (dans la limite de 20 % du revenu imposable) : un don de 200 € ne vous coûte réellement que 68 €. Pour les entreprises, la réduction est de 60 % (un don de 500 € revient à 200 €). Un reçu fiscal officiel vous est adressé.",
+      a: "Oui. Les dons consentis au profit de l'Association Diocésaine de Nice ouvrent droit, pour les particuliers imposables, à une réduction d'impôt de 66 % du montant du don (dans la limite de 20 % du revenu imposable) : un don de 200 € ne vous coûte réellement que 68 €. Pour les entreprises, la réduction est de 60 %. Un reçu fiscal vous est adressé automatiquement.",
     },
   ],
 
@@ -290,14 +276,14 @@ export const SITE = {
       { label: "Aménagements", montant: "400 K€", pct: 8, couleur: "#8a9b6e" },
       { label: "Études & conception", montant: "150 K€", pct: 3, couleur: "#3a6ea5" },
     ],
-    note: "Répartition indicative de l'enveloppe travaux (5 M€ hors part déjà couverte par l'acquisition du terrain).",
+    note: "Répartition indicative de l'enveloppe travaux (hors part déjà couverte par l'acquisition du terrain).",
     calendrier: [
       { periode: "2025", label: "Acquisition du terrain" },
-      { periode: "Automne 2026", label: "Concours des 33 architectes" },
-      { periode: "Noël 2026", label: "Choix du cabinet lauréat" },
-      { periode: "2027", label: "Études & autorisations" },
-      { periode: "2028–2030", label: "Travaux & aménagements" },
-      { periode: "2030–2031", label: "Inauguration" },
+      { periode: "25-26", label: "Études & concours d'architecture" },
+      { periode: "2026", label: "Autorisations" },
+      { periode: "27-29", label: "Travaux" },
+      { periode: "29-30", label: "Aménagements" },
+      { periode: "2030", label: "Ouverture" },
     ],
   },
 
@@ -308,7 +294,7 @@ export const SITE = {
       { nom: "1 mur", montant: 1000, texte: "100 pierres : un mur entier s'élève." },
       { nom: "5 murs", montant: 5000, texte: "Le clocher prend de la hauteur." },
       { nom: "10 murs", montant: 10000, texte: "Les cloches approchent du sommet." },
-      { nom: "Le clocher", montant: 0, texte: "Ensemble : les cloches sonnent à 22 mètres." },
+      { nom: "Le clocher", montant: 0, texte: "Ensemble : les cloches sonnent en 2030." },
     ],
     virement: {
       beneficiaire: "Assoc. Diocésaine de Nice — Paroisse St Arnoux",
@@ -334,320 +320,361 @@ export const SITE = {
   },
 };
 
-/* ============================================================================
-   4. LES ARTICLES DU SITE
-   Pour ajouter un article, copiez un bloc { ... } ci-dessous.
-   Pour masquer temporairement un article, passez `publie: false`.
-   ============================================================================ */
+export const MENU_PROJET = ["Projet", "Équipe", "Architecture", "Agenda", "Budget"];
 
-export const CATEGORIES = [
-  "Présentation",
-  "Projet",
-  "Architecture",
-  "Construction",
-  "Équipe",
-  "Budget",
-  "Avancement",
-  "Agenda",
-  "Déduction fiscales",
-  "Foire aux questions",
-];
+export const FOOTER_LINKS = {
+  quiSommesNous: [
+    { label: "Le projet de l'église au Rouret", href: "/articles/projet-eglise-saint-joseph-le-rouret" },
+    { label: "Le Père Paul Bao Dinh Ly & l'équipe", href: "/articles/qui-est-bao-dinh" },
+    { label: "Messe de rentrée & prochaines étapes", href: "/articles/messe-de-rentree-et-vie-du-projet" },
+    { label: "Soutenir la collecte (clocher 22 m)", href: "/soutenir" },
+  ],
+  liensUtiles: [
+    { label: "Calendrier des événements", href: "/calendrier" },
+    { label: "Newsletter", href: "/newsletter" },
+    { label: "Article Nice-Matin (4 oct. 2026)", href: "https://www.nicematin.com/societe/vie-locale/projet-a-6-millions-d-euros-unique-dans-les-alpes-maritimes-appel-aux-dons-face-a-la-croissance-du-nombre-de-fideles-cette-paroisse-lance-la-construction-d-une-eglise-10734256" },
+    { label: "Diocèse de Nice", href: "https://nice.catholique.fr/" },
+    { label: "Paroisse Saint-Arnoux (Facebook)", href: "https://www.facebook.com/saint.arnoux" },
+    { label: "Commune du Rouret", href: "https://lerouret.fr/" },
+  ],
+};
+
+/* ============================================================================
+   2. LES ARTICLES DU SITE
+   ============================================================================
+   Pour modifier un article ou en ajouter un nouveau :
+   - Copiez un bloc `{ slug: "...", titre: "...", ... }` ci-dessous.
+   - `statut: "publie"` affiche l'article sur le site ; `"brouillon"` le masque.
+   - Vous pouvez ajouter des photos (`photos: [...]`) et des vidéos YouTube
+     (`videos: [...]`) ainsi que des blocs interactifs dans `contenu` :
+     `[[budget]]`, `[[equipe]]`, `[[avancement]]`, `[[clocher]]`, `[[missions]]`, `[[faq]]`.
+   ============================================================================ */
 
 export const ARTICLES = [
   {
     slug: "projet-eglise-saint-joseph-le-rouret",
-    titre: "Au Rouret, un projet à 6 millions d'euros unique dans les Alpes-Maritimes pour bâtir l'église Saint-Joseph",
-    categories: ["Projet", "Présentation", "Architecture", "Construction", "Avancement"],
+    aliases: ["budget", "le-terrain", "les-architectes", "selection-des-architectes", "pourquoi-le-cout-a-augmente", "materiaux-locaux-et-normes"],
+    titre: "Projet à 6 millions d'euros unique dans les Alpes-Maritimes : la paroisse Saint-Arnoux lance la construction de l'église Saint-Joseph au Rouret",
+    categories: ["Projet", "Architecture", "Budget"],
     date: "2026-10-04",
-    auteur: "Paroisse Saint-Arnoux (d'après Nice-Matin)",
-    image: "/assets/img/hero-eglise-nuit.jpeg",
-    motsCles: [
-      "Nice-Matin",
-      "Le Rouret",
-      "église Saint-Joseph",
-      "centre paroissial",
-      "concours d'architectes",
-      "Pré-des-Roures",
-      "appel aux dons",
-    ],
-    publie: true,
+    auteur: "Paroisse Saint-Arnoux (avec Nice-Matin)",
+    image: "/assets/img/l-ensemble-paroissial-dans-son-site.jpeg",
     resume:
-      "Face à la croissance du nombre de fidèles dans les dix communes de la paroisse Saint-Arnoux, la communauté lance au Rouret la construction de l'église Saint-Joseph et de son centre paroissial : un projet de 6 millions d'euros, salué par Nice-Matin comme unique dans les Alpes-Maritimes.",
-    contenu: `C'est à l'ombre d'oliviers centenaires et de cyprès dressés vers le ciel, sur le terrain situé à proximité du **collège du Pré-des-Roures au Rouret**, que **plus de 400 fidèles** se sont rassemblés fin septembre 2026 pour la messe de rentrée en plein air de la **paroisse Saint-Arnoux**. Lors de cette célébration, le père **Paul Bao-Dinh Ly** a intronisé cinq catéchumènes qui recevront le baptême au printemps et a accueilli une personne en chemin de conversion — signe concret de la vitalité qui anime la communauté.
+      "Face à la croissance rapide du nombre de fidèles dans les dix communes de la paroisse Saint-Arnoux, un nouvel ensemble paroissial et une église de 300 places avec un clocher de 22 mètres vont voir le jour au Rouret sur un terrain arboré d'oliviers centenaires.",
+    motsCles: ["Le Rouret", "Nice-Matin", "Église Saint-Joseph", "Budget 6 M€", "Concours d'architectes", "Environnement"],
+    statut: "publie",
+    photos: [
+      {
+        url: "/assets/img/l-ensemble-paroissial-dans-son-site.jpeg",
+        legende: "Intégration paysagère du futur ensemble paroissial Saint-Joseph au Rouret (70 % d'espaces végétalisés).",
+      },
+      {
+        url: "/assets/img/hero-eglise-nuit.jpeg",
+        legende: "Perspective nocturne de la future église Saint-Joseph et de son clocher de 22 mètres.",
+      },
+    ],
+    videos: [],
+    contenu: `C'est un chantier spirituel et architectural **unique dans le département des Alpes-Maritimes**. Comme le souligne le quotidien [*Nice-Matin* dans son reportage du 4 octobre 2026](https://www.nicematin.com/societe/vie-locale/projet-a-6-millions-d-euros-unique-dans-les-alpes-maritimes-appel-aux-dons-face-a-la-croissance-du-nombre-de-fideles-cette-paroisse-lance-la-construction-d-une-eglise-10734256), la **paroisse Saint-Arnoux** a officiellement lancé la construction de la future **église Saint-Joseph** et de son nouveau centre paroissial sur la commune du **Rouret**.
 
-Comme le souligne le quotidien [*Nice-Matin* dans son reportage consacré au projet](https://www.nicematin.com/societe/vie-locale/projet-a-6-millions-d-euros-unique-dans-les-alpes-maritimes-appel-aux-dons-face-a-la-croissance-du-nombre-de-fideles-cette-paroisse-lance-la-construction-d-une-eglise-10734256), cette joie partagée est portée par une aventure exceptionnelle dans les Alpes-Maritimes : **la construction d'une nouvelle église, l'église Saint-Joseph, et de son centre paroissial (projet SJO2)**.
+## Une paroisse de dix communes en pleine croissance démographique et missionnaire
 
-## Dix communes réunies et une croissance qui pousse les murs
+La paroisse Saint-Arnoux fédère aujourd'hui **dix communes et localités** du moyen-pays grassois : **Le Rouret, Roquefort-les-Pins, Opio, Le Bar-sur-Loup, Châteauneuf-Grasse, Cipières, Courmes, Gourdon, Gréolières et Pont-du-Loup**.
 
-La paroisse Saint-Arnoux fédère aujourd'hui **dix communes et villages** du moyen-pays grassois : **Roquefort-les-Pins, Le Rouret, Opio, Le Bar-sur-Loup, Châteauneuf-de-Grasse, Cipières, Courmes, Gourdon, Gréolières et Pont-du-Loup**.
-
-Avec l'arrivée de nombreuses familles, la fréquentation des messes, du catéchisme, de l'aumônerie et des parcours de préparation aux sacrements ne cesse de croître, tandis que le centre paroissial actuel (1104, route de Nice au Rouret) est devenu trop exigu :
+Face à l'arrivée de nombreuses familles et au dynamisme des activités paroissiales (catéchisme, aumônerie des jeunes, catéchuménat adulte, parcours Alpha, chorale et solidarité), l'église historique Saint-Pons et les locaux actuels du centre Saint-Joseph (1104, route de Nice au Rouret) sont devenus trop exigus :
 
 > « Devant la démographie grandissante de la paroisse, le centre paroissial est de plus en plus petit. Cette dynamique est limitée par l'espace, alors nous allons bâtir notre église et son centre paroissial sur ce terrain idéalement situé dans un espace arboré et préservé. Ce n'est pas un bâtiment que nous allons ériger, c'est une mission. Nous sommes tous des bâtisseurs. »
-> — **Père Paul Bao-Dinh Ly**, curé de la paroisse Saint-Arnoux (*Nice-Matin*)
+> — **Père Paul Bao Dinh Ly**, curé de la paroisse Saint-Arnoux (*Nice-Matin*, 4 octobre 2026)
 
-## Un ensemble écologique et lumineux sur un terrain d'un hectare
+## Un terrain de 8 736 m² à l'ombre des oliviers centenaires
 
-Acquis et intégralement payé en 2025, le terrain de **8 736 m²** (près d'un hectare) conservera **70 % d'espaces paysagers** pour préserver son cadre méditerranéen d'oliviers et de cyprès. L'ensemble bâti (environ 1 000 m²) réunira trois pôles complémentaires :
+Située à proximité immédiate du **collège du Pré-des-Roures** au Rouret (30, allée du Pré-des-Roures), la parcelle de **8 736 m²** (près d'un hectare) a été intégralement acquise et payée en 2025.
 
-- **L'église Saint-Joseph (+ de 300 places)** : une nef chaleureuse et lumineuse, un parvis ouvert à tous et un **clocher de 22 mètres**.
-- **Le centre paroissial (+ de 100 personnes)** : accueil, grande salle polyvalente pour les temps forts, salles de catéchisme et d'aumônerie, café fraternel et cuisine.
-- **Le presbytère** : trois logements (T3) destinés à la vie de la communauté sacerdotale.
+Planté d'**oliviers centenaires** et de **cyprès dressés vers le ciel**, ce terrain bénéficie d'une situation centrale pour l'ensemble des communes de la paroisse. Le projet accorde une place majeure au **volet environnemental** : **70 % de la parcelle restera en espaces paysagers**, pour accueillir les fidèles dans un cadre paisible et méditerranéen.
 
-Une attention particulière est portée au **volet environnemental** : sobriété énergétique, matériaux durables (pierre claire, bois) et intégration harmonieuse dans le paysage du Rouret.
+L'ensemble bâti (environ **1 000 m²**) regroupera trois pôles complémentaires permettant d'accueillir jusqu'à **400 personnes** :
 
-## 33 architectes candidats et une consultation participative ouverte à tous
+1. **L'église Saint-Joseph (+ de 300 places)** : une nef lumineuse et priante, un parvis d'accueil fraternel et un **clocher de 22 mètres** appelé à devenir un repère spirituel et architectural durable.
+2. **Le centre paroissial (+ de 100 personnes)** : une grande salle polyvalente pour les temps forts communautaires, des salles de catéchisme et d'aumônerie, un espace café convivial, une cuisine et les bureaux d'accueil.
+3. **Le presbytère** : trois logements (T3) destinés aux prêtres au service de la communauté sacerdotale.
 
-Après le feu vert du Diocèse de Nice en mai 2026 (Comité d'Investissement Diocésain et Commission Diocésaine d'Art Sacré), la sélection architecturale est entrée dans sa phase active :
+## 33 architectes candidats et une consultation participative les 28 et 29 novembre
 
-1. **33 cabinets d'architectes** ont répondu au cahier des charges.
-2. Une présélection retient **10 cabinets** admis à concourir.
-3. **5 projets finalistes** seront exposés sous forme de **maquettes** lors d'une grande **consultation participative** ouverte à la communauté paroissiale, aux habitants et aux riverains les **28 et 29 novembre 2026** à la **salle Charvet**, à l'occasion de la kermesse paroissiale.
-4. Le projet lauréat sera dévoilé **durant les fêtes de Noël**.
+Après le feu vert officiel du Diocèse de Nice en mai 2026 — validation par le Comité d'Investissement Diocésain (CID) le 7 mai, puis par la Commission Diocésaine d'Art Sacré (CDAE) le 19 mai — la sélection du maître d'œuvre est entrée dans sa phase active :
 
-[[avancement]]
+- **33 cabinets d'architectes** ont reçu le cahier des charges et remis leurs candidatures ;
+- **10 équipes** sont présélectionnées lors d'un premier écrémage ;
+- **5 projets finalistes** seront retenus pour le concours final et **présentés sous forme de maquettes lors d'une consultation participative** ouverte à la communauté paroissiale, au public et aux riverains les **28 et 29 novembre 2026** à la **salle Charvet du Rouret**, à l'occasion de la kermesse paroissiale ;
+- Le projet lauréat sera dévoilé **durant les fêtes de Noël 2026**.
 
-## 6 millions d'euros financés par la générosité des bâtisseurs
+## Un budget de 6 millions d'euros financé par l'appel aux dons
 
-Comme le rappelle Bertrand, bénévole et chargé de projet : *« L'enveloppe prévisionnelle est de 6 millions d'euros au total, comprenant le terrain qui est déjà acquis. Nous lançons un appel aux dons : c'est ainsi que nous financerons ce projet. »*
+Comme le rappelle Bertrand, bénévole et chargé de projet pour la communauté : *« L'enveloppe prévisionnelle est de 6 millions d'euros au total, comprenant le terrain qui est déjà acquis. Nous lançons bien évidemment un appel aux dons, c'est ainsi que nous financerons ce projet. »*
 
-Avec **1,4 M€ déjà réunis** (terrain inclus), chaque don — dès 10 € pour une pierre ou 1 000 € pour un mur — fait s'élever le clocher de 22 mètres vers l'objectif.
+Grâce à l'acquisition du terrain et à l'engagement des premiers grands donateurs, **1,4 M€ ont déjà été réunis**. Il reste **4,6 M€ TTC** à mobiliser sur la durée du chantier pour ériger le centre paroissial puis l'église :
 
-[[clocher]]`,
+[[budget]]
+
+Chaque don (déductible de l'impôt sur le revenu à hauteur de **66 %** pour les particuliers et de **60 %** pour les entreprises) permet de poser symboliquement une pierre de 10 € ou un mur de 1 000 € pour faire monter le clocher de 22 mètres.`,
   },
 
   {
     slug: "qui-est-bao-dinh",
-    titre: "Père Paul Bao-Dinh Ly : portrait du « curé bâtisseur » de la paroisse Saint-Arnoux",
-    categories: ["Équipe", "Présentation"],
+    aliases: ["qui-sommes-nous"],
+    titre: "Portrait du Père Paul Bao Dinh Ly, le « curé bâtisseur » de la paroisse Saint-Arnoux",
+    categories: ["Équipe", "Projet"],
     date: "2026-10-05",
     auteur: "Équipe projet SJO2",
     image: "/assets/img/pere-paul-bao-dinh-ly.jpeg",
-    motsCles: [
-      "Père Paul Bao-Dinh Ly",
-      "curé",
-      "Paroisse Saint-Arnoux",
-      "Diocèse de Nice",
-      "curé bâtisseur",
-      "vocation",
-      "équipe",
-    ],
-    publie: true,
     resume:
-      "Ordonné prêtre à Nice en 2009 et curé de la paroisse Saint-Arnoux, le père Paul Bao-Dinh Ly fédère dix communes et plus de cent bénévoles autour de la construction de la future église Saint-Joseph au Rouret.",
-    contenu: `Surnommé avec affection le **« curé bâtisseur »** par ses paroissiens et la presse locale, le **père Paul Bao-Dinh Ly** (Lý Bảo Đinh) est le curé de la **paroisse Saint-Arnoux** et le pilote principal du projet de construction de l'église Saint-Joseph et de son centre paroissial au Rouret.
+      "Curé de la paroisse Saint-Arnoux et doyen du Pays de Grasse au sein du Diocèse de Nice, le Père Paul Bao Dinh Ly fédère plus de 100 bénévoles et une équipe pluridisciplinaire autour du projet de l'église Saint-Joseph au Rouret.",
+    motsCles: ["Père Paul Bao Dinh Ly", "Curé bâtisseur", "Paroisse Saint-Arnoux", "Diocèse de Nice", "Équipe", "Bénévoles"],
+    statut: "publie",
+    photos: [
+      {
+        url: "/assets/img/pere-paul-bao-dinh-ly.jpeg",
+        legende: "Le Père Paul Bao Dinh Ly, curé de la paroisse Saint-Arnoux et doyen du Pays de Grasse.",
+      },
+    ],
+    videos: [],
+    contenu: `Surnommé avec affection le **« curé bâtisseur »** dans les colonnes de [*Nice-Matin*](https://www.nicematin.com/societe/vie-locale/projet-a-6-millions-d-euros-unique-dans-les-alpes-maritimes-appel-aux-dons-face-a-la-croissance-du-nombre-de-fideles-cette-paroisse-lance-la-construction-d-une-eglise-10734256), le **Père Paul Bao Dinh Ly** (Lý Bảo Đinh) est l'âme et le pilote pastoral du projet de construction de l'église Saint-Joseph et de son centre paroissial au Rouret.
 
-> « Nous allons mettre une pelle dans notre âme et dans notre prière. Nous ne bâtissons pas seulement des murs : nous bâtissons un lieu vivant. »
-> — **Père Paul Bao-Dinh Ly**
+## Un pasteur au service du Diocèse de Nice et du Pays de Grasse
 
-## Du Vietnam au diocèse de Nice : un pasteur au service de la mission
+Prêtre du **Diocèse de Nice**, le Père Paul Bao Dinh Ly exerce sa mission au cœur des Alpes-Maritimes avec une double responsabilité pastorale et diocésaine :
 
-Originaire du Vietnam et formé au séminaire du diocèse de Nice (notamment auprès du sanctuaire Notre-Dame de Laghet), Paul Bao-Dinh Ly a été **ordonné prêtre le dimanche 11 octobre 2009** en la cathédrale Sainte-Réparate de Nice.
+- **Curé de la paroisse Saint-Arnoux**, qui rassemble dix communes et villages de l'arrière-pays grassois autour du Rouret (Roquefort-les-Pins, Le Rouret, Opio, Le Bar-sur-Loup, Châteauneuf-Grasse, Cipières, Courmes, Gourdon, Gréolières et Pont-du-Loup) ;
+- **Doyen du Pays de Grasse**, coordonnant l'action pastorale des paroisses du doyenné en lien étroit avec l'évêque de Nice, Mgr Jean-Philippe Nault ;
+- Au sein du diocèse, il a également servi comme **modérateur pour la Pastorale Liturgique et Sacramentelle (PLS)**, cérémoniaire épiscopal et aumônier de la **Communauté catholique vietnamienne de la Côte d'Azur**.
 
-Incardiné dans le **diocèse de Nice**, il a exercé plusieurs ministères pastoraux dans les Alpes-Maritimes et siège également au sein du **conseil épiscopal (conseil restreint)** autour de l'évêque de Nice, Mgr Jean-Philippe Nault. Il est aussi connu dans le diocèse pour ses capsules spirituelles vidéo et radio (*« La Minute Spi »*), où il partage l'Évangile avec simplicité, profondeur et enthousiasme.
+## « Mettre une pelle dans notre âme et dans notre prière »
 
-## Rassembler dix communes autour d'une maison commune
+Pour le Père Paul Bao Dinh Ly, la construction d'une église au XXIᵉ siècle ne répond pas seulement à un besoin matériel de mètres carrés : elle est le fruit et l'outil d'un **renouveau missionnaire**. Lors de la messe de rentrée en plein air célébrée fin septembre 2026 devant plus de 400 fidèles sous les oliviers du futur terrain, il a accueilli **cinq nouveaux catéchumènes** en route vers le baptême ainsi qu'une personne appelée à la conversion, avant de lancer à l'assemblée :
 
-Nommé curé de la **paroisse Saint-Arnoux**, il veille sur un territoire vivant qui regroupe **dix communes** : Le Rouret, Roquefort-les-Pins, Opio, Châteauneuf-de-Grasse, Le Bar-sur-Loup, Gourdon, Cipières, Courmes, Gréolières et Pont-du-Loup.
+> « Nous allons mettre une pelle dans notre âme et dans notre prière. [...] Nous ne bâtissons pas seulement des murs. Nous bâtissons un lieu vivant. »
+> — **Père Paul Bao Dinh Ly**
 
-Face à l'arrivée de nombreuses jeunes familles, aux demandes de baptême d'adultes et d'enfants et à l'essor des groupes de jeunes, il a porté avec le conseil pastoral et le conseil économique une conviction forte : **doter la paroisse d'une véritable église et d'un centre paroissial dimensionnés pour les décennies à venir**, au cœur du Rouret.
+Cette conviction irrigue tout le cahier des charges du projet SJO2 : concevoir un lieu à la fois profondément sacré pour la liturgie, chaleureux et ouvert pour les familles et les jeunes, et respectueux de la beauté naturelle du site du Rouret.
 
-## Un maître d'ouvrage entouré d'une équipe d'experts bénévoles
+## Une équipe structurée de 19 experts et plus de 100 bénévoles
 
-Représentant le maître d'ouvrage en lien étroit avec l'**Association Diocésaine de Nice (ADN)**, le père Paul Bao-Dinh Ly a su réunir autour de lui une équipe projet structurée — ingénieurs, architectes, financiers, juristes, communicants — et **plus de 100 bénévoles** répartis en commissions.
-
-Découvrez ci-dessous l'équipe qui l'accompagne au quotidien dans la conduite du projet SJO2 :
+Pour mener à bien un projet de **6 millions d'euros** avec la rigueur professionnelle qu'il exige, le Père Paul Bao Dinh Ly s'est entouré d'un comité de pilotage et de quatre commissions spécialisées (**Pilotage central, Construction & Art sacré, Finance, Pastorale & Communication**) réunissant ingénieurs, chefs de projets, architectes, juristes, financiers et communicants :
 
 [[equipe]]`,
   },
 
   {
-    slug: "budget-equipe-et-questions-frequentes",
-    titre: "Budget de 6 M€, déduction fiscale et bénévolat : comment participer concrètement à l'aventure des Bâtisseurs",
-    categories: ["Budget", "Déduction fiscales", "Foire aux questions", "Équipe"],
-    date: "2026-10-10",
-    auteur: "Commission Finance & Communication SJO2",
-    image: "/assets/img/eglise-saint-joseph-batisseurs-du-seigneur.png",
-    motsCles: [
-      "budget",
-      "6 millions",
-      "déduction fiscale",
-      "66%",
-      "60%",
-      "mécénat",
-      "bénévoles",
-      "FAQ",
-      "questions fréquentes",
+    slug: "messe-de-rentree-et-vie-du-projet",
+    aliases: [
+      "la-journee-de-rentree",
+      "ou-en-est-le-projet",
+      "les-evenements",
+      "questions-frequentes",
+      "reduction-d-impot",
+      "rejoindre-les-benevoles",
     ],
-    publie: true,
+    titre: "Plus de 400 fidèles sous les oliviers, Clocher des Bâtisseurs et prochaines étapes : comment participer à l'aventure",
+    categories: ["Agenda", "Avancement", "Foire aux questions", "Déduction fiscales"],
+    date: "2026-10-06",
+    auteur: "Commission Communication SJO2",
+    image: "/assets/img/hero-eglise-nuit.jpeg",
     resume:
-      "Comment se répartit le budget de 6 millions d'euros ? Comment fonctionne la réduction d'impôt de 66 % (particuliers) et 60 % (entreprises) ? Quelles sont les missions bénévoles ouvertes ? Toutes les réponses en un coup d'œil.",
-    contenu: `Bâtir une église et un centre paroissial au XXIᵉ siècle repose entièrement sur la **transparence financière**, la **générosité des fidèles et des mécènes** et l'**engagement bénévole**. Voici tout ce qu'il faut savoir pour comprendre le financement du projet SJO2 et y prendre part.
+      "Retour sur la première messe de rentrée célébrée en plein air sur le terrain du Rouret devant plus de 400 personnes, calendrier des prochaines étapes jusqu'au choix de l'architecte à Noël, fonctionnement du Clocher des Bâtisseurs et missions bénévoles.",
+    motsCles: ["Messe de rentrée", "Mgr Jean-Philippe Nault", "Clocher des Bâtisseurs", "Kermesse novembre", "Bénévolat", "Fiscalité"],
+    statut: "publie",
+    photos: [
+      {
+        url: "/assets/img/hero-eglise-nuit.jpeg",
+        legende: "Le futur clocher de 22 mètres s'élève au rythme des dons de toute la communauté.",
+      },
+    ],
+    videos: [],
+    contenu: `La rentrée pastorale de septembre 2026 restera gravée dans la mémoire de la paroisse Saint-Arnoux. Pour la première fois, **plus de 400 fidèles** se sont rassemblés en plein air sur le terrain même où s'élèvera la future église Saint-Joseph, près du collège du Pré-des-Roures au Rouret, en présence de **Mgr Jean-Philippe Nault**, évêque de Nice, et du **Père Paul Bao Dinh Ly**.
 
-## 1. Un budget maîtrisé de 6 millions d'euros TTC
+## Une célébration fondatrice sous les oliviers centenaires
 
-Sur un budget global de **6 M€ TTC**, **1,4 M€ ont déjà été réunis** grâce aux premiers grands donateurs, ce qui a permis d'acquérir et de payer intégralement le terrain de 8 736 m² au Rouret dès 2025. Il reste **4,6 M€ TTC** à réunir sur la durée du chantier pour financer les études, la construction et les aménagements :
+À l'ombre des oliviers centenaires et des grands cyprès qui bordent la parcelle de 8 736 m², familles, jeunes de l'aumônerie, anciens et élus ont découvert concrètement l'emplacement du futur ensemble paroissial. L'intronisation de **cinq catéchumènes** adultes qui recevront le baptême au printemps a donné à cette journée tout son sens : bâtir l'église de demain pour celles et ceux qui frappent aujourd'hui à sa porte.
 
-[[budget]]
+## Où en est le projet aujourd'hui ?
 
-## 2. Fiscalité du don : 66 % pour les particuliers, 60 % pour les entreprises
+Après l'acquisition du terrain en 2025 et les validations diocésaines de mai 2026 (CID et CDAE), l'automne 2026 est rythmé par le **concours d'architectes** (33 candidats, 10 sélectionnés, puis **5 finalistes exposés les 28 et 29 novembre 2026 à la salle Charvet** lors de la kermesse paroissiale, avant l'annonce du lauréat à **Noël 2026**) :
 
-Tous les dons versés à l'**Association Diocésaine de Nice — Paroisse Saint-Arnoux** (en ligne, par virement ou par chèque avec la mention « SJO2 ») ouvrent droit à un **reçu fiscal officiel** :
+[[avancement]]
 
-- **Vous êtes un particulier imposable** : vous bénéficiez d'une réduction d'impôt sur le revenu de **66 %** du montant de votre don (dans la limite de 20 % du revenu imposable).
-  - Un don de **100 €** (10 pierres) ne vous coûte réellement que **34 €**.
-  - Un don de **200 €** (20 pierres) ne vous coûte réellement que **68 €**.
-  - Un don de **1 000 €** (1 mur complet) ne vous coûte réellement que **340 €**.
-- **Vous êtes une entreprise (mécénat)** : vous bénéficiez d'une réduction d'impôt sur les sociétés de **60 %** du montant du don (dans la limite de 20 000 € ou 5 ‰ du chiffre d'affaires annuel HT). Un don de **1 000 €** revient ainsi à **400 €**.
+## Le « Clocher des Bâtisseurs » : 22 mètres à élever ensemble
 
-Vous pouvez calculer l'impact exact de votre don sur la page [Soutenir le projet](/soutenir).
+Pour permettre à chacun de suivre et de soutenir concrètement l'avancement de la collecte, la paroisse a imaginé le **Clocher des Bâtisseurs** :
 
-## 3. Rejoindre les commissions de bénévoles
+- **1 pierre = 10 €** · **1 mur = 100 pierres = 1 000 €** ;
+- Les **22 mètres** du clocher représentent les **6 M€** du budget global (soit environ **272 727 € par mètre**) ;
+- Avec **1,4 M€ déjà réunis** (terrain inclus), le clocher culmine déjà à **5,13 mètres** (140 000 pierres posées).
 
-Au-delà du don financier, le projet avance grâce aux talents de chacun. Neuf missions bénévoles sont actuellement ouvertes au sein de trois commissions (cliquez sur une fiche pour voir le détail et proposer votre aide) :
+[[clocher]]
+
+## Rejoindre les équipes de bénévoles
+
+Au-delà du don financier, plus de 100 bénévoles font vivre le projet au quotidien. Trois commissions recrutent actuellement de nouveaux talents :
 
 [[missions]]
 
-## 4. Questions fréquentes (FAQ)
+## Questions fréquentes sur le projet et la réduction d'impôt (66 % / 60 %)
 
 [[faq]]`,
   },
 ];
 
 /* ============================================================================
-   5. LE CALENDRIER DES ÉVÉNEMENTS (passés et à venir)
-   - Pour afficher/masquer un événement sur le site : `publie: true` ou `publie: false`
-   - Pour ajouter un bouton d'inscription : remplissez `lienInscription: "https://..."`
-   - Pour ajouter des photos et vidéos sur la page de l'événement (/calendrier/<slug>) :
-     ajoutez leurs liens dans `photos: [...]` et `videos: [...]` (liens YouTube acceptés).
+   3. LES ÉVÉNEMENTS DU CALENDRIER (/calendrier)
+   ============================================================================
+   Chaque événement ci-dessous crée automatiquement :
+   - un point doré sur le calendrier mensuel (/calendrier) ;
+   - une fiche détaillée avec bouton « S'inscrire » au clic sur la date ;
+   - une page web dédiée (/calendrier/<slug>) pouvant afficher une galerie de
+     photos (`photos`) et des vidéos YouTube / MP4 (`videos`).
+
+   Pour masquer un événement aux visiteurs sans le supprimer, mettez :
+     `visible: false`
    ============================================================================ */
 
-export const CALENDRIER = [
+export const EVENEMENTS = [
   {
     slug: "2026-05-07-comite-d-investissement-diocesain",
+    visible: true,
     titre: "Comité d'Investissement Diocésain (CID)",
     date: "2026-05-07",
     categorie: "Étape du projet",
     lieu: "Diocèse de Nice",
     description:
-      "Validation de la faisabilité et du plan de financement du projet par le Diocèse de Nice. Une étape officielle franchie : le projet SJO2 est reconnu solide et finançable.",
-    publie: true,
+      "Validation officielle de la faisabilité et du plan de financement du projet SJO2 par le Comité d'Investissement Diocésain du Diocèse de Nice.",
     photos: [],
     videos: [],
   },
   {
     slug: "2026-05-19-commission-diocesaine-d-art-sacre",
+    visible: true,
     titre: "Commission Diocésaine d'Art Sacré (CDAE)",
     date: "2026-05-19",
     categorie: "Étape du projet",
     lieu: "Diocèse de Nice",
     description:
-      "Avis favorable de la Commission Diocésaine d'Art Sacré sur le projet architectural et liturgique de l'église Saint Joseph et de son centre paroissial.",
-    publie: true,
+      "Avis favorable de la Commission Diocésaine d'Art Sacré sur le programme architectural, liturgique et artistique de l'église Saint-Joseph et de son centre paroissial.",
     photos: [],
     videos: [],
   },
   {
     slug: "2026-06-21-fete-de-fin-d-annee-les-batisseurs",
+    visible: true,
     titre: "Fête de fin d'année — Les Bâtisseurs",
     date: "2026-06-21",
     categorie: "Événement",
     lieu: "Paroisse Saint-Arnoux, Le Rouret",
     description:
-      "Fête de fin d'année de la Paroisse Saint-Arnoux, sur le thème des Bâtisseurs : un temps festif et fraternel pour toute la communauté, autour du projet Saint Joseph.",
+      "Fête paroissiale de fin d'année sur le thème des Bâtisseurs : temps fraternel et festif autour du projet Saint-Joseph.",
     lienInfo: "https://www.facebook.com/saint.arnoux",
-    publie: true,
     photos: [],
     videos: [],
   },
   {
     slug: "2026-08-15-messe-de-l-assomption",
+    visible: true,
     titre: "Messe de l'Assomption de la Vierge Marie",
     date: "2026-08-15",
     categorie: "Célébration",
     lieu: "Paroisse Saint-Arnoux",
-    description: "Solennité de l'Assomption, célébrée avec la communauté paroissiale.",
-    publie: true,
+    description: "Solennité de l'Assomption célébrée avec l'ensemble de la communauté paroissiale.",
+    photos: [],
+    videos: [],
+  },
+  {
+    slug: "2026-09-lancement-public-de-la-campagne-de-dons",
+    visible: true,
+    titre: "Lancement public de la campagne de dons & concours d'architectes",
+    date: "2026-09-01",
+    dateFin: "2026-09-30",
+    categorie: "Étape du projet",
+    lieu: "Le Rouret",
+    description:
+      "Ouverture officielle de l'appel aux dons (« Le Clocher des Bâtisseurs ») et remise du cahier des charges aux 33 cabinets d'architectes candidats.",
     photos: [],
     videos: [],
   },
   {
     slug: "2026-09-20-premiere-messe-de-rentree-sur-le-nouveau-terrain",
-    titre: "Messe de rentrée en plein air sur le terrain de la future église",
+    visible: true,
+    titre: "1ʳᵉ messe de rentrée en plein air sur le terrain de la future église",
     date: "2026-09-20",
     heureDebut: "10:30",
     categorie: "Célébration",
-    lieu: "Terrain du futur ensemble paroissial (près du collège du Pré-des-Roures), Le Rouret",
+    lieu: "Terrain du Pré-des-Roures, Le Rouret",
     description:
-      "Plus de 400 fidèles réunis à l'ombre des oliviers centenaires sur le terrain qui accueillera l'église Saint-Joseph. Célébration présidée en présence de Mgr Jean-Philippe Nault, évêque de Nice, et du père Paul Bao-Dinh Ly, avec l'entrée en catéchuménat de cinq futurs baptisés et le lancement officiel de l'appel aux dons et du concours d'architectes.",
-    lienInfo: "/articles/projet-eglise-saint-joseph-le-rouret",
-    publie: true,
+      "Plus de 400 fidèles réunis à l'ombre des oliviers centenaires pour la messe de rentrée présidée par Mgr Jean-Philippe Nault, évêque de Nice, aux côtés du Père Paul Bao Dinh Ly. Intronisation de cinq catéchumènes et lancement solennel du projet Saint-Joseph.",
+    lienInfo:
+      "https://www.nicematin.com/societe/vie-locale/projet-a-6-millions-d-euros-unique-dans-les-alpes-maritimes-appel-aux-dons-face-a-la-croissance-du-nombre-de-fideles-cette-paroisse-lance-la-construction-d-une-eglise-10734256",
     photos: [
       {
-        url: "/assets/img/hero-eglise-nuit.jpeg",
-        legende: "Perspective du futur ensemble paroissial Saint-Joseph au Rouret",
+        url: "/assets/img/l-ensemble-paroissial-dans-son-site.jpeg",
+        legende: "Le site arboré du Pré-des-Roures au Rouret qui a accueilli plus de 400 fidèles fin septembre.",
+      },
+      {
+        url: "/assets/img/pere-paul-bao-dinh-ly.jpeg",
+        legende: "Le Père Paul Bao Dinh Ly : « Nous allons mettre une pelle dans notre âme et dans notre prière. »",
       },
     ],
     videos: [],
   },
   {
-    slug: "2026-11-28-kermesse-et-exposition-des-maquettes-d-architectes",
-    titre: "Kermesse paroissiale & consultation participative des 5 maquettes d'architectes",
+    slug: "2026-11-28-kermesse-et-consultation-des-maquettes-d-architectes",
+    visible: true,
+    titre: "Kermesse paroissiale & Consultation participative des 5 projets d'architectes",
     date: "2026-11-28",
     dateFin: "2026-11-29",
     heureDebut: "10:00",
     heureFin: "18:00",
-    categorie: "Événement",
+    categorie: "Consultation & Événement",
     lieu: "Salle Charvet, Le Rouret",
     description:
-      "À l'occasion de la kermesse de la paroisse Saint-Arnoux, venez découvrir les **maquettes des 5 cabinets d'architectes finalistes** retenus parmi les 33 candidats. Une grande consultation participative ouverte aux paroissiens, aux habitants et aux riverains avant le choix final dévoilé à Noël.",
+      "Présentation publique des maquettes des **5 cabinets d'architectes finalistes** retenus à l'issue du concours. Tous les paroissiens, habitants et riverains sont invités à découvrir les projets et à donner leur avis avant le choix final.",
     lienInscription: "/contact",
-    lienInfo: "/articles/projet-eglise-saint-joseph-le-rouret",
-    publie: true,
-    photos: [],
+    photos: [
+      {
+        url: "/assets/img/hero-eglise-nuit.jpeg",
+        legende: "Découverte des esquisses et maquettes de la future église Saint-Joseph.",
+      },
+    ],
     videos: [],
   },
   {
-    slug: "2026-12-24-annonce-du-projet-architectural-laureat",
-    titre: "Dévoilement du projet d'architecte retenu pour l'église Saint-Joseph",
-    date: "2026-12-24",
+    slug: "2026-12-25-annonce-du-projet-architectural-laureat",
+    visible: true,
+    titre: "Fêtes de Noël — Dévoilement du projet d'architecte retenu",
+    date: "2026-12-25",
     categorie: "Étape du projet",
     lieu: "Paroisse Saint-Arnoux, Le Rouret",
     description:
-      "À l'issue du concours d'architecture et de la consultation participative des 28 et 29 novembre, la paroisse Saint-Arnoux et le père Paul Bao-Dinh Ly dévoilent durant les fêtes de Noël le projet architectural choisi pour bâtir l'église Saint-Joseph et son centre paroissial.",
-    lienInfo: "/articles/projet-eglise-saint-joseph-le-rouret",
-    publie: true,
+      "À l'issue de la consultation participative de fin novembre, la paroisse Saint-Arnoux et le Père Paul Bao Dinh Ly dévoilent durant les fêtes de Noël le projet architectural lauréat pour l'église Saint-Joseph et le centre paroissial.",
     photos: [],
     videos: [],
   },
 ];
 
-/* ----------------------------------------------------------------------------
-   6. NAVIGATION DU MENU « LE PROJET » & DU PIED DE PAGE
-   ---------------------------------------------------------------------------- */
-export const MENU_PROJET = [
-  "Présentation",
-  "Projet",
-  "Architecture",
-  "Équipe",
-  "Budget",
-  "Déduction fiscales",
-  "Foire aux questions",
-];
+/* ============================================================================
+   4. SYNCHRONISATION GOOGLE AGENDA (OPTIONNELLE)
+   ============================================================================
+   - Si `activer: false` (recommandé pour la simplicité), seuls les événements
+     listés dans `EVENEMENTS` ci-dessus sont affichés.
+   - Si `activer: true`, le site lit aussi le Google Agenda ci-dessous.
+   - Pour ne rendre visibles sur le site QUE certains événements du Google
+     Agenda, laissez `filtrerVisibilite: true` : seuls les événements dont
+     la visibilité Google Agenda est réglée sur « Public » OU dont le titre /
+     la description contient `[Site]` (ou `#site`) seront affichés aux visiteurs !
+   ============================================================================ */
 
-export const FOOTER_LINKS = {
-  quiSommesNous: [
-    { label: "Le projet (Nice-Matin)", href: "/articles/projet-eglise-saint-joseph-le-rouret" },
-    { label: "Père Paul Bao-Dinh Ly & l'équipe", href: "/articles/qui-est-bao-dinh" },
-    { label: "Budget, fiscalité & FAQ", href: "/articles/budget-equipe-et-questions-frequentes" },
-    { label: "L'avancement", href: "/#avancement" },
-  ],
-  liensUtiles: [
-    { label: "Calendrier des événements", href: "/calendrier" },
-    { label: "Newsletter", href: "/newsletter" },
-    { label: "Soutenir le projet", href: "/soutenir" },
-    { label: "Diocèse de Nice", href: "https://nice.catholique.fr/" },
-    { label: "Paroisse Saint-Arnoux (Facebook)", href: "https://www.facebook.com/saint.arnoux" },
-    { label: "Commune du Rouret", href: "https://lerouret.fr/" },
-  ],
+export const CALENDRIER_GOOGLE = {
+  activer: true,
+  calendarId: "9f2cb93155d97884909c3bcb4fb4c887a2659636e5c6059d68c6e43ad0b842e5@group.calendar.google.com",
+  // Si true : un événement du Google Agenda n'apparaît sur le site que s'il contient
+  // `[Site]` ou `#site` (dans son titre ou sa description) OU s'il est marqué « Public » (CLASS:PUBLIC).
+  filtrerVisibilite: true,
+  motCleFiltre: "[Site]",
+  // Si true : conserve toujours les événements de `EVENEMENTS` ci-dessus en plus du Google Agenda.
+  fusionnerAvecEvenementsLocaux: true,
 };
