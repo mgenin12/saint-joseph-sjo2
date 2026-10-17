@@ -52,6 +52,9 @@ export default async function HomePage() {
             <a className="btn btn--gold btn--lg" href={config.urlDon} target="_blank" rel="noopener">
               Faire un don
             </a>
+            <Link className="btn btn--outline btn--lg" href="/calendrier">
+              Calendrier
+            </Link>
           </div>
         </div>
         <a className="hero__scroll" href="#decouvrir" aria-label="Défiler vers le projet" />
