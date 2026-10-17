@@ -142,29 +142,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ---------- Valeurs ---------- */}
-      {SITE.afficherValeurs && (
-        <section id="valeurs" className="section section--alt" aria-labelledby="valeurs-title">
-          <div className="container">
-            <div className="section-head section-head--center reveal">
-              <span className="eyebrow">Nos valeurs</span>
-              <h2 id="valeurs-title">{SITE.valeurs.titre}</h2>
-              <p className="lead">{SITE.valeurs.intro}</p>
-            </div>
-            <div className="values">
-              {SITE.valeurs.items.map((v) => (
-                <div key={v.nom} className="value reveal">
-                  <h3>{v.nom}</h3>
-                  <p>{v.texte}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ---------- Derniers articles ---------- */}
-      <section className="section" aria-labelledby="articles-title">
+      {/* ---------- Derniers articles (Le projet) ---------- */}
+      <section id="projet" className="section" aria-labelledby="articles-title">
         <div className="container">
           <div className="section-head reveal">
             <span className="eyebrow">Le projet</span>
@@ -184,8 +163,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ---------- Prochains rendez-vous ---------- */}
-      <section className="section section--white section--tight" aria-labelledby="rdv-title">
+      {/* ---------- Prochains rendez-vous (Calendrier) ---------- */}
+      <section id="calendrier" className="section section--white section--tight" aria-labelledby="rdv-title">
         <div className="container">
           <div className="section-head reveal">
             <span className="eyebrow">Calendrier</span>
@@ -207,8 +186,29 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ---------- Valeurs ---------- */}
+      {SITE.afficherValeurs && (
+        <section id="valeurs" className="section section--white" aria-labelledby="valeurs-title">
+          <div className="container">
+            <div className="section-head section-head--center reveal">
+              <span className="eyebrow">Nos valeurs</span>
+              <h2 id="valeurs-title">{SITE.valeurs.titre}</h2>
+              <p className="lead">{SITE.valeurs.intro}</p>
+            </div>
+            <div className="values">
+              {SITE.valeurs.items.map((v) => (
+                <div key={v.nom} className="value reveal">
+                  <h3>{v.nom}</h3>
+                  <p>{v.texte}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ---------- Livre d'Or des Bâtisseurs ---------- */}
-      <section id="temoignages" className="section section--white" aria-labelledby="temoignages-title">
+      <section id="temoignages" className="section section--alt" aria-labelledby="temoignages-title">
         <div className="container">
           <Testimonials />
         </div>
