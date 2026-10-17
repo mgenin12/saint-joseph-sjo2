@@ -1,7 +1,7 @@
 /* ============================================================================
    FICHIER UNIQUE DE CONTENU DU SITE — js/content.js
    Projet SJO2 · Église Saint-Joseph & Centre Paroissial (Le Rouret)
-   Paroisse Saint-Arnoux · Diocèse de Nice
+   Paroisse Saint-Arnoux - Diocèse de Nice
    ============================================================================
 
    👉 TOUT LE CONTENU DU SITE SE MODIFIE ICI, SANS TOUCHER AU CODE :
