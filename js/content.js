@@ -395,20 +395,6 @@ export const SITE = {
         citation:
           "Il n'y a aujourd'hui aucun édifice capable de contenir 600 personnes dans nos dix communes. Avec un lieu central au Rouret, près du collège et doté d'un grand parking, chaque famille pourra enfin être accueillie dignement.",
       },
-      {
-        auteur: "Marie & Thomas",
-        role: "Parents de trois enfants au catéchisme et à l'aumônerie",
-        commune: "Roquefort-les-Pins & Le Rouret",
-        citation:
-          "Voir plus de 400 personnes réunies sous les oliviers pour la messe de rentrée et cinq adultes demander le baptême nous a profondément touchés. Poser nos pierres chaque mois, c'est offrir une maison spirituelle à nos enfants.",
-      },
-      {
-        auteur: "Un catéchumène de la promotion 2026",
-        role: "En chemin vers le baptême",
-        commune: "Pays de Grasse",
-        citation:
-          "Être accueilli par toute la communauté sur la terre même où s'élèvera la future église Saint-Joseph donne un sens concret au mot Église : une famille ouverte qui grandit et qui bâtit dans l'espérance.",
-      },
     ],
   },
 };
