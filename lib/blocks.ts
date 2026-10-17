@@ -2,7 +2,17 @@
  * Blocs dynamiques insérables dans le Markdown d'un article : un jeton seul sur
  * sa ligne, par exemple `[[budget]]`, est remplacé par un composant interactif.
  */
-export const BLOCK_NAMES = ["budget", "equipe", "avancement", "calendrier", "clocher", "faq", "missions"] as const;
+export const BLOCK_NAMES = [
+  "budget",
+  "equipe",
+  "avancement",
+  "calendrier",
+  "clocher",
+  "faq",
+  "missions",
+  "concours",
+  "temoignages",
+] as const;
 export type BlockName = (typeof BLOCK_NAMES)[number];
 
 export type Segment = { type: "markdown"; value: string } | { type: "block"; name: BlockName };

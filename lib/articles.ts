@@ -1,9 +1,9 @@
 import { cache } from "react";
 import type { Article, ArticleStatut, Categorie } from "./types";
-import { type SheetRow, type SheetSource } from "./sheets";
+import type { SheetRow, SheetSource } from "./sheets";
 import { slugify, splitList, normalize, truncate, stripMarkdown, driveImageUrl } from "./text";
 import { toIsoDate, todayIso } from "./dates";
-import { ARTICLES as RAW_ARTICLES, CATEGORIES as RAW_CATEGORIES } from "@/js/content.js";
+import { ARTICLES as CONTENT_ARTICLES } from "@/content/site";
 
 /** Catégories officielles (copie de l'onglet « Catégories d'articles (mots clés) »). */
 export const DEFAULT_CATEGORIES = [
@@ -52,7 +52,7 @@ export function computeStatut(statut: string | undefined, date: string | undefin
   return "publie";
 }
 
-/** Ordre d'affichage : articles datés (plus récents d'abord), puis articles sans date dans l'ordre du Sheet. */
+/** Ordre d'affichage : articles datés (plus récents d'abord), puis articles sans date dans l'ordre de js/content.js. */
 export function sortArticles(articles: Article[]): Article[] {
   return [...articles].sort((a, b) => {
     if (a.date && b.date) return a.date < b.date ? 1 : a.date > b.date ? -1 : a.ordre - b.ordre;
@@ -70,7 +70,7 @@ function pick(row: SheetRow, ...keys: string[]): string | undefined {
   return undefined;
 }
 
-/** Construit la liste des articles à partir des lignes du Sheet et des contenus du dépôt. */
+/** Construit la liste des articles à partir de lignes tabulaires et de contenus de démarrage (conservé pour les tests). */
 export function buildArticles(rows: SheetRow[], seeds: Seed[], officialCategories: string[]): Article[] {
   const bySlug = new Map(seeds.map((s) => [s.slug, s]));
   const byAlias = new Map<string, Seed>();
@@ -128,7 +128,6 @@ export function buildArticles(rows: SheetRow[], seeds: Seed[], officialCategorie
     });
   });
 
-  // Articles définis uniquement dans le dépôt (publie: true dans l'en-tête).
   seeds
     .filter((s) => s.publie && !matched.has(s) && !used.has(s.slug))
     .forEach((s, i) => {
@@ -160,36 +159,44 @@ function canonicalizer(official: string[]): (name: string) => string {
   return (name: string) => map.get(normalize(name)) ?? name.trim();
 }
 
+/**
+ * Charge les articles directement depuis `js/content.js` (section ARTICLES).
+ * Aucun lien avec Google Sheets n'est nécessaire.
+ */
 const loadAll = cache(async (): Promise<{ articles: Article[]; categories: string[]; source: SheetSource }> => {
-  const officialCategories = Array.isArray(RAW_CATEGORIES) && RAW_CATEGORIES.length ? [...RAW_CATEGORIES] : DEFAULT_CATEGORIES;
-  const canon = canonicalizer(officialCategories);
-  const items = (RAW_ARTICLES as Array<Record<string, unknown>>).map((raw, i): Article => {
-    const titre = String(raw.titre ?? "");
-    const slug = slugify(String(raw.slug || titre || `article-${i + 1}`));
-    const contenu = String(raw.contenu ?? "").trim();
-    const resume = raw.resume ? String(raw.resume) : truncate(stripMarkdown(contenu), 180);
-    const date = toIsoDate(raw.date ? String(raw.date) : undefined);
-    const categories = (Array.isArray(raw.categories) ? raw.categories.map(String) : splitList(String(raw.categories ?? ""))).map(canon);
-    const motsCles = Array.isArray(raw.motsCles) ? raw.motsCles.map(String) : splitList(String(raw.motsCles ?? ""));
-    const publie = raw.publie !== false;
+  const canon = canonicalizer(DEFAULT_CATEGORIES);
+  const used = new Set<string>();
+  const list: Article[] = CONTENT_ARTICLES.map((item, i) => {
+    const baseSlug = slugify(item.slug || item.titre || `article-${i + 1}`);
+    let slug = baseSlug;
+    let n = 2;
+    while (used.has(slug)) slug = `${baseSlug}-${n++}`;
+    used.add(slug);
+    const date = toIsoDate(item.date);
+    const categories = (Array.isArray(item.categories) ? item.categories : splitList(String(item.categories ?? ""))).map(canon);
+    const contenu = (item.contenu ?? "").trim();
+    const resume = item.resume || truncate(stripMarkdown(contenu), 180);
     return {
       slug,
-      titre,
+      aliases: (item.aliases ?? []).map(slugify),
+      titre: item.titre,
       categories,
       brief: resume,
       resume,
       contenu,
-      contenuSource: "repo",
-      auteur: raw.auteur ? String(raw.auteur) : undefined,
+      contenuSource: "repo" as const,
+      auteur: item.auteur,
       date,
-      image: raw.image ? String(raw.image) : undefined,
-      motsCles,
-      statut: publie ? computeStatut(raw.statut ? String(raw.statut) : undefined, date) : "brouillon",
-      source: "repo",
+      image: driveImageUrl(item.image) ?? item.image,
+      photos: item.photos,
+      videos: item.videos,
+      motsCles: Array.isArray(item.motsCles) ? item.motsCles : splitList(String(item.motsCles ?? "")),
+      statut: computeStatut(item.statut, date),
+      source: "repo" as const,
       ordre: i,
     };
   });
-  return { articles: sortArticles(items), categories: officialCategories, source: "snapshot" };
+  return { articles: sortArticles(list), categories: DEFAULT_CATEGORIES, source: "none" };
 });
 
 /** Tous les articles visibles (publiés, + brouillons selon l'environnement). */
@@ -201,7 +208,8 @@ export async function getArticles(options: { drafts?: boolean } = {}): Promise<A
 
 export async function getArticle(slug: string, options: { drafts?: boolean } = {}): Promise<Article | undefined> {
   const all = await getArticles(options);
-  return all.find((a) => a.slug === slug);
+  const s = slugify(slug);
+  return all.find((a) => a.slug === s || a.aliases?.includes(s));
 }
 
 /** Catégories officielles avec le nombre d'articles visibles ; catégories inconnues ajoutées en fin de liste. */

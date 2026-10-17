@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SITE } from "@/content/site";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 type Props = {
   urlDon: string;
@@ -114,6 +115,8 @@ export default function Header({ urlDon, categories }: Props) {
               Faire un don
             </a>
           </nav>
+
+          <LanguageSwitcher />
         </div>
       </div>
     </header>

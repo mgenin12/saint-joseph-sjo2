@@ -5,8 +5,9 @@ import Timeline from "@/components/Timeline";
 import Clocher from "@/components/Clocher";
 import ArticleCard from "@/components/ArticleCard";
 import UpcomingEvents from "@/components/UpcomingEvents";
-import LegacyHashRedirect from "@/components/LegacyHashRedirect";
+import ConcoursArchitectes from "@/components/ConcoursArchitectes";
 import Testimonials from "@/components/Testimonials";
+import LegacyHashRedirect from "@/components/LegacyHashRedirect";
 import { SITE } from "@/content/site";
 import { getArticles } from "@/lib/articles";
 import { getUpcomingEvents, getPastEvents } from "@/lib/events";
@@ -103,7 +104,7 @@ export default async function HomePage() {
           </div>
           <Timeline />
           <p className="mt-4">
-            <Link href="/articles/projet-eglise-saint-joseph-le-rouret">Lire l&apos;article complet sur le projet →</Link>
+            <Link href="/articles/messe-de-rentree-et-vie-du-projet">Lire le point d&apos;étape complet →</Link>
           </p>
         </div>
       </section>
@@ -162,9 +163,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ---------- Témoignages (« Pourquoi je bâtis ») ---------- */}
-      <Testimonials />
-
       {/* ---------- Derniers articles ---------- */}
       <section className="section" aria-labelledby="articles-title">
         <div className="container">
@@ -199,6 +197,20 @@ export default async function HomePage() {
               <Link href="/calendrier">Voir tout le calendrier →</Link>
             </p>
           )}
+        </div>
+      </section>
+
+      {/* ---------- Concours d'architectes ---------- */}
+      <section id="concours" className="section section--alt" aria-labelledby="concours-title">
+        <div className="container">
+          <ConcoursArchitectes />
+        </div>
+      </section>
+
+      {/* ---------- Livre d'Or des Bâtisseurs ---------- */}
+      <section id="temoignages" className="section section--white" aria-labelledby="temoignages-title">
+        <div className="container">
+          <Testimonials />
         </div>
       </section>
     </>

@@ -5,6 +5,7 @@ import { slugify, splitList, parseBool, driveImageUrl } from "./text";
 import { toIsoDate, todayIso } from "./dates";
 import { googleCalendarIcsUrl, parseIcsEvents } from "./ics";
 import { EVENEMENTS_DEMARRAGE } from "@/content/evenements";
+import { CALENDRIER_GOOGLE } from "@/content/site";
 
 function pick(row: SheetRow, ...keys: string[]): string | undefined {
   for (const k of keys) {
@@ -57,10 +58,8 @@ export function buildEvents(rows: SheetRow[]): Evenement[] {
 let gcalWarned = false;
 
 async function fetchGoogleCalendarEvents(): Promise<Evenement[] | null> {
-  const enabled =
-    process.env.GOOGLE_CALENDAR_ENABLED === "true" || Boolean(process.env.GOOGLE_CALENDAR_ICS_URL?.trim());
-  if (!enabled || process.env.GOOGLE_CALENDAR_ID === "none") return null;
-  const url = googleCalendarIcsUrl();
+  if (!CALENDRIER_GOOGLE.activer || process.env.GOOGLE_CALENDAR_ID === "none") return null;
+  const url = googleCalendarIcsUrl(CALENDRIER_GOOGLE.calendarId);
   try {
     const res = await fetch(url, {
       next: { revalidate: REVALIDATE_SECONDS },
@@ -71,14 +70,17 @@ async function fetchGoogleCalendarEvents(): Promise<Evenement[] | null> {
       if (!gcalWarned) {
         gcalWarned = true;
         console.warn(
-          `[gcal] Agenda Google (${res.status}) inaccessible : vérifiez que « Rendre disponible publiquement » est coché dans les paramètres de Google Agenda (ou définissez GOOGLE_CALENDAR_ICS_URL avec l'adresse secrète au format iCal). Utilisation des événements de js/content.js.`,
+          `[gcal] Agenda Google (${res.status}) non public : utilisation des événements de js/content.js.`,
         );
       }
       return null;
     }
     const text = await res.text();
     if (!text.includes("BEGIN:VCALENDAR")) return null;
-    return parseIcsEvents(text);
+    return parseIcsEvents(text, {
+      filterVisibility: CALENDRIER_GOOGLE.filtrerVisibilite,
+      keyword: CALENDRIER_GOOGLE.motCleFiltre,
+    });
   } catch {
     return null;
   }
@@ -87,12 +89,16 @@ async function fetchGoogleCalendarEvents(): Promise<Evenement[] | null> {
 export type EventsSource = "gcal" | "sheet" | "repo";
 
 const loadEvents = cache(async (): Promise<{ events: Evenement[]; source: EventsSource }> => {
-  const localEvents = EVENEMENTS_DEMARRAGE.filter((e) => e.publie !== false);
+  const localEvents = EVENEMENTS_DEMARRAGE.filter((e) => e.publie);
   const gcal = await fetchGoogleCalendarEvents();
   if (gcal && gcal.length > 0) {
-    const bySlug = new Map(localEvents.map((e) => [e.slug, e]));
-    for (const ev of gcal.filter((e) => e.publie !== false)) {
-      if (!bySlug.has(ev.slug)) bySlug.set(ev.slug, ev);
+    if (!CALENDRIER_GOOGLE.fusionnerAvecEvenementsLocaux) {
+      return { events: gcal.filter((e) => e.publie), source: "gcal" };
+    }
+    const bySlug = new Map<string, Evenement>();
+    for (const e of localEvents) bySlug.set(e.slug, e);
+    for (const e of gcal.filter((ev) => ev.publie)) {
+      if (!bySlug.has(e.slug)) bySlug.set(e.slug, e);
     }
     return { events: [...bySlug.values()], source: "gcal" };
   }

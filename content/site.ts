@@ -1,27 +1,24 @@
-/* ============================================================================
-   Ré-export depuis js/content.js (fichier unique d'édition du site).
-   Pour modifier les textes, les chiffres, les articles ou le calendrier,
-   éditez directement le fichier : js/content.js
-   ============================================================================ */
+/* ============================================================
+   Pont vers `js/content.js` (fichier unique éditable par l'équipe).
+   Toute modification de contenu doit se faire dans `js/content.js`.
+   ============================================================ */
 
-import { SITE as RAW_SITE, MENU_PROJET as RAW_MENU_PROJET, FOOTER_LINKS as RAW_FOOTER_LINKS } from "@/js/content.js";
+import { SITE as RAW_SITE, MENU_PROJET, FOOTER_LINKS, ARTICLES, EVENEMENTS, CALENDRIER_GOOGLE } from "../js/content.js";
 
-export const SITE = RAW_SITE;
-export const MENU_PROJET = RAW_MENU_PROJET;
-export const FOOTER_LINKS = RAW_FOOTER_LINKS;
-
-export type Membre = {
-  nom: string;
-  photo: string;
-  role: string;
-  bio: string;
+export const SITE = {
+  ...RAW_SITE,
+  avancement: {
+    ...RAW_SITE.avancement,
+    jalons: RAW_SITE.avancement.jalons as {
+      periode: string;
+      etat: "done" | "now" | "todo";
+      titre: string;
+      texte: string;
+    }[],
+  },
 };
 
-export type Mission = {
-  id: string;
-  titre: string;
-  resume: string;
-  mission: string;
-  profil: string;
-  engagement: string;
-};
+export type Membre = (typeof SITE.equipe.membres)[number];
+export type Mission = (typeof SITE.missions.groupes)[number]["missions"][number];
+
+export { MENU_PROJET, FOOTER_LINKS, ARTICLES, EVENEMENTS, CALENDRIER_GOOGLE };

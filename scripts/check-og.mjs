@@ -8,7 +8,7 @@
 const base = (process.env.SITE_URL || "http://localhost:3000").replace(/\/$/, "");
 const urls = process.argv.slice(2).length
   ? process.argv.slice(2)
-  : ["/", "/articles", "/articles/projet-eglise-saint-joseph-le-rouret", "/soutenir", "/calendrier", "/newsletter"].map((p) => base + p);
+  : ["/", "/articles", "/articles/projet-eglise-saint-joseph-le-rouret", "/articles/qui-est-bao-dinh", "/soutenir", "/calendrier", "/newsletter"].map((p) => base + p);
 
 const REQUIRED = ["og:title", "og:description", "og:image", "og:url", "og:type", "twitter:card"];
 

@@ -374,6 +374,51 @@ button {
   justify-content: space-between;
   gap: 24px;
 }
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+}
+.lang-switch__btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--cream);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.lang-switch__btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+.lang-switch__btn.active {
+  background: var(--gold);
+  color: var(--navy-900);
+}
+/* Masque la barre supérieure native de Google Translate pour préserver le design */
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+#goog-gt-tt,
+.goog-te-gadget,
+.skiptranslate > iframe {
+  display: none !important;
+}
+body {
+  top: 0 !important;
+}
 .brand {
   display: flex;
   align-items: center;
@@ -2596,324 +2641,4 @@ button {
   margin: 0;
   font-size: 0.9rem;
   color: var(--ink-soft);
-}
-
-/* ---------- Témoignages (« Pourquoi je bâtis ») ---------- */
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-}
-@media (max-width: 760px) {
-  .testimonials-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.testimonial-card {
-  margin: 0;
-  background: var(--parchment);
-  border-radius: var(--radius);
-  padding: 28px;
-  border-left: 4px solid var(--gold);
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 18px;
-}
-.testimonial-card__quote {
-  font-family: var(--font-display), Georgia, serif;
-  font-style: italic;
-  font-size: 1.08rem;
-  line-height: 1.55;
-  color: var(--navy);
-  margin: 0;
-}
-.testimonial-card__footer {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: 0.92rem;
-}
-.testimonial-card__footer strong {
-  color: var(--navy);
-  font-weight: 700;
-}
-.testimonial-card__footer span {
-  color: var(--ink-soft);
-  font-size: 0.85rem;
-}
-
-/* ---------- Espace Entreprises & Mécénat ---------- */
-.mecenat-tiers {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
-}
-@media (max-width: 1000px) {
-  .mecenat-tiers {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 600px) {
-  .mecenat-tiers {
-    grid-template-columns: 1fr;
-  }
-}
-.mecenat-tier {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(226, 201, 127, 0.28);
-  border-radius: var(--radius);
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.mecenat-tier__badge {
-  align-self: flex-start;
-  background: rgba(197, 162, 75, 0.2);
-  color: var(--gold-soft);
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.mecenat-tier h3 {
-  margin: 0;
-  color: var(--cream);
-  font-size: 1.25rem;
-}
-.mecenat-tier__amounts {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 12px;
-  background: rgba(0, 20, 51, 0.55);
-  border-radius: var(--radius-sm);
-}
-.mecenat-tier__amounts small {
-  display: block;
-  font-size: 0.74rem;
-  color: var(--cream-dim);
-}
-.mecenat-tier__amounts strong {
-  font-family: var(--font-display), serif;
-  font-size: 1.3rem;
-  color: var(--cream);
-}
-.mecenat-tier__net strong {
-  color: var(--gold-soft);
-}
-.mecenat-tier p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--cream-dim);
-}
-
-/* ---------- Feuille imprimable (Bon de soutien & Dossier Mécènes) ---------- */
-.print-section {
-  padding-top: calc(var(--header-h) + 36px);
-}
-.print-sheet {
-  background: #ffffff;
-  color: var(--ink);
-  border-radius: var(--radius);
-  padding: 40px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--cream-dim);
-}
-.print-sheet__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid var(--gold);
-  margin-bottom: 24px;
-}
-.print-sheet__header h1 {
-  font-size: 1.85rem;
-  margin-bottom: 6px;
-}
-.print-sheet__logo {
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.print-box {
-  border: 1px solid var(--cream-dim);
-  border-radius: var(--radius-sm);
-  padding: 20px;
-  margin-bottom: 18px;
-  background: #fffdf9;
-}
-.print-box h2 {
-  font-size: 1.15rem;
-  margin: 0 0 12px;
-  color: var(--navy);
-}
-.print-check-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  font-weight: 600;
-  margin-bottom: 14px;
-  color: var(--navy);
-}
-.print-lines {
-  display: grid;
-  gap: 12px;
-}
-.print-line {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  font-size: 0.95rem;
-}
-.print-line-2col {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: 18px;
-}
-.print-dots {
-  flex: 1;
-  border-bottom: 1px dotted #7a7568;
-  min-width: 80px;
-  height: 1.1em;
-}
-.print-amounts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-  gap: 10px;
-}
-.print-amount {
-  border: 1px solid var(--cream-dim);
-  border-radius: 8px;
-  padding: 10px 12px;
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.print-amount small {
-  color: var(--ink-soft);
-  font-size: 0.78rem;
-}
-.print-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.print-grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-@media (max-width: 720px) {
-  .print-grid-2,
-  .print-grid-3,
-  .print-line-2col {
-    grid-template-columns: 1fr;
-  }
-  .print-sheet {
-    padding: 22px;
-  }
-}
-.print-subbox {
-  background: #ffffff;
-  border: 1px solid var(--parchment-2);
-  border-radius: 8px;
-  padding: 14px;
-}
-.print-subbox h3 {
-  font-size: 1rem;
-  margin: 0 0 8px;
-}
-.print-dl {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 4px 10px;
-  font-size: 0.88rem;
-  margin: 0;
-}
-.print-dl dt {
-  color: var(--ink-soft);
-}
-.print-dl dd {
-  margin: 0;
-}
-.print-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.92rem;
-}
-.print-table th,
-.print-table td {
-  border: 1px solid var(--cream-dim);
-  padding: 10px 12px;
-  text-align: left;
-  vertical-align: top;
-}
-.print-table th {
-  background: var(--parchment);
-  color: var(--navy);
-  font-weight: 700;
-}
-.print-footer {
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid var(--cream-dim);
-}
-.print-signature {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 14px;
-  font-size: 0.92rem;
-}
-.print-sig-box {
-  border: 1px dashed #8c8576;
-  border-radius: 6px;
-  padding: 8px 14px;
-  min-width: 240px;
-  min-height: 62px;
-  font-size: 0.82rem;
-  color: var(--ink-soft);
-}
-.print-legal {
-  font-size: 0.78rem;
-  color: var(--ink-soft);
-  margin: 0 0 4px;
-}
-
-@media print {
-  body {
-    background: #ffffff !important;
-    font-size: 11pt;
-  }
-  body::after,
-  .header,
-  .cta-band,
-  .footer,
-  .skip-link,
-  .no-print {
-    display: none !important;
-  }
-  .print-section {
-    padding: 0 !important;
-  }
-  .print-sheet {
-    box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
-  }
-  .container,
-  .narrow {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-  }
 }

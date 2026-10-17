@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EventCard } from "@/components/Calendar";
+import MediaGallery from "@/components/MediaGallery";
 import ShareBar from "@/components/ShareBar";
 import { getEvent, getEvents, isComplet } from "@/lib/events";
 import { googleCalendarUrl } from "@/lib/ics";
@@ -83,6 +84,7 @@ export default async function EvenementPage({ params }: { params: Params }) {
       <section className="section section--tight">
         <div className="narrow">
           <EventCard e={e} today={today} detailed />
+          <MediaGallery photos={e.photos} videos={e.videos} />
           <div className="row mt-4">
             <Link className="btn btn--outline btn--sm" href={`/calendrier?mois=${e.date.slice(0, 7)}&date=${e.date}`}>
               ← Voir dans le calendrier

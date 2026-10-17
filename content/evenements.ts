@@ -1,9 +1,12 @@
 import type { Evenement } from "@/lib/types";
-import { CALENDRIER } from "@/js/content.js";
+import { EVENEMENTS } from "../js/content.js";
 
 /* ============================================================
    ÉVÉNEMENTS DU CALENDRIER
-   Définis dans le fichier unique js/content.js (section CALENDRIER).
+   Pilotés directement depuis `js/content.js` (section EVENEMENTS).
    ============================================================ */
 
-export const EVENEMENTS_DEMARRAGE: Evenement[] = CALENDRIER as Evenement[];
+export const EVENEMENTS_DEMARRAGE: Evenement[] = EVENEMENTS.map((e) => ({
+  ...e,
+  publie: e.visible !== false,
+}));

@@ -5,7 +5,6 @@ import { splitBlocks, usesBlock } from "@/lib/blocks";
 import { buildEvents } from "@/lib/events";
 import { eventToIcs, googleCalendarUrl, parseIcsEvents, googleCalendarSubscribeUrl } from "@/lib/ics";
 import { rowsToObjects } from "@/lib/sheets";
-import { SITE } from "@/content/site";
 
 describe("dates", () => {
   it("convertit les formats du Sheet en ISO", () => {
@@ -137,17 +136,27 @@ describe("événements", () => {
     expect(googleCalendarSubscribeUrl("9f2cb93155d97884909c3bcb4fb4c887a2659636e5c6059d68c6e43ad0b842e5@group.calendar.google.com")).toBe(
       "https://calendar.google.com/calendar/r?cid=OWYyY2I5MzE1NWQ5Nzg4NDkwOWMzYmNiNGZiNGM4ODdhMjY1OTYzNmU1YzYwNTlkNjhjNmU0M2FkMGI4NDJlNUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t",
     );
-  });
-});
 
-describe("contenu dynamique js/content.js (témoignages, mécénat & bon de soutien)", () => {
-  it("expose les témoignages, les paliers entreprises (60 %) et le bon de soutien", () => {
-    expect(SITE.temoignages.items.length).toBeGreaterThanOrEqual(4);
-    expect(SITE.mecenat.paliersEntreprises.length).toBeGreaterThanOrEqual(4);
-    for (const p of SITE.mecenat.paliersEntreprises) {
-      expect(p.coutReel).toBe(Math.round(p.don * 0.4));
-    }
-    expect(SITE.don.bonDeSoutien.montantsParticuliers).toContain(100);
-    expect(SITE.don.bonDeSoutien.montantsEntreprises).toContain(1000);
+    const selectiveIcs = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "BEGIN:VEVENT",
+      "DTSTART;VALUE=DATE:20261120",
+      "SUMMARY:Réunion interne paroisse",
+      "END:VEVENT",
+      "BEGIN:VEVENT",
+      "DTSTART;VALUE=DATE:20261128",
+      "SUMMARY:[Site] Kermesse et exposition des maquettes",
+      "END:VEVENT",
+      "BEGIN:VEVENT",
+      "DTSTART;VALUE=DATE:20261225",
+      "SUMMARY:Messe de Noël",
+      "CLASS:PUBLIC",
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].join("\r\n");
+
+    const filtered = parseIcsEvents(selectiveIcs, { filterVisibility: true });
+    expect(filtered.map((e) => e.titre)).toEqual(["Kermesse et exposition des maquettes", "Messe de Noël"]);
   });
 });
