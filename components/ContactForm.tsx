@@ -7,6 +7,8 @@ import { sendContact, type FormState } from "@/app/actions";
 const SUJETS = [
   { value: "information", label: "Demande d'information" },
   { value: "don", label: "Don, legs ou mécénat" },
+  { value: "concours-architectes", label: "Concours d'architectes & consultation des 28–29 nov." },
+  { value: "temoignage", label: "Livre d'Or — Partager un témoignage de bâtisseur" },
   { value: "benevolat", label: "Proposer mon aide (bénévolat)" },
   { value: "presse", label: "Presse & partenariats" },
   { value: "autre", label: "Autre" },

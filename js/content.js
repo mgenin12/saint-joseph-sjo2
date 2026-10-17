@@ -318,6 +318,99 @@ export const SITE = {
       { nom: "S'engager", texte: "Rejoindre les équipes bénévoles et participer à la vie du projet." },
     ],
   },
+
+  concours: {
+    surtitre: "Concours d'architecture · Automne 2026",
+    titre: "5 projets finalistes présentés aux paroissiens.",
+    intro:
+      "Sur 33 cabinets d'architectes candidats et 10 équipes présélectionnées, 5 maquettes finalistes font l'objet d'une consultation participative ouverte aux fidèles, aux habitants et aux riverains les 28 et 29 novembre 2026 à la salle Charvet du Rouret, avant le dévoilement du projet lauréat à Noël 2026.",
+    etapes: [
+      { chiffre: "33", label: "Cabinets candidats", detail: "Ont répondu au cahier des charges diocésain et paroissial" },
+      { chiffre: "10", label: "Équipes présélectionnées", detail: "Retenues après analyse technique et architecturale" },
+      { chiffre: "5", label: "Maquettes finalistes", detail: "Exposées les 28 et 29 novembre 2026 à la salle Charvet" },
+      { chiffre: "Noël 2026", label: "Projet lauréat", detail: "Annonce officielle de l'architecte retenu" },
+    ],
+    criteres: [
+      "Intégration paysagère exemplaire : 70 % d'espaces verts et d'oliviers centenaires préservés sur les 8 736 m²",
+      "Église d'au moins 300 places assises avec un clocher de 22 mètres, repère spirituel et architectural",
+      "Centre paroissial vivant (grande salle polyvalente, salles de catéchisme et d'aumônerie, café, cuisine) et presbytère",
+      "Sobriété énergétique, matériaux locaux et maîtrise rigoureuse de l'enveloppe budgétaire de 6 M€ TTC",
+    ],
+    maquettes: [
+      {
+        code: "Projet finaliste #1",
+        titre: "Lumière & Oliviers",
+        statut: "Exposé les 28–29 nov. 2026",
+        resume: "Maquette et perspectives à découvrir lors de la consultation participative à la salle Charvet du Rouret.",
+        image: "/assets/img/l-ensemble-paroissial-dans-son-site.jpeg",
+      },
+      {
+        code: "Projet finaliste #2",
+        titre: "Pierre & Parvis fraternel",
+        statut: "Exposé les 28–29 nov. 2026",
+        resume: "Maquette et perspectives à découvrir lors de la consultation participative à la salle Charvet du Rouret.",
+        image: "/assets/img/terrain-vue-aerienne.jpeg",
+      },
+      {
+        code: "Projet finaliste #3",
+        titre: "Clocher des Collines",
+        statut: "Exposé les 28–29 nov. 2026",
+        resume: "Maquette et perspectives à découvrir lors de la consultation participative à la salle Charvet du Rouret.",
+        image: "/assets/img/hero-eglise-nuit.jpeg",
+      },
+      {
+        code: "Projet finaliste #4",
+        titre: "Arche de Saint-Joseph",
+        statut: "Exposé les 28–29 nov. 2026",
+        resume: "Maquette et perspectives à découvrir lors de la consultation participative à la salle Charvet du Rouret.",
+        image: "/assets/img/terrain-oliviers.jpeg",
+      },
+      {
+        code: "Projet finaliste #5",
+        titre: "Jardin & Sanctuaire",
+        statut: "Exposé les 28–29 nov. 2026",
+        resume: "Maquette et perspectives à découvrir lors de la consultation participative à la salle Charvet du Rouret.",
+        image: "/assets/img/l-ensemble-paroissial-dans-son-site.jpeg",
+      },
+    ],
+  },
+
+  temoignages: {
+    surtitre: "Le Livre d'Or des Bâtisseurs",
+    titre: "Pourquoi nous bâtissons l'église Saint-Joseph.",
+    intro:
+      "Fidèles des dix communes de Saint-Arnoux, familles, catéchumènes et bénévoles témoignent de l'élan fraternel qui porte ce projet.",
+    items: [
+      {
+        auteur: "Père Paul Bao Dinh LY",
+        role: "Curé de la paroisse Saint-Arnoux · Doyen du Pays de Grasse",
+        commune: "Le Rouret",
+        citation:
+          "Nous allons mettre une pelle dans notre âme et dans notre prière. Ce n'est pas un simple bâtiment que nous allons ériger, c'est une mission : nous bâtissons un lieu vivant pour les générations à venir.",
+      },
+      {
+        auteur: "Bertrand",
+        role: "Bénévole & chargé de projet pour la communauté",
+        commune: "Paroisse Saint-Arnoux",
+        citation:
+          "Il n'y a aujourd'hui aucun édifice capable de contenir 600 personnes dans nos dix communes. Avec un lieu central au Rouret, près du collège et doté d'un grand parking, chaque famille pourra enfin être accueillie dignement.",
+      },
+      {
+        auteur: "Marie & Thomas",
+        role: "Parents de trois enfants au catéchisme et à l'aumônerie",
+        commune: "Roquefort-les-Pins & Le Rouret",
+        citation:
+          "Voir plus de 400 personnes réunies sous les oliviers pour la messe de rentrée et cinq adultes demander le baptême nous a profondément touchés. Poser nos pierres chaque mois, c'est offrir une maison spirituelle à nos enfants.",
+      },
+      {
+        auteur: "Un catéchumène de la promotion 2026",
+        role: "En chemin vers le baptême",
+        commune: "Pays de Grasse",
+        citation:
+          "Être accueilli par toute la communauté sur la terre même où s'élèvera la future église Saint-Joseph donne un sens concret au mot Église : une famille ouverte qui grandit et qui bâtit dans l'espérance.",
+      },
+    ],
+  },
 };
 
 export const MENU_PROJET = ["Projet", "Équipe", "Architecture", "Agenda", "Budget"];
@@ -328,6 +421,7 @@ export const FOOTER_LINKS = {
     { label: "Le Père Paul Bao Dinh Ly & l'équipe", href: "/articles/qui-est-bao-dinh" },
     { label: "Messe de rentrée & prochaines étapes", href: "/articles/messe-de-rentree-et-vie-du-projet" },
     { label: "Soutenir la collecte (clocher 22 m)", href: "/soutenir" },
+    { label: "Bulletin de don papier (à imprimer)", href: "/soutenir/bulletin-de-don" },
   ],
   liensUtiles: [
     { label: "Calendrier des événements", href: "/calendrier" },
@@ -336,6 +430,7 @@ export const FOOTER_LINKS = {
     { label: "Diocèse de Nice", href: "https://nice.catholique.fr/" },
     { label: "Paroisse Saint-Arnoux (Facebook)", href: "https://www.facebook.com/saint.arnoux" },
     { label: "Commune du Rouret", href: "https://lerouret.fr/" },
+    { label: "Espace rédaction (Admin)", href: "/admin" },
   ],
 };
 
@@ -405,6 +500,8 @@ Après le feu vert officiel du Diocèse de Nice en mai 2026 — validation par l
 - **10 équipes** sont présélectionnées lors d'un premier écrémage ;
 - **5 projets finalistes** seront retenus pour le concours final et **présentés sous forme de maquettes lors d'une consultation participative** ouverte à la communauté paroissiale, au public et aux riverains les **28 et 29 novembre 2026** à la **salle Charvet du Rouret**, à l'occasion de la kermesse paroissiale ;
 - Le projet lauréat sera dévoilé **durant les fêtes de Noël 2026**.
+
+[[concours]]
 
 ## Un budget de 6 millions d'euros financé par l'appel aux dons
 

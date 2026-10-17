@@ -9,6 +9,8 @@ import TeamGrid from "./TeamGrid";
 import Missions from "./Missions";
 import Faq from "./Faq";
 import Calendar from "./Calendar";
+import ConcoursArchitectes from "./ConcoursArchitectes";
+import Testimonials from "./Testimonials";
 import { splitBlocks, type BlockName } from "@/lib/blocks";
 import { computeClocher, getSiteConfig } from "@/lib/config";
 import { getEvents } from "@/lib/events";
@@ -164,6 +166,10 @@ function renderBlock(name: BlockName) {
       return <FaqBlock />;
     case "missions":
       return <MissionsBlock />;
+    case "concours":
+      return <ConcoursArchitectes compact />;
+    case "temoignages":
+      return <Testimonials />;
   }
 }
 

@@ -5,6 +5,8 @@ import Timeline from "@/components/Timeline";
 import Clocher from "@/components/Clocher";
 import ArticleCard from "@/components/ArticleCard";
 import UpcomingEvents from "@/components/UpcomingEvents";
+import ConcoursArchitectes from "@/components/ConcoursArchitectes";
+import Testimonials from "@/components/Testimonials";
 import LegacyHashRedirect from "@/components/LegacyHashRedirect";
 import { SITE } from "@/content/site";
 import { getArticles } from "@/lib/articles";
@@ -195,6 +197,20 @@ export default async function HomePage() {
               <Link href="/calendrier">Voir tout le calendrier →</Link>
             </p>
           )}
+        </div>
+      </section>
+
+      {/* ---------- Concours d'architectes ---------- */}
+      <section id="concours" className="section section--alt" aria-labelledby="concours-title">
+        <div className="container">
+          <ConcoursArchitectes />
+        </div>
+      </section>
+
+      {/* ---------- Livre d'Or des Bâtisseurs ---------- */}
+      <section id="temoignages" className="section section--white" aria-labelledby="temoignages-title">
+        <div className="container">
+          <Testimonials />
         </div>
       </section>
     </>

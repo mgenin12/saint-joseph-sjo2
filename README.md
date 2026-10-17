@@ -146,8 +146,8 @@ Au tout début de [`js/content.js`](./js/content.js) :
 
 ```javascript
   collecte: {
-    montantCollecte: 1_400_000, // Changez ce chiffre (ex. 1_650_000)
-    objectif: 6_000_000,
+    collecteActuelle: 1_400_000, // Changez ce chiffre (ex. 1_650_000)
+    objectifGlobal: 6_000_000,
   },
 ```
 
@@ -155,7 +155,26 @@ Le site recalcule automatiquement la hauteur atteinte sur les **22 mètres** du 
 
 ---
 
-## 6. Développement local (pour les développeurs)
+## 6. Utiliser l'interface visuelle protégée par mot de passe (`/admin`)
+
+Pour les bénévoles qui préfèrent remplir un formulaire visuel plutôt que d'éditer [`js/content.js`](./js/content.js) sur GitHub :
+
+1. Rendez-vous sur **[https://saint-joseph-sjo2.vercel.app/admin](https://saint-joseph-sjo2.vercel.app/admin)**.
+2. Connectez-vous avec le mot de passe paroissial (défini par la variable d'environnement `ADMIN_PASSWORD` dans Vercel ; mot de passe initial : `SJO2-Batisseurs-2026`).
+3. Modifiez vos **Articles**, vos **Événements du calendrier** (avec leurs photos et vidéos YouTube/Drive), le **compteur de la collecte**, les **témoignages du Livre d'Or** (`SITE.temoignages`) ou les **5 maquettes du concours d'architectes** (`SITE.concours`).
+4. Cliquez sur **« 🚀 Enregistrer / Générer js/content.js »** :
+   - Si un jeton `GITHUB_TOKEN` est configuré sur Vercel (ou saisi dans l'interface), la modification est publiée directement sur GitHub et redéployée automatiquement ;
+   - Sinon, vous pouvez télécharger ou copier le fichier `js/content.js` prêt à l'emploi en un clic.
+
+---
+
+## 7. Bulletin de don papier & Fiche projet à imprimer (`/soutenir/bulletin-de-don`)
+
+Une page prête à imprimer (ou à enregistrer en PDF) est disponible sur **[https://saint-joseph-sjo2.vercel.app/soutenir/bulletin-de-don](https://saint-joseph-sjo2.vercel.app/soutenir/bulletin-de-don)** pour les donateurs souhaitant donner par chèque (*à l'ordre de ADN – Paroisse St Arnoux, mention « SJO2 » au dos*) ou par virement bancaire.
+
+---
+
+## 8. Développement local (pour les développeurs)
 
 ```bash
 npm install

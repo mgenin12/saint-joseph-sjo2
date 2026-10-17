@@ -5,6 +5,7 @@ import Clocher from "@/components/Clocher";
 import Wall from "@/components/Wall";
 import Simulator from "@/components/Simulator";
 import Faq from "@/components/Faq";
+import Testimonials from "@/components/Testimonials";
 import { SITE } from "@/content/site";
 import { computeClocher, getSiteConfig, CLOCHER_METRES } from "@/lib/config";
 import { formatEuros, formatNumber } from "@/lib/text";
@@ -42,6 +43,9 @@ export default async function SoutenirPage() {
             <a className="btn btn--outline" href="#autres-moyens">
               Virement, chèque, entreprise
             </a>
+            <Link className="btn btn--outline" href="/soutenir/bulletin-de-don">
+              🖨️ Bulletin de don papier (PDF)
+            </Link>
           </div>
         </div>
       </section>
@@ -153,6 +157,11 @@ export default async function SoutenirPage() {
                 <br />
                 {SITE.adresse}
               </p>
+              <p className="mt-2">
+                <Link className="btn btn--outline btn--sm" href="/soutenir/bulletin-de-don">
+                  🖨️ Imprimer le bulletin de don papier
+                </Link>
+              </p>
               <h3 className="mt-4">Legs, donations, assurance-vie</h3>
               <p>
                 {SITE.contact.donsEtLegs.nom} vous accompagne en toute confidentialité :{" "}
@@ -195,13 +204,19 @@ export default async function SoutenirPage() {
             ))}
           </div>
           <div className="row mt-4">
-            <Link className="btn btn--navy" href="/articles/rejoindre-les-benevoles">
+            <Link className="btn btn--navy" href="/articles/messe-de-rentree-et-vie-du-projet">
               Voir les missions bénévoles
             </Link>
             <Link className="btn btn--outline" href="/newsletter">
               Recevoir la newsletter
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="section section--white" aria-labelledby="temoignages-soutenir-title">
+        <div className="container">
+          <Testimonials />
         </div>
       </section>
 

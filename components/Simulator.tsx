@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { PIERRE_EUROS, PIERRES_PAR_MUR, coutReel } from "@/lib/collecte";
 
@@ -24,13 +25,14 @@ export default function Simulator({ urlDon, eurosParCm, eurosParMetre }: Props) 
   const cm = montant / eurosParCm;
   const hauteur = cm >= 100 ? `${(cm / 100).toLocaleString("fr-FR", { maximumFractionDigits: 2 })} m` : `${cm.toLocaleString("fr-FR", { maximumFractionDigits: 1 })} cm`;
   const reel = coutReel(montant, type);
+  const economie = Math.max(0, montant - reel);
   const taux = type === "particulier" ? 66 : 60;
   const litBricks = Math.min(PIERRES_PAR_MUR, murs > 0 ? PIERRES_PAR_MUR : reste);
 
   return (
     <div className="sim">
       <div>
-        <span className="eyebrow">Simulateur</span>
+        <span className="eyebrow">Simulateur fiscal &amp; constructeur</span>
         <label htmlFor="sim-montant" className="small muted">
           Je donne
         </label>
@@ -44,19 +46,36 @@ export default function Simulator({ urlDon, eurosParCm, eurosParMetre }: Props) 
           min={MIN}
           max={MAX}
           step={STEP}
-          value={montant}
+          value={Math.min(MAX, Math.max(MIN, montant))}
           onChange={(e) => setMontant(Number(e.target.value))}
         />
         <div className="sim__bounds">
           <span>{euros(MIN)} · 1 pierre</span>
           <span>{euros(MAX)} · 10 murs</span>
         </div>
-        <div className="row mt-2">
+        <div className="row mt-2" style={{ alignItems: "center" }}>
           {[50, 100, 200, 500, 1000, 5000].map((v) => (
             <button key={v} type="button" className={`chip${montant === v ? " active" : ""}`} onClick={() => setMontant(v)}>
               {euros(v)}
             </button>
           ))}
+          <label className="small muted" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            Autre (€) :
+            <input
+              type="number"
+              min={10}
+              max={500000}
+              step={10}
+              value={montant}
+              onChange={(e) => {
+                const v = Math.max(10, Number(e.target.value) || 10);
+                setMontant(v);
+              }}
+              className="input"
+              style={{ width: 105, padding: "5px 8px", fontSize: "0.9rem" }}
+              aria-label="Montant libre en euros"
+            />
+          </label>
         </div>
 
         <div className="sim__stats">
@@ -74,28 +93,36 @@ export default function Simulator({ urlDon, eurosParCm, eurosParMetre }: Props) 
           </div>
         </div>
 
-        <a className="btn btn--gold btn--lg" href={urlDon} target="_blank" rel="noopener">
-          Donner {euros(montant)}
-        </a>
-        <p className="small muted mt-2">Le montant se saisit sur la plateforme sécurisée du Diocèse de Nice.</p>
+        <div className="row">
+          <a className="btn btn--gold btn--lg" href={urlDon} target="_blank" rel="noopener">
+            Donner {euros(montant)} en ligne
+          </a>
+          <Link className="btn btn--outline" href={`/soutenir/bulletin-de-don?montant=${montant}`}>
+            🖨️ Bulletin de don papier
+          </Link>
+        </div>
+        <p className="small muted mt-2">Le don en ligne s&apos;effectue sur la plateforme sécurisée du Diocèse de Nice (reçu fiscal automatique).</p>
       </div>
 
       <div>
         <div className="toggle" role="group" aria-label="Type de donateur">
           <button type="button" className={`toggle__btn${type === "particulier" ? " active" : ""}`} onClick={() => setType("particulier")}>
-            Particulier
+            Particulier (66 %)
           </button>
           <button type="button" className={`toggle__btn${type === "entreprise" ? " active" : ""}`} onClick={() => setType("entreprise")}>
-            Entreprise
+            Entreprise (60 %)
           </button>
         </div>
         <div className="sim__real">
           <span className="small">Coût réel après réduction d&apos;impôt ({taux} %)</span>
           <br />
           <b>{euros(reel)}</b>
+          <div className="small" style={{ color: "var(--gold)", fontWeight: 700, marginTop: 4 }}>
+            Réduction d&apos;impôt : −{euros(economie)}
+          </div>
           <p>
             {type === "particulier"
-              ? "Réduction d'impôt sur le revenu de 66 % dans la limite de 20 % du revenu imposable. Reçu fiscal envoyé pour chaque don."
+              ? "Réduction d'impôt sur le revenu de 66 % dans la limite de 20 % du revenu imposable. Reçu fiscal officiel envoyé par l'Association Diocésaine de Nice."
               : "Réduction d'impôt sur les sociétés de 60 % dans la limite de 20 000 € ou 5 ‰ du chiffre d'affaires HT. Reçu fiscal envoyé pour chaque don."}
           </p>
         </div>
