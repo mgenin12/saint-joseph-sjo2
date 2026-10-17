@@ -47,6 +47,172 @@ function isComplet(e: Evenement) {
   return e.places !== undefined && e.inscrits !== undefined && e.inscrits >= e.places;
 }
 
+function nextDayIso(iso: string): string {
+  const d = new Date(`${iso}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
+function addOneHour(time: string): string {
+  const m = time.match(/^(\d{1,2})[:h](\d{2})?/);
+  if (!m) return time;
+  const h = (parseInt(m[1], 10) + 1) % 24;
+  return `${String(h).padStart(2, "0")}:${m[2] ?? "00"}`;
+}
+
+function formatGcalDate(iso: string, time?: string): string {
+  const [y, m, d] = iso.split("-");
+  if (time) {
+    const mt = time.match(/^(\d{1,2})[:h](\d{2})?/);
+    if (mt) return `${y}${m}${d}T${mt[1].padStart(2, "0")}${(mt[2] ?? "00").padStart(2, "0")}00`;
+  }
+  return `${y}${m}${d}`;
+}
+
+function formatOutlookDate(iso: string, time?: string): string {
+  if (!time) return iso;
+  const mt = time.match(/^(\d{1,2})[:h](\d{2})?/);
+  if (!mt) return iso;
+  return `${iso}T${mt[1].padStart(2, "0")}:${(mt[2] ?? "00").padStart(2, "0")}:00`;
+}
+
+function buildGoogleCalUrl(e: Evenement): string {
+  const timed = Boolean(e.heureDebut);
+  const start = formatGcalDate(e.date, e.heureDebut);
+  const end = timed
+    ? formatGcalDate(e.dateFin ?? e.date, e.heureFin ?? addOneHour(e.heureDebut!))
+    : formatGcalDate(nextDayIso(e.dateFin ?? e.date));
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: e.titre,
+    dates: `${start}/${end}`,
+    details: `${e.description || ""}${e.lienInscription ? `\n\nInscription : ${e.lienInscription}` : ""}`,
+    location: e.lieu ?? "",
+    ctz: "Europe/Paris",
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+function buildOutlookCalUrl(e: Evenement, host: "outlook.live.com" | "outlook.office.com"): string {
+  const timed = Boolean(e.heureDebut);
+  const startdt = timed ? formatOutlookDate(e.date, e.heureDebut) : e.date;
+  const enddt = timed
+    ? formatOutlookDate(e.dateFin ?? e.date, e.heureFin ?? addOneHour(e.heureDebut!))
+    : nextDayIso(e.dateFin ?? e.date);
+  const params = new URLSearchParams({
+    path: "/calendar/action/compose",
+    rru: "addevent",
+    subject: e.titre,
+    startdt,
+    enddt,
+    allday: timed ? "false" : "true",
+    body: `${e.description || ""}${e.lienInscription ? `\n\nInscription : ${e.lienInscription}` : ""}`,
+    location: e.lieu ?? "",
+  });
+  return `https://${host}/calendar/0/deeplink/compose?${params.toString()}`;
+}
+
+function AddToCalendarMenu({ e }: { e: Evenement }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ position: "relative", display: "inline-block" }}>
+      <button
+        type="button"
+        className="btn btn--gold btn--sm"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+      >
+        📅 Ajouter à mon agenda ▾
+      </button>
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 6px)",
+            left: 0,
+            zIndex: 50,
+            background: "#fff",
+            border: "1px solid rgba(0,32,78,0.16)",
+            borderRadius: 10,
+            boxShadow: "0 12px 32px rgba(0,0,0,0.18)",
+            minWidth: 250,
+            padding: 6,
+            display: "grid",
+            gap: 4,
+          }}
+        >
+          <a
+            href={buildGoogleCalUrl(e)}
+            target="_blank"
+            rel="noopener"
+            onClick={() => setOpen(false)}
+            style={{
+              display: "block",
+              padding: "8px 12px",
+              borderRadius: 7,
+              color: "var(--navy)",
+              fontWeight: 600,
+              fontSize: "0.88rem",
+              textDecoration: "none",
+            }}
+          >
+            📅 Google Calendar
+          </a>
+          <a
+            href={buildOutlookCalUrl(e, "outlook.live.com")}
+            target="_blank"
+            rel="noopener"
+            onClick={() => setOpen(false)}
+            style={{
+              display: "block",
+              padding: "8px 12px",
+              borderRadius: 7,
+              color: "var(--navy)",
+              fontWeight: 600,
+              fontSize: "0.88rem",
+              textDecoration: "none",
+            }}
+          >
+            🟦 Microsoft Calendar (Outlook.com)
+          </a>
+          <a
+            href={buildOutlookCalUrl(e, "outlook.office.com")}
+            target="_blank"
+            rel="noopener"
+            onClick={() => setOpen(false)}
+            style={{
+              display: "block",
+              padding: "8px 12px",
+              borderRadius: 7,
+              color: "var(--navy)",
+              fontWeight: 600,
+              fontSize: "0.88rem",
+              textDecoration: "none",
+            }}
+          >
+            🏢 Microsoft 365 (Professionnel)
+          </a>
+          <a
+            href={`/calendrier/${e.slug}/ics`}
+            onClick={() => setOpen(false)}
+            style={{
+              display: "block",
+              padding: "8px 12px",
+              borderRadius: 7,
+              color: "var(--ink-soft)",
+              fontSize: "0.84rem",
+              textDecoration: "none",
+              borderTop: "1px solid rgba(0,32,78,0.08)",
+            }}
+          >
+            🍎 Apple Calendar / Autre (.ics)
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function EventCard({ e, today, detailed = false }: { e: Evenement; today: string; detailed?: boolean }) {
   const past = (e.dateFin ?? e.date) < today;
   const heure = [formatHeure(e.heureDebut), formatHeure(e.heureFin)].filter(Boolean).join(" – ");
@@ -95,11 +261,7 @@ export function EventCard({ e, today, detailed = false }: { e: Evenement; today:
             En savoir plus
           </a>
         )}
-        {!past && (
-          <a className="btn btn--outline btn--sm" href={`/calendrier/${e.slug}/ics`}>
-            Ajouter à mon agenda
-          </a>
-        )}
+        {!past && <AddToCalendarMenu e={e} />}
         {!detailed && (
           <Link className="btn btn--navy btn--sm" href={`/calendrier/${e.slug}`}>
             {hasMedia ? "Page de l'événement (photos & vidéos) →" : "Page de l'événement →"}

@@ -129,6 +129,33 @@ export function googleCalendarUrl(e: Evenement): string {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
+function isoDateTimeForOutlook(iso: string, time?: string): string {
+  if (!time) return iso;
+  const mt = time.match(/^(\d{1,2})[:h](\d{2})?/);
+  if (!mt) return iso;
+  return `${iso}T${mt[1].padStart(2, "0")}:${(mt[2] ?? "00").padStart(2, "0")}:00`;
+}
+
+/** Lien « Ajouter à Microsoft Outlook.com (Personnel) ». */
+export function outlookCalendarUrl(e: Evenement, baseHost: "outlook.live.com" | "outlook.office.com" = "outlook.live.com"): string {
+  const timed = Boolean(e.heureDebut);
+  const startdt = timed ? isoDateTimeForOutlook(e.date, e.heureDebut) : e.date;
+  const enddt = timed
+    ? isoDateTimeForOutlook(e.dateFin ?? e.date, e.heureFin ?? addHour(e.heureDebut!))
+    : nextDay(e.dateFin ?? e.date);
+  const params = new URLSearchParams({
+    path: "/calendar/action/compose",
+    rru: "addevent",
+    subject: e.titre,
+    startdt,
+    enddt,
+    allday: timed ? "false" : "true",
+    body: `${stripMarkdown(e.description)}${e.lienInscription ? `\n\nInscription : ${e.lienInscription}` : ""}`,
+    location: e.lieu ?? "",
+  });
+  return `https://${baseHost}/calendar/0/deeplink/compose?${params.toString()}`;
+}
+
 type ParsedIcsDateTime = {
   date: string;
   time?: string;

@@ -89,11 +89,6 @@ export default async function EvenementPage({ params }: { params: Params }) {
             <Link className="btn btn--outline btn--sm" href={`/calendrier?mois=${e.date.slice(0, 7)}&date=${e.date}`}>
               ← Voir dans le calendrier
             </Link>
-            {!past && (
-              <a className="btn btn--outline btn--sm" href={googleCalendarUrl(e)} target="_blank" rel="noopener">
-                Ajouter à Google Agenda
-              </a>
-            )}
           </div>
           <ShareBar url={url} title={e.titre} text={`${formatDateFull(e.date)}${e.lieu ? ` · ${e.lieu}` : ""}`} />
         </div>
