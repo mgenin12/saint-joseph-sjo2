@@ -92,7 +92,7 @@ export default function Header({ urlDon }: Props) {
 
             <div className="nav__item">
               <Link className={`nav__link${isProjet ? " active" : ""}`} href="/articles" onClick={() => setOpen(false)}>
-                Le projet
+                Articles
               </Link>
             </div>
 
