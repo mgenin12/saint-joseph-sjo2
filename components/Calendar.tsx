@@ -47,21 +47,68 @@ function isComplet(e: Evenement) {
   return e.places !== undefined && e.inscrits !== undefined && e.inscrits >= e.places;
 }
 
+function youtubeEmbedUrl(rawUrl: string): string | null {
+  try {
+    const u = new URL(rawUrl);
+    if (u.hostname.includes("youtu.be")) {
+      const id = u.pathname.replace(/^\//, "").split("/")[0];
+      return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+    }
+    if (u.hostname.includes("youtube.com") || u.hostname.includes("youtube-nocookie.com")) {
+      if (u.pathname.startsWith("/embed/")) return rawUrl;
+      if (u.pathname.startsWith("/shorts/")) {
+        const id = u.pathname.replace(/^\/shorts\//, "").split("/")[0];
+        return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+      }
+      const v = u.searchParams.get("v");
+      return v ? `https://www.youtube-nocookie.com/embed/${v}` : null;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+function SmartActionLink({
+  href,
+  className,
+  children,
+  disabled,
+}: {
+  href: string;
+  className: string;
+  children: React.ReactNode;
+  disabled?: boolean;
+}) {
+  if (href.startsWith("/")) {
+    return (
+      <Link className={className} href={href} aria-disabled={disabled || undefined}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a className={className} href={href} target="_blank" rel="noopener noreferrer" aria-disabled={disabled || undefined}>
+      {children}
+    </a>
+  );
+}
+
 export function EventCard({ e, today, detailed = false }: { e: Evenement; today: string; detailed?: boolean }) {
   const past = (e.dateFin ?? e.date) < today;
   const heure = [formatHeure(e.heureDebut), formatHeure(e.heureFin)].filter(Boolean).join(" – ");
   const complet = isComplet(e);
-  const photoCount = e.photos?.length ?? 0;
-  const videoCount = e.videos?.length ?? 0;
-  const hasMedia = photoCount > 0 || videoCount > 0;
+  const photos = (e.photos ?? []).map((p) => (typeof p === "string" ? { url: p } : p));
+  const videos = (e.videos ?? []).map((v) => (typeof v === "string" ? { url: v } : v));
+  const hasMedia = photos.length > 0 || videos.length > 0;
+
   return (
     <div className="event-detail">
       <span className="badges">
         <span className="badge badge--gold">{e.categorie}</span>
         {past && <span className="badge">Passé</span>}
         {complet && <span className="badge badge--draft">Complet</span>}
-        {photoCount > 0 && <span className="badge">{photoCount} photo{photoCount > 1 ? "s" : ""}</span>}
-        {videoCount > 0 && <span className="badge">{videoCount} vidéo{videoCount > 1 ? "s" : ""}</span>}
+        {hasMedia && <span className="badge">Photos / Vidéos</span>}
       </span>
       <h3>{e.titre}</h3>
       <p className="meta">
@@ -78,22 +125,77 @@ export function EventCard({ e, today, detailed = false }: { e: Evenement; today:
           {e.inscrits ?? 0} inscrit{(e.inscrits ?? 0) > 1 ? "s" : ""} / {e.places} places
         </p>
       )}
+      {detailed && photos.length > 0 && (
+        <div className="mt-4">
+          <h4>Photos de l&apos;événement</h4>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+              gap: 16,
+              marginTop: 12,
+            }}
+          >
+            {photos.map((p, idx) => (
+              <figure key={idx} style={{ margin: 0 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={p.url}
+                  alt={p.legende || `${e.titre} — photo ${idx + 1}`}
+                  style={{ width: "100%", borderRadius: 12, objectFit: "cover", maxHeight: 280 }}
+                />
+                {p.legende && (
+                  <figcaption className="small muted" style={{ marginTop: 6 }}>
+                    {p.legende}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        </div>
+      )}
+      {detailed && videos.length > 0 && (
+        <div className="mt-4">
+          <h4>Vidéos de l&apos;événement</h4>
+          <div style={{ display: "grid", gap: 16, marginTop: 12 }}>
+            {videos.map((v, idx) => {
+              const yt = youtubeEmbedUrl(v.url);
+              return (
+                <div key={idx}>
+                  {yt ? (
+                    <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden", borderRadius: 12 }}>
+                      <iframe
+                        src={yt}
+                        title={v.titre || `${e.titre} — vidéo ${idx + 1}`}
+                        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  ) : (
+                    <video src={v.url} controls style={{ width: "100%", borderRadius: 12 }} />
+                  )}
+                  {v.titre && (
+                    <p className="small muted" style={{ marginTop: 6 }}>
+                      {v.titre}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       <div className="actions">
         {e.lienInscription && !past && (
-          <a
-            className="btn btn--gold"
-            href={e.lienInscription}
-            target={e.lienInscription.startsWith("http") ? "_blank" : undefined}
-            rel={e.lienInscription.startsWith("http") ? "noopener" : undefined}
-            aria-disabled={complet || undefined}
-          >
+          <SmartActionLink className="btn btn--gold" href={e.lienInscription} disabled={complet}>
             {complet ? "Complet" : "S'inscrire"}
-          </a>
+          </SmartActionLink>
         )}
         {e.lienInfo && (
-          <a className="btn btn--outline" href={e.lienInfo} target="_blank" rel="noopener">
+          <SmartActionLink className="btn btn--outline" href={e.lienInfo}>
             En savoir plus
-          </a>
+          </SmartActionLink>
         )}
         {!past && (
           <a className="btn btn--outline btn--sm" href={`/calendrier/${e.slug}/ics`}>
@@ -102,7 +204,7 @@ export function EventCard({ e, today, detailed = false }: { e: Evenement; today:
         )}
         {!detailed && (
           <Link className="btn btn--navy btn--sm" href={`/calendrier/${e.slug}`}>
-            {hasMedia ? "Page de l'événement (photos & vidéos) →" : "Page de l'événement →"}
+            {hasMedia ? "Page de l'événement (photos & vidéos)" : "Page de l'événement"}
           </Link>
         )}
       </div>
@@ -288,17 +390,12 @@ function EventItem({ e, onPick, past = false }: { e: Evenement; onPick: (iso: st
             Détails
           </button>
           <Link className="btn btn--outline btn--sm" href={`/calendrier/${e.slug}`}>
-            {(e.photos?.length || e.videos?.length) ? "Page & photos" : "Page"}
+            {(e.photos?.length || e.videos?.length) ? "Photos & vidéos" : "Page"}
           </Link>
           {e.lienInscription && !past && (
-            <a
-              className="btn btn--gold btn--sm"
-              href={e.lienInscription}
-              target={e.lienInscription.startsWith("http") ? "_blank" : undefined}
-              rel={e.lienInscription.startsWith("http") ? "noopener" : undefined}
-            >
+            <SmartActionLink className="btn btn--gold btn--sm" href={e.lienInscription}>
               S&apos;inscrire
-            </a>
+            </SmartActionLink>
           )}
         </div>
       </div>

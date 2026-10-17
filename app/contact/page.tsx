@@ -73,7 +73,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Sear
             <div className="card">
               <h3>Bénévolat</h3>
               <p className="small">
-                Consultez les <Link href="/articles/rejoindre-les-benevoles">missions ouvertes</Link> et indiquez celle qui vous intéresse dans le formulaire.
+                Consultez les <Link href="/articles/budget-equipe-et-questions-frequentes">missions ouvertes</Link> et indiquez celle qui vous intéresse dans le formulaire.
               </p>
             </div>
           </aside>

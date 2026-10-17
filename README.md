@@ -1,184 +1,182 @@
-# Église Saint Joseph — Projet SJO2 (Paroisse Saint-Arnoux · Le Rouret)
+# Église Saint Joseph — Projet SJO2 (Le Rouret · Paroisse Saint-Arnoux)
 
-Site officiel du projet de construction de l'**église Saint-Joseph** et de son **centre paroissial** au Rouret (Alpes-Maritimes), porté par la **Paroisse Saint-Arnoux** et l'**Association Diocésaine de Nice**.
+Site web dynamique du projet de construction de l'**église Saint-Joseph** et de son **centre paroissial** au Rouret
+(Paroisse Saint-Arnoux, Diocèse de Nice).
 
-- **Site en ligne (production)** : **[https://saint-joseph-sjo2.vercel.app](https://saint-joseph-sjo2.vercel.app)**
-- **Fichier unique de contenu** : **[`js/content.js`](./js/content.js)** — **tous les textes, chiffres, articles et événements du calendrier se modifient dans ce seul fichier**, sans toucher au code technique.
-
----
-
-## 1. Comment modifier le site facilement depuis GitHub (sans rien installer)
-
-Toute personne autorisée de la paroisse peut mettre à jour le site directement depuis son navigateur web :
-
-1. Ouvrez le fichier **[`js/content.js`](https://github.com/mgenin12/saint-joseph-sjo2/blob/main/js/content.js)** sur GitHub.
-2. Cliquez sur l'icône **crayon ✏️ (*Edit this file*)** en haut à droite du fichier.
-3. Modifiez le texte, le montant de la collecte, un article ou un événement.
-4. Cliquez sur le bouton vert **« Commit changes... »** en haut à droite, puis validez.
+- **Site en ligne** : **https://saint-joseph-sjo2.vercel.app**
+- **Code source** : **https://github.com/mgenin12/saint-joseph-sjo2**
+- **Fichier unique pour modifier tout le contenu du site (sans toucher au code)** : **[`js/content.js`](./js/content.js)**
 
 ---
 
-## 2. Comment modifier ou ajouter un article (`ARTICLES` dans `js/content.js`)
+## ✏️ Guide pratique (en français) : comment modifier le site sans toucher au code
 
-Les articles ne dépendent d'aucun tableur externe : ils se trouvent tous dans la section **`export const ARTICLES = [ ... ]`** du fichier [`js/content.js`](./js/content.js).
+Toute l'équipe paroissiale habilitée peut modifier **les articles, le calendrier des événements, les photos/vidéos, le montant de la collecte, les textes d'accueil, l'équipe et la FAQ** dans **un seul fichier** : **`js/content.js`**.
 
-### Les 3 articles actuellement publiés
-1. **`projet-eglise-saint-joseph-le-rouret`** — *Projet à 6 millions d'euros unique dans les Alpes-Maritimes : la paroisse Saint-Arnoux lance la construction de l'église Saint-Joseph au Rouret* (basé sur l'article de *Nice-Matin* du 4 octobre 2026).
-2. **`qui-est-bao-dinh`** — *Portrait du Père Paul Bao Dinh Ly, le « curé bâtisseur » de la paroisse Saint-Arnoux* (présentation du curé et de l'équipe projet).
-3. **`messe-de-rentree-et-vie-du-projet`** — *Plus de 400 fidèles sous les oliviers, Clocher des Bâtisseurs et prochaines étapes : comment participer à l'aventure*.
+### Étape par étape directement depuis votre navigateur (sur GitHub)
 
-### Ajouter un nouvel article (modèle à copier-coller)
-Dans [`js/content.js`](./js/content.js), au début de la liste `export const ARTICLES = [`, collez un bloc comme celui-ci :
+1. Connectez-vous sur **[github.com](https://github.com)** et ouvrez le fichier :
+   👉 **[`js/content.js`](https://github.com/mgenin12/saint-joseph-sjo2/blob/main/js/content.js)**
+2. Cliquez sur l'icône **crayon ✏️ (« Edit this file »)** en haut à droite du fichier.
+3. Effectuez vos modifications (voir les exemples ci-dessous).
+4. Cliquez sur le bouton vert **« Commit changes… »** en haut à droite, puis validez.
+
+---
+
+## 📰 1. Modifier ou ajouter un article (`ARTICLES` dans `js/content.js`)
+
+Dans `js/content.js`, cherchez la section **`export const ARTICLES = [`**.
+Trois articles complets y figurent déjà :
+1. **`projet-eglise-saint-joseph-le-rouret`** — *Au Rouret, un projet à 6 millions d'euros unique dans les Alpes-Maritimes pour bâtir l'église Saint-Joseph* (d'après le reportage de *Nice-Matin*).
+2. **`qui-est-bao-dinh`** — *Père Paul Bao-Dinh Ly : portrait du « curé bâtisseur » de la paroisse Saint-Arnoux*.
+3. **`budget-equipe-et-questions-frequentes`** — *Budget de 6 M€, déduction fiscale et bénévolat : comment participer concrètement à l'aventure des Bâtisseurs*.
+
+### Pour ajouter un nouvel article
+
+Copiez-collez un bloc `{ ... }` au début de `export const ARTICLES = [` :
 
 ```javascript
   {
-    slug: "visite-du-chantier-2027", // Devient l'adresse : /articles/visite-du-chantier-2027
-    titre: "Première visite du chantier avec les paroissiens",
-    categories: ["Construction", "Projet"], // Catégories pour le filtre de recherche
-    date: "2027-03-15", // Format AAAA-MM-JJ
-    auteur: "Équipe projet SJO2",
-    image: "/assets/img/l-ensemble-paroissial-dans-son-site.jpeg", // Image principale
-    resume: "Une phrase courte qui s'affiche dans la liste des articles et lors d'un partage sur Facebook ou WhatsApp.",
-    motsCles: ["Chantier", "Le Rouret", "Bâtisseurs"],
-    statut: "publie", // Mettez "brouillon" pour masquer l'article sans le supprimer
-    photos: [
-      {
-        url: "/assets/img/l-ensemble-paroissial-dans-son-site.jpeg",
-        legende: "Légende affichée sous la photo.",
-      },
-    ],
-    videos: [
-      {
-        url: "https://www.youtube.com/watch?v=VOTRE_ID_VIDEO",
-        titre: "Vidéo de présentation",
-      },
-    ],
+    slug: "mon-nouvel-article", // URL de la page : /articles/mon-nouvel-article (sans espaces ni accents)
+    titre: "Titre de mon nouvel article",
+    categories: ["Projet", "Avancement"], // Choisir parmi CATEGORIES
+    date: "2026-11-30", // Format AAAA-MM-JJ
+    auteur: "Paroisse Saint-Arnoux",
+    image: "/assets/img/hero-eglise-nuit.jpeg", // Image de couverture (optionnelle)
+    motsCles: ["kermesse", "architectes", "Le Rouret"],
+    publie: true, // Mettre false pour masquer temporairement l'article (brouillon)
+    resume: "Court résumé d'une ou deux phrases affiché dans la liste des articles et lors d'un partage sur Facebook / WhatsApp.",
     contenu: `Écrivez ici le texte complet de votre article.
 
 ## Un sous-titre de section
 
-Vous pouvez écrire plusieurs paragraphes, mettre du texte en **gras** ou en *italique*, et créer des listes :
-
+Vous pouvez écrire plusieurs paragraphes, mettre des mots en **gras** ou en *italique*, et créer des listes :
 - Premier point
 - Deuxième point
 
-> « Vous pouvez aussi insérer une citation mise en valeur. »`,
+> « Une citation mise en valeur. »`,
   },
 ```
 
-### Blocs interactifs utilisables dans le texte d'un article
-Si vous écrivez l'un de ces mots-clés seul sur une ligne dans `contenu`, le site insère automatiquement le bloc interactif correspondant :
-- `[[budget]]` : les 3 chiffres clés + le camembert interactif du budget
-- `[[equipe]]` : le Père Paul Bao Dinh Ly + le trombinoscope interactif des 19 membres de l'équipe
+### Blocs interactifs que vous pouvez insérer dans un article
+
+En écrivant l'un de ces mots seul sur une ligne dans `contenu`, le site insère automatiquement le bloc interactif correspondant :
+- `[[budget]]` : les 3 cartes du budget + le camembert interactif + le calendrier de réalisation
+- `[[equipe]]` : la fiche du père Paul Bao-Dinh Ly + les 8 compétences + le trombinoscope des 19 bénévoles
 - `[[avancement]]` : la frise chronologique des étapes du projet
-- `[[clocher]]` : l'infographie du clocher de 22 mètres et le Mur des Bâtisseurs
-- `[[missions]]` : les missions ouvertes aux bénévoles
-- `[[faq]]` : la foire aux questions interactive
+- `[[clocher]]` : l'infographie du clocher de 22 m et du Mur des Bâtisseurs
+- `[[missions]]` : les 9 fiches de missions bénévoles
+- `[[faq]]` : l'accordéon des questions fréquentes
 
 ---
 
-## 3. Comment gérer les événements du calendrier (`EVENEMENTS` dans `js/content.js`)
+## 📅 2. Modifier le calendrier, choisir quels événements sont visibles et ajouter des photos / vidéos (`CALENDRIER` dans `js/content.js`)
 
-Chaque événement présent dans la section **`export const EVENEMENTS = [ ... ]`** de [`js/content.js`](./js/content.js) crée automatiquement :
-1. Une pastille dorée sur le calendrier mensuel (`/calendrier`) ;
-2. Une fenêtre de détail au clic sur la date avec la description et le bouton **« S'inscrire »** ;
-3. **Une page web dédiée** (`/calendrier/<slug>`) avec le récit de l'événement, sa **galerie de photos** et ses **vidéos intégrées**, accessible directement depuis le calendrier via le bouton *« Page de l'événement (photos & vidéos) → »*.
+Dans `js/content.js`, cherchez la section **`export const CALENDRIER = [`**.
 
-### Exemple d'événement avec inscription, photos et vidéo
+Chaque événement possède automatiquement :
+- son apparition dans le calendrier mensuel (`/calendrier`) et dans la liste « À venir » / « Événements passés »,
+- une fiche qui s'ouvre lorsqu'on clique sur la date (avec sa description et le bouton **« S'inscrire »**),
+- **sa propre page web dédiée** (`/calendrier/<slug>`) où s'affichent ses **photos** et ses **vidéos**.
+
+### Exemple complet d'événement avec inscription, photos et vidéo YouTube
 
 ```javascript
   {
-    slug: "2026-11-28-kermesse-et-consultation-des-maquettes-d-architectes",
-    visible: true, // Mettez false pour cacher cet événement aux visiteurs du site
-    titre: "Kermesse paroissiale & Consultation participative des 5 projets d'architectes",
-    date: "2026-11-28",
-    dateFin: "2026-11-29", // Optionnel (si l'événement dure plusieurs jours)
-    heureDebut: "10:00",   // Optionnel
-    heureFin: "18:00",     // Optionnel
-    categorie: "Consultation & Événement",
+    slug: "2026-11-28-kermesse-et-exposition-des-maquettes-d-architectes",
+    titre: "Kermesse paroissiale & consultation participative des 5 maquettes d'architectes",
+    date: "2026-11-28",       // Date de début (AAAA-MM-JJ)
+    dateFin: "2026-11-29",    // Optionnel : date de fin si l'événement dure plusieurs jours
+    heureDebut: "10:00",      // Optionnel
+    heureFin: "18:00",        // Optionnel
+    categorie: "Événement",   // "Célébration", "Événement", "Étape du projet", "Réunion"...
     lieu: "Salle Charvet, Le Rouret",
-    description: "Présentation publique des maquettes des 5 cabinets d'architectes finalistes.",
+    description: "Description affichée quand on clique sur la date et sur la page de l'événement.",
     lienInscription: "https://forms.gle/votre-formulaire", // Active le bouton doré « S'inscrire »
+    lienInfo: "/articles/projet-eglise-saint-joseph-le-rouret", // Bouton « En savoir plus »
+    publie: true,             // 👉 Mettez false pour masquer cet événement sur le site !
     photos: [
       {
-        url: "/assets/img/hero-eglise-nuit.jpeg",
-        legende: "Découverte des maquettes à la salle Charvet.",
+        url: "/assets/img/ma-photo-1.jpg",
+        legende: "Présentation des maquettes à la salle Charvet",
       },
     ],
     videos: [
       {
-        url: "https://www.youtube.com/watch?v=VOTRE_ID_VIDEO",
-        titre: "Retour en vidéo sur la rencontre",
+        url: "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+        titre: "Vidéo récapitulative de la journée",
       },
     ],
   },
 ```
 
-### Option Google Agenda : n'afficher que certains événements choisis
-Si vous utilisez aussi le Google Agenda paroissial (`CALENDRIER_GOOGLE` en bas de `js/content.js`), l'option `filtrerVisibilite: true` est activée :
-- Vos réunions internes restent **invisibles** sur le site ;
-- **Seuls** les événements dont la visibilité dans Google Agenda est réglée sur **« Public »** *ou* dont le titre/la description contient le mot-clé **`[Site]`** (ou `#site`) apparaissent sur le site web.
+### Où stocker les photos et les vidéos d'un événement ?
+
+- **Pour les photos** :
+  - **Sur GitHub (recommandé, gratuit)** : sur GitHub, ouvrez le dossier [`public/assets/img/`](https://github.com/mgenin12/saint-joseph-sjo2/tree/main/public/assets/img), cliquez sur **« Add file » → « Upload files »**, glissez vos photos (`.jpg` ou `.png`), validez, puis indiquez `/assets/img/nom-de-la-photo.jpg` dans `photos`.
+  - **Ou sur Google Drive** : partagez la photo en lecture (« Tous les utilisateurs disposant du lien ») et collez le lien Google Drive dans `url`.
+- **Pour les vidéos** :
+  - **Sur YouTube (recommandé, gratuit et sans aucune limite de taille)** : publiez la vidéo sur la chaîne YouTube de la paroisse (en mode *Public* ou *Non répertorié*) et collez simplement le lien `https://www.youtube.com/watch?v=...` dans `videos` : le lecteur vidéo s'intègre automatiquement sur la page de l'événement !
 
 ---
 
-## 4. Comment ajouter des photos et des vidéos (et limites de stockage)
+## 💶 3. Mettre à jour le montant de la collecte (clocher de 22 m)
 
-### Ajouter une photo sur GitHub
-1. Sur GitHub, ouvrez le dossier **[`public/assets/img`](https://github.com/mgenin12/saint-joseph-sjo2/tree/main/public/assets/img)**.
-2. Cliquez sur **« Add file » → « Upload files »** en haut à droite.
-3. Glissez-déposez vos photos (format `.jpg`, `.jpeg`, `.png` ou `.webp`), puis cliquez sur **« Commit changes »**.
-4. Dans `js/content.js`, utilisez simplement le chemin `"/assets/img/nom-de-votre-photo.jpg"`.
-   *(Vous pouvez aussi coller un lien de partage Google Drive d'une image : le site le convertit automatiquement.)*
-
-### Ajouter une vidéo
-- **Recommandé (stockage illimité et gratuit)** : publiez la vidéo sur **YouTube** (en mode *« Public »* ou *« Non répertoriée »* si vous voulez qu'elle ne soit visible que depuis le site de la paroisse), puis collez simplement son lien `https://www.youtube.com/watch?v=...` dans `videos: [ ... ]` dans `js/content.js`.
-- Vous pouvez aussi coller un lien vidéo **Vimeo** ou **Google Drive** (`https://drive.google.com/file/d/.../view`).
-
-### Limites de stockage
-- **Photos dans GitHub** : gratuit jusqu'à **1 Go** par dépôt (soit environ **1 000 à 2 000 photos** optimisées pour le web à ~500 Ko–1 Mo par photo).
-- **Vidéos sur YouTube / Google Drive** : **aucune limite** sur le site web puisque la vidéo est diffusée par YouTube/Google.
-
----
-
-## 5. Comment mettre à jour le montant de la collecte (Clocher de 22 m)
-
-Au tout début de [`js/content.js`](./js/content.js) :
+Au tout début de `js/content.js` :
 
 ```javascript
   collecte: {
-    collecteActuelle: 1_400_000, // Changez ce chiffre (ex. 1_650_000)
-    objectifGlobal: 6_000_000,
+    montantCollecte: 1_400_000, // 👈 Changez ce chiffre (en euros)
+    objectif: 6_000_000,
   },
 ```
 
-Le site recalcule automatiquement la hauteur atteinte sur les **22 mètres** du clocher, le pourcentage, le nombre de **pierres de 10 €** et le nombre de **murs de 1 000 €** sur la page d'accueil et sur la page *Soutenir*.
+Dès que vous modifiez `montantCollecte`, **tout le site se recalcule automatiquement** :
+- la hauteur atteinte sur le clocher de **22 mètres** (ex. `1 400 000 €` → **5,13 m**, soit **23 %**),
+- le nombre de **pierres posées** (1 pierre = 10 €) et de **murs bâtis** (1 mur = 100 pierres = 1 000 €),
+- le reste à financer.
 
 ---
 
-## 6. Utiliser l'interface visuelle protégée par mot de passe (`/admin`)
+## 💬 4. Modifier les témoignages « Pourquoi je bâtis » et l'espace Entreprises & Mécénat (`js/content.js`)
 
-Pour les bénévoles qui préfèrent remplir un formulaire visuel plutôt que d'éditer [`js/content.js`](./js/content.js) sur GitHub :
+Toujours dans [`js/content.js`](./js/content.js) :
 
-1. Rendez-vous sur **[https://saint-joseph-sjo2.vercel.app/admin](https://saint-joseph-sjo2.vercel.app/admin)**.
-2. Connectez-vous avec le mot de passe paroissial (défini par la variable d'environnement `ADMIN_PASSWORD` dans Vercel ; mot de passe initial : `SJO2-Batisseurs-2026`).
-3. Modifiez vos **Articles**, vos **Événements du calendrier** (avec leurs photos et vidéos YouTube/Drive), le **compteur de la collecte**, les **témoignages du Livre d'Or** (`SITE.temoignages`) ou les **5 maquettes du concours d'architectes** (`SITE.concours`).
-4. Cliquez sur **« 🚀 Enregistrer / Générer js/content.js »** :
-   - Si un jeton `GITHUB_TOKEN` est configuré sur Vercel (ou saisi dans l'interface), la modification est publiée directement sur GitHub et redéployée automatiquement ;
-   - Sinon, vous pouvez télécharger ou copier le fichier `js/content.js` prêt à l'emploi en un clic.
+- **Témoignages (`SITE.temoignages`)** : affichés sur la page d'accueil et sur `/soutenir`. Vous pouvez modifier ou ajouter un témoignage en ajoutant un bloc `{ citation, auteur, role, commune }` dans `SITE.temoignages.items`.
+- **Espace Entreprises & Mécénat (`SITE.mecenat`)** : affiché sur `/soutenir#mecenat` et sur le dossier imprimable `/mecenat`. Vous pouvez modifier les avantages (`avantages`) et les paliers entreprises (`paliersEntreprises`).
+- **Bon de soutien imprimable (`SITE.don.bonDeSoutien`)** : affiché sur `/bon-de-soutien` (avec bouton « 🖨️ Imprimer / Enregistrer en PDF »).
 
 ---
 
-## 7. Bulletin de don papier & Fiche projet à imprimer (`/soutenir/bulletin-de-don`)
+## 🔄 5. Activer la mise à jour automatique du site (lier GitHub à Vercel)
 
-Une page prête à imprimer (ou à enregistrer en PDF) est disponible sur **[https://saint-joseph-sjo2.vercel.app/soutenir/bulletin-de-don](https://saint-joseph-sjo2.vercel.app/soutenir/bulletin-de-don)** pour les donateurs souhaitant donner par chèque (*à l'ordre de ADN – Paroisse St Arnoux, mention « SJO2 » au dos*) ou par virement bancaire.
+Une fois le dépôt GitHub connecté à Vercel, **chaque modification enregistrée (« Commit changes ») dans `js/content.js` sur GitHub met à jour le site public en ~45 secondes** :
+
+1. Ouvrez **[vercel.com/dashboard](https://vercel.com/dashboard)** et connectez-vous (équipe **`eglise-saint-joseph`**).
+2. Cliquez sur le projet **`saint-joseph-sjo2`**.
+3. Cliquez sur l'onglet **« Settings »** (en haut), puis sur **« Git »** dans le menu de gauche.
+4. Dans **« Connected Git Repository »**, cliquez sur **« Connect Git Repository »** → choisissez **GitHub** → sélectionnez **`mgenin12/saint-joseph-sjo2`** (branche de production : `main`).
+5. Si GitHub vous demande d'autoriser l'application Vercel, cliquez sur **« Install / Authorize Vercel »** pour le dépôt `saint-joseph-sjo2`.
 
 ---
 
-## 8. Développement local (pour les développeurs)
+## 💻 6. Lancer ou déployer le site (pour les administrateurs techniques)
 
 ```bash
 npm install
-npm run dev     # http://localhost:3000
-npm test        # Tests unitaires (Vitest)
-npm run build   # Build de production Next.js
+npm run dev      # Lance le site en local sur http://localhost:3000
+npm test         # Lance les 32 tests unitaires (Vitest)
+npm run lint     # Vérifie le code (ESLint)
+npm run build    # Compile le site pour la production
 ```
+
+### Variables d'environnement (`.env.example`)
+
+| Variable | Rôle |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | URL publique du site (`https://saint-joseph-sjo2.vercel.app` puis `https://saint-joseph.saint-arnoux.fr`) |
+| `NEXT_PUBLIC_URL_DON` | URL de la plateforme de don diocésaine |
+| `GOOGLE_CALENDAR_ENABLED` | `false` par défaut (les événements viennent de `js/content.js`). Mettre `true` pour fusionner en plus les événements publics du Google Agenda |
+| `GOOGLE_CALENDAR_ID` | ID du Google Agenda (`9f2cb93155d97884909c3bcb4fb4c887a2659636e5c6059d68c6e43ad0b842e5@group.calendar.google.com`) |
+| `GOOGLE_CALENDAR_FILTER_TAG` | Optionnel (ex. `#site`) : n'affiche que les événements Google Agenda contenant ce mot-clé |
+| `CONTACT_WEBHOOK_URL` / `NEWSLETTER_WEBHOOK_URL` | URL optionnelle recevant les formulaires de contact et de newsletter |

@@ -40,12 +40,12 @@ export default async function SoutenirPage() {
             <a className="btn btn--gold btn--lg" href={config.urlDon} target="_blank" rel="noopener">
               Faire un don en ligne
             </a>
-            <a className="btn btn--outline" href="#autres-moyens">
-              Virement, chèque, entreprise
-            </a>
-            <Link className="btn btn--outline" href="/soutenir/bulletin-de-don">
-              🖨️ Bulletin de don papier (PDF)
+            <Link className="btn btn--navy" href="/bon-de-soutien">
+              Bon de soutien imprimable (chèque / virement)
             </Link>
+            <a className="btn btn--outline" href="#mecenat">
+              Entreprises &amp; Mécénat (60 %)
+            </a>
           </div>
         </div>
       </section>
@@ -157,17 +157,17 @@ export default async function SoutenirPage() {
                 <br />
                 {SITE.adresse}
               </p>
-              <p className="mt-2">
-                <Link className="btn btn--outline btn--sm" href="/soutenir/bulletin-de-don">
-                  🖨️ Imprimer le bulletin de don papier
-                </Link>
-              </p>
               <h3 className="mt-4">Legs, donations, assurance-vie</h3>
               <p>
                 {SITE.contact.donsEtLegs.nom} vous accompagne en toute confidentialité :{" "}
                 <a href={`tel:${SITE.contact.donsEtLegs.telephone.replace(/\s/g, "")}`}>{SITE.contact.donsEtLegs.telephone}</a> ·{" "}
                 <a href={`mailto:${SITE.contact.donsEtLegs.email}`}>{SITE.contact.donsEtLegs.email}</a>
               </p>
+              <div className="row mt-4">
+                <Link className="btn btn--navy btn--sm" href="/bon-de-soutien">
+                  🖨️ Ouvrir &amp; imprimer le bon de soutien
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -180,13 +180,70 @@ export default async function SoutenirPage() {
               <span className="eyebrow">Entreprises · 60 %</span>
               <p>{SITE.don.fiscalite.entreprises}</p>
               <p className="small muted">
-                Mécénat d&apos;entreprise : contactez-nous pour une convention et une visibilité adaptée.{" "}
-                <Link href="/contact?sujet=don">Nous écrire</Link>
+                Mécénat d&apos;entreprise : consultez notre espace dédié ci-dessous ou{" "}
+                <Link href="/mecenat">ouvrez le dossier Mécènes imprimable</Link>.
               </p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ---------- Espace Entreprises & Mécénat (60 %) ---------- */}
+      {SITE.mecenat && (
+        <section id="mecenat" className="section section--navy" aria-labelledby="mecenat-title">
+          <div className="container">
+            <div className="section-head reveal">
+              <span className="eyebrow">{SITE.mecenat.surtitre}</span>
+              <h2 id="mecenat-title">{SITE.mecenat.titre}</h2>
+              <p className="lead">{SITE.mecenat.intro}</p>
+            </div>
+
+            <div className="grid grid-3">
+              {SITE.mecenat.avantages.map((av) => (
+                <div key={av.titre} className="panel reveal">
+                  <h3>{av.titre}</h3>
+                  <p>{av.texte}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mecenat-tiers mt-6">
+              {SITE.mecenat.paliersEntreprises.map((p) => (
+                <div key={p.nom} className="mecenat-tier reveal">
+                  <span className="mecenat-tier__badge">{p.equivalent}</span>
+                  <h3>{p.nom}</h3>
+                  <div className="mecenat-tier__amounts">
+                    <div>
+                      <small>Don de l&apos;entreprise</small>
+                      <strong>{formatEuros(p.don)}</strong>
+                    </div>
+                    <div className="mecenat-tier__net">
+                      <small>Coût réel après IS (-60 %)</small>
+                      <strong>{formatEuros(p.coutReel)}</strong>
+                    </div>
+                  </div>
+                  <p>{p.description}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="row mt-6">
+              <Link className="btn btn--gold btn--lg" href="/mecenat">
+                📄 Consulter &amp; imprimer le Dossier Mécènes (PDF)
+              </Link>
+              <Link className="btn btn--ghost" href="/bon-de-soutien">
+                🖨️ Bon de soutien imprimable
+              </Link>
+              <Link className="btn btn--outline" href="/contact?sujet=don">
+                Contacter l&apos;équipe Mécénat
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ---------- Témoignages (« Pourquoi je bâtis ») ---------- */}
+      <Testimonials />
 
       {/* ---------- S'engager autrement ---------- */}
       <section className="section" aria-labelledby="engage-title">
@@ -204,19 +261,13 @@ export default async function SoutenirPage() {
             ))}
           </div>
           <div className="row mt-4">
-            <Link className="btn btn--navy" href="/articles/messe-de-rentree-et-vie-du-projet">
-              Voir les missions bénévoles
+            <Link className="btn btn--navy" href="/articles/budget-equipe-et-questions-frequentes">
+              Voir le budget &amp; les missions bénévoles
             </Link>
             <Link className="btn btn--outline" href="/newsletter">
               Recevoir la newsletter
             </Link>
           </div>
-        </div>
-      </section>
-
-      <section className="section section--white" aria-labelledby="temoignages-soutenir-title">
-        <div className="container">
-          <Testimonials />
         </div>
       </section>
 
@@ -228,7 +279,7 @@ export default async function SoutenirPage() {
           </div>
           <Faq items={SITE.faq} />
           <p className="mt-2">
-            <Link href="/articles/questions-frequentes">Toutes les questions fréquentes →</Link>
+            <Link href="/articles/budget-equipe-et-questions-frequentes">Budget, déduction fiscale &amp; questions fréquentes →</Link>
           </p>
         </div>
       </section>

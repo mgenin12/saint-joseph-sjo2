@@ -196,15 +196,6 @@ function cleanIcsHtml(raw: string): string {
     .trim();
 }
 
-export type ParseIcsOptions = {
-  /**
-   * Si true : ne garde que les événements marqués « Public » (CLASS:PUBLIC) dans
-   * Google Agenda OU contenant `[Site]` / `#site` dans le titre ou la description.
-   */
-  filterVisibility?: boolean;
-  keyword?: string;
-};
-
 /**
  * Convertit un flux iCal (.ics) Google Agenda en liste d'événements du site.
  *
@@ -215,7 +206,7 @@ export type ParseIcsOptions = {
  * - « Places : 150 » / « Inscrits : 45 »
  * - « Image : https://... »
  */
-export function parseIcsEvents(icsText: string, options: ParseIcsOptions = {}): Evenement[] {
+export function parseIcsEvents(icsText: string): Evenement[] {
   if (!icsText || !icsText.includes("BEGIN:VCALENDAR")) return [];
   const unfolded = icsText.replace(/\r?\n[ \t]/g, "");
   const lines = unfolded.split(/\r?\n/);
@@ -233,7 +224,7 @@ export function parseIcsEvents(icsText: string, options: ParseIcsOptions = {}): 
     }
     if (line === "END:VEVENT") {
       if (inEvent) {
-        const ev = buildEventFromVevent(props, usedSlugs, options);
+        const ev = buildEventFromVevent(props, usedSlugs);
         if (ev) events.push(ev);
       }
       inEvent = false;
@@ -268,14 +259,14 @@ export function parseIcsEvents(icsText: string, options: ParseIcsOptions = {}): 
 function buildEventFromVevent(
   props: { name: string; params: string; value: string }[],
   usedSlugs: Set<string>,
-  options: ParseIcsOptions,
 ): Evenement | undefined {
   const getProp = (name: string) => props.find((p) => p.name === name);
   const status = getProp("STATUS")?.value.trim().toUpperCase();
   if (status === "CANCELLED") return undefined;
 
-  const visibilityClass = getProp("CLASS")?.value.trim().toUpperCase();
-  if (visibilityClass === "PRIVATE" || visibilityClass === "CONFIDENTIAL") return undefined;
+  // Les événements marqués « Privé » ou « Confidentiel » dans Google Agenda sont ignorés.
+  const visibility = getProp("CLASS")?.value.trim().toUpperCase();
+  if (visibility === "PRIVATE" || visibility === "CONFIDENTIAL") return undefined;
 
   const dtStartProp = getProp("DTSTART");
   if (!dtStartProp) return undefined;
@@ -285,21 +276,18 @@ function buildEventFromVevent(
   let rawTitle = unescapeIcs(getProp("SUMMARY")?.value ?? "").replace(/\s+/g, " ").trim();
   if (!rawTitle) return undefined;
 
-  const rawDescUnescaped = cleanIcsHtml(unescapeIcs(getProp("DESCRIPTION")?.value ?? ""));
-  const combinedText = `${rawTitle}\n${rawDescUnescaped}`;
+  const rawDesc = cleanIcsHtml(unescapeIcs(getProp("DESCRIPTION")?.value ?? ""));
 
-  if (/(\[priv[ée]\]|#priv[ée])/i.test(combinedText)) return undefined;
-
-  if (options.filterVisibility) {
-    const kw = (options.keyword || "[Site]").toLowerCase();
-    const hasKeyword =
-      combinedText.toLowerCase().includes(kw) ||
-      /(\[site\]|\[public\]|#site\b|#public\b)/i.test(combinedText);
-    const isExplicitlyPublic = visibilityClass === "PUBLIC";
-    if (!hasKeyword && !isExplicitlyPublic) return undefined;
+  // Filtre optionnel : si GOOGLE_CALENDAR_FILTER_TAG est défini (ex. "#site"),
+  // seuls les événements contenant ce mot-clé dans le titre ou la description sont affichés.
+  const filterTag = process.env.GOOGLE_CALENDAR_FILTER_TAG?.trim();
+  if (filterTag) {
+    const lowerTag = filterTag.toLowerCase();
+    if (!rawTitle.toLowerCase().includes(lowerTag) && !rawDesc.toLowerCase().includes(lowerTag)) {
+      return undefined;
+    }
+    rawTitle = rawTitle.replace(new RegExp(filterTag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "ig"), "").trim();
   }
-
-  rawTitle = rawTitle.replace(/\s*(\[site\]|\[public\]|#site\b|#public\b)\s*/gi, " ").replace(/\s+/g, " ").trim();
 
   let categorie = unescapeIcs(getProp("CATEGORIES")?.value ?? "").split(",")[0]?.trim() || "";
   const bracketMatch = rawTitle.match(/^\[([^\]]+)\]\s*(.+)$/);
@@ -323,13 +311,14 @@ function buildEventFromVevent(
   }
 
   const lieu = unescapeIcs(getProp("LOCATION")?.value ?? "").replace(/\s+/g, " ").trim() || undefined;
-  const rawDesc = rawDescUnescaped.replace(/\s*(\[site\]|\[public\]|#site\b|#public\b)\s*/gi, " ").trim();
 
   let lienInscription: string | undefined;
   let lienInfo: string | undefined;
   let places: number | undefined;
   let inscrits: number | undefined;
   let image: string | undefined;
+  const photos: string[] = [];
+  const videos: string[] = [];
 
   const bodyLines: string[] = [];
   for (const line of rawDesc.split("\n")) {
@@ -344,9 +333,20 @@ function buildEventFromVevent(
       lienInscription = inscMatch[1].trim();
       continue;
     }
-    const infoMatch = trimmed.match(/^(?:lien\s+info|info|en\s+savoir\s+plus|lien)\s*[:=-]\s*(https?:\/\/\S+)$/i);
+    const infoMatch = trimmed.match(/^(?:lien\s+info|info|en\s+savoir\s+plus|lien)\s*[:=-]\s*(https?:\/\/\S+|\/\S+)$/i);
     if (infoMatch) {
       lienInfo = infoMatch[1].trim();
+      continue;
+    }
+    const photoMatch = trimmed.match(/^photos?\s*[:=-]\s*(https?:\/\/\S+|\/\S+)$/i);
+    if (photoMatch) {
+      const u = driveImageUrl(photoMatch[1].trim()) ?? photoMatch[1].trim();
+      photos.push(u);
+      continue;
+    }
+    const videoMatch = trimmed.match(/^vid[ée]os?\s*[:=-]\s*(https?:\/\/\S+)$/i);
+    if (videoMatch) {
+      videos.push(videoMatch[1].trim());
       continue;
     }
     const placesMatch = trimmed.match(/^places\s*[:=-]\s*(\d+)$/i);
@@ -399,6 +399,8 @@ function buildEventFromVevent(
     places,
     inscrits,
     image,
+    photos: photos.length ? photos : undefined,
+    videos: videos.length ? videos : undefined,
     publie: true,
   };
 }

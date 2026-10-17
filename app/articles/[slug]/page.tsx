@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Blocks from "@/components/Blocks";
 import ArticleCard from "@/components/ArticleCard";
-import MediaGallery from "@/components/MediaGallery";
 import ShareBar from "@/components/ShareBar";
 import { getArticle, getArticles, getRelatedArticles, getAdjacentArticles } from "@/lib/articles";
 import { absoluteUrl } from "@/lib/config";
@@ -121,8 +120,6 @@ export default async function ArticlePage({ params }: { params: Params }) {
           <div className="prose">
             <Blocks markdown={article.contenu || ""} />
           </div>
-
-          <MediaGallery photos={article.photos} videos={article.videos} />
 
           {article.motsCles.length > 0 && (
             <div className="tags">
