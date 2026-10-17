@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SITE } from "@/content/site";
 import LanguageSwitcher from "./LanguageSwitcher";
+import BugFeedbackButton from "./BugFeedbackButton";
 
 type Props = {
   urlDon: string;
@@ -49,20 +50,23 @@ export default function Header({ urlDon }: Props) {
   return (
     <header className={`header${scrolled ? " scrolled" : ""}${solid ? " solid" : ""}`}>
       <div className="container header__inner">
-        <Link href="/" className="brand" aria-label="Accueil — Église Saint Joseph">
-          <Image
-            className="brand__logo"
-            src="/assets/img/eglise-saint-joseph-batisseurs-du-seigneur.png"
-            alt=""
-            width={46}
-            height={46}
-            priority
-          />
-          <span className="brand__text">
-            <strong>{SITE.nom}</strong>
-            <span>{SITE.sousTitre}</span>
-          </span>
-        </Link>
+        <div className="header__left">
+          <BugFeedbackButton />
+          <Link href="/" className="brand" aria-label="Accueil — Église Saint Joseph">
+            <Image
+              className="brand__logo"
+              src="/assets/img/eglise-saint-joseph-batisseurs-du-seigneur.png"
+              alt=""
+              width={46}
+              height={46}
+              priority
+            />
+            <span className="brand__text">
+              <strong>{SITE.nom}</strong>
+              <span>{SITE.sousTitre}</span>
+            </span>
+          </Link>
+        </div>
 
         <div className="header__right">
           <a className="btn btn--gold nav__cta nav__cta--mobile" href={urlDon} target="_blank" rel="noopener">
