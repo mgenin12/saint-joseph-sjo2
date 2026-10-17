@@ -79,9 +79,30 @@ export default function AdminEditor() {
   const [hasServerToken, setHasServerToken] = useState(false);
 
   const [payload, setPayload] = useState<AdminPayload | null>(null);
-  const [activeTab, setActiveTab] = useState<"collecte" | "articles" | "evenements" | "temoignages">("articles");
+  const [activeTab, setActiveTab] = useState<"collecte" | "articles" | "evenements" | "temoignages" | "newsletter">("articles");
   const [selectedArticleIdx, setSelectedArticleIdx] = useState(0);
   const [selectedEventIdx, setSelectedEventIdx] = useState(0);
+  const [subscribers, setSubscribers] = useState<{ nom: string; email: string; date: string }[]>([]);
+  const [loadingSubs, setLoadingSubs] = useState(false);
+
+  async function loadSubscribers(pw: string) {
+    setLoadingSubs(true);
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "list", password: pw }),
+      });
+      const json = await res.json();
+      if (json.ok && Array.isArray(json.subscribers)) {
+        setSubscribers(json.subscribers);
+      }
+    } catch {
+      // ignore
+    } finally {
+      setLoadingSubs(false);
+    }
+  }
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -100,6 +121,7 @@ export default function AdminEditor() {
         setPayload(json.data);
         setHasServerToken(Boolean(json.hasServerGithubToken));
         setLoggedIn(true);
+        loadSubscribers(password);
       }
     } catch {
       setError("Impossible de contacter le serveur.");
@@ -348,6 +370,16 @@ export default function AdminEditor() {
           onClick={() => setActiveTab("temoignages")}
         >
           💬 Témoignages &amp; Architectes
+        </button>
+        <button
+          type="button"
+          className={`btn ${activeTab === "newsletter" ? "btn--navy" : "btn--outline"}`}
+          onClick={() => {
+            setActiveTab("newsletter");
+            loadSubscribers(password);
+          }}
+        >
+          📬 Inscrits Newsletter ({subscribers.length})
         </button>
       </div>
 
@@ -982,6 +1014,93 @@ export default function AdminEditor() {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* ==================== ONGLET INSCRITS NEWSLETTER ==================== */}
+      {activeTab === "newsletter" && (
+        <div className="card">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 16 }}>
+            <div>
+              <h3 style={{ margin: 0 }}>Liste des inscrits à la Newsletter ({subscribers.length})</h3>
+              <p className="small muted" style={{ margin: "4px 0 0" }}>
+                Chaque nouvelle inscription envoie aussi un e-mail automatique à <b>secretariat@saint-arnoux.fr</b>.
+              </p>
+            </div>
+            <div className="row" style={{ gap: 8 }}>
+              <button
+                type="button"
+                className="btn btn--outline btn--sm"
+                onClick={() => loadSubscribers(password)}
+                disabled={loadingSubs}
+              >
+                🔄 Actualiser
+              </button>
+              {subscribers.length > 0 && (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn--outline btn--sm"
+                    onClick={() => {
+                      const emails = subscribers.map((s) => s.email).join(", ");
+                      navigator.clipboard.writeText(emails);
+                      setStatusMsg("✅ Toutes les adresses e-mail ont été copiées dans votre presse-papiers !");
+                    }}
+                  >
+                    📋 Copier tous les e-mails
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn--gold btn--sm"
+                    onClick={() => {
+                      const csv = [
+                        "Prénom et Nom,E-mail,Date d'inscription",
+                        ...subscribers.map(
+                          (s) => `"${(s.nom || "").replace(/"/g, '""')}","${s.email}","${s.date}"`,
+                        ),
+                      ].join("\n");
+                      const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = "inscrits-newsletter-sjo2.csv";
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    📥 Télécharger en CSV (Excel)
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+
+          {subscribers.length === 0 ? (
+            <p className="muted">Aucune inscription enregistrée pour le moment.</p>
+          ) : (
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.92rem" }}>
+                <thead>
+                  <tr style={{ borderBottom: "2px solid rgba(0,32,78,0.15)", textAlign: "left" }}>
+                    <th style={{ padding: "8px 10px" }}>Prénom et Nom</th>
+                    <th style={{ padding: "8px 10px" }}>E-mail</th>
+                    <th style={{ padding: "8px 10px" }}>Date d&apos;inscription</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {subscribers.map((s, idx) => (
+                    <tr key={idx} style={{ borderBottom: "1px solid rgba(0,32,78,0.08)" }}>
+                      <td style={{ padding: "8px 10px", fontWeight: 600 }}>{s.nom || "—"}</td>
+                      <td style={{ padding: "8px 10px" }}>
+                        <a href={`mailto:${s.email}`}>{s.email}</a>
+                      </td>
+                      <td style={{ padding: "8px 10px" }}>{s.date}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
     </div>

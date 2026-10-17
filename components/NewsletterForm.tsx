@@ -39,6 +39,16 @@ export default function NewsletterForm({ externalUrl, facebookUrl, emailFallback
     setState(initial);
 
     try {
+      await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "subscribe", nom: prenom, email }),
+      });
+    } catch {
+      // Continue avec l'envoi FormSubmit
+    }
+
+    try {
       const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(destEmail)}`, {
         method: "POST",
         headers: {
@@ -50,7 +60,7 @@ export default function NewsletterForm({ externalUrl, facebookUrl, emailFallback
           _replyto: email,
           _template: "table",
           _captcha: "false",
-          Prénom: prenom || "—",
+          "Prénom et Nom": prenom || "—",
           "E-mail": email,
           Consentement: "Oui",
         }),
@@ -81,8 +91,8 @@ export default function NewsletterForm({ externalUrl, facebookUrl, emailFallback
     <form className="form" onSubmit={handleSubmit} noValidate>
       <div className="form-row">
         <div className="field">
-          <label htmlFor="n-prenom">Prénom</label>
-          <input id="n-prenom" name="prenom" className="input" autoComplete="given-name" />
+          <label htmlFor="n-prenom">Prénom et Nom</label>
+          <input id="n-prenom" name="prenom" className="input" autoComplete="name" />
         </div>
         <div className="field">
           <label htmlFor="n-email">E-mail *</label>
