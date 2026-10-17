@@ -559,15 +559,15 @@ Pour mener à bien un projet de **6 millions d'euros** avec la rigueur professio
     categories: ["Agenda", "Avancement", "Foire aux questions", "Déduction fiscales"],
     date: "2026-10-06",
     auteur: "Commission Communication SJO2",
-    image: "/assets/img/hero-eglise-nuit.jpeg",
+    image: "/assets/img/2026-09-20-messe-en-plein-air.jpeg",
     resume:
       "Retour sur la première messe de rentrée célébrée en plein air sur le terrain du Rouret devant plus de 400 personnes, calendrier des prochaines étapes jusqu'au choix de l'architecte à Noël, fonctionnement du Clocher des Bâtisseurs et missions bénévoles.",
     motsCles: ["Messe de rentrée", "Mgr Jean-Philippe Nault", "Clocher des Bâtisseurs", "Kermesse novembre", "Bénévolat", "Fiscalité"],
     statut: "publie",
     photos: [
       {
-        url: "/assets/img/hero-eglise-nuit.jpeg",
-        legende: "Le futur clocher de 22 mètres s'élève au rythme des dons de toute la communauté.",
+        url: "/assets/img/2026-09-20-messe-en-plein-air.jpeg",
+        legende: "Première messe de rentrée en plein air sur le terrain de la future église Saint-Joseph au Rouret (20 septembre 2026).",
       },
     ],
     videos: [],
