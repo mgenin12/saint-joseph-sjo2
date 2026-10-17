@@ -36,7 +36,7 @@ export default async function HomePage() {
         <div className="hero__bg" aria-hidden="true" />
         <div className="hero__glow" aria-hidden="true" />
         <div className="container hero__content stag">
-          <span className="eyebrow">Projet SJO2 · Église Saint Joseph · Le Rouret</span>
+          <span className="eyebrow">Église Saint Joseph · Le Rouret</span>
           <h1 id="hero-title">
             {SITE.hero.titre.map((part, i) => (i % 2 === 1 ? <em key={i}>{part}</em> : <span key={i}>{part}</span>))}
           </h1>
