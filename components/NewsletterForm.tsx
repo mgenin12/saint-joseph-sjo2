@@ -1,25 +1,84 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState, type FormEvent } from "react";
 import { subscribeNewsletter, type FormState } from "@/app/actions";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const initial: FormState = { ok: false };
 
 type Props = { externalUrl?: string; facebookUrl?: string; emailFallback?: string };
 
 export default function NewsletterForm({ externalUrl, facebookUrl, emailFallback }: Props) {
-  const [state, action, pending] = useActionState(subscribeNewsletter, initial);
+  const [state, setState] = useState<FormState>(initial);
+  const [pending, setPending] = useState(false);
+
+  const destEmail = emailFallback || "secretariat@saint-arnoux.fr";
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    if (String(formData.get("website") ?? "")) {
+      setState({ ok: true, code: "spam" });
+      return;
+    }
+
+    const email = String(formData.get("email") ?? "").trim();
+    const prenom = String(formData.get("prenom") ?? "").trim();
+    const consent = formData.get("consentement") === "on";
+
+    if (!EMAIL_RE.test(email)) {
+      setState({ ok: false, code: "invalid", message: "Merci d'indiquer une adresse e-mail valide." });
+      return;
+    }
+    if (!consent) {
+      setState({ ok: false, code: "invalid", message: "Merci d'accepter de recevoir la newsletter." });
+      return;
+    }
+
+    setPending(true);
+    setState(initial);
+
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(destEmail)}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: `[Site SJO2 — Newsletter] Nouvelle inscription (${email})`,
+          _replyto: email,
+          _template: "table",
+          _captcha: "false",
+          Prénom: prenom || "—",
+          "E-mail": email,
+          Consentement: "Oui",
+        }),
+      });
+      if (res.ok) {
+        setState({ ok: true, code: "sent" });
+        setPending(false);
+        return;
+      }
+    } catch {
+      // Repli sur l'action serveur
+    }
+
+    const serverResult = await subscribeNewsletter(initial, formData);
+    setState(serverResult);
+    setPending(false);
+  }
 
   if (state.ok && state.code !== "spam") {
     return (
       <div className="notice notice--ok" role="status">
-        <b>Merci !</b> Votre inscription est enregistrée. À bientôt dans votre boîte mail.
+        <b>Merci !</b> Votre inscription est enregistrée et transmise à <b>{destEmail}</b>. À bientôt dans votre boîte mail.
       </div>
     );
   }
 
   return (
-    <form className="form" action={action} noValidate>
+    <form className="form" onSubmit={handleSubmit} noValidate>
       <div className="form-row">
         <div className="field">
           <label htmlFor="n-prenom">Prénom</label>
