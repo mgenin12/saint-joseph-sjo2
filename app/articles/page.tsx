@@ -11,7 +11,7 @@ type SearchParams = Promise<{ q?: string; categorie?: string }>;
 export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
   const { categorie } = await searchParams;
   const cat = findCategory(await getCategories(), categorie);
-  const title = cat ? `Le projet — ${cat.nom}` : "Le projet — Tous les articles";
+  const title = cat ? `Le projet — ${cat.nom}` : "Le projet et l'équipe - Articles et descriptifs";
   return pageMetadata({
     title,
     description:
@@ -31,7 +31,7 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Sea
       <section className="page-head">
         <div className="container">
           <span className="eyebrow">Le projet</span>
-          <h1>{cat ? cat.nom : "Les articles du projet"}</h1>
+          <h1>{cat ? cat.nom : "Le projet et l'équipe - Articles et descriptifs"}</h1>
           <p className="lead">
             Le terrain, les architectes, le budget, l&apos;équipe, les étapes… Recherchez un article par mot-clé ou parcourez-les par catégorie.
           </p>
