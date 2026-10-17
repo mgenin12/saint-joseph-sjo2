@@ -20,11 +20,12 @@ Ce document est destiné aux membres de l'équipe projet et aux bénévoles de l
 
 ### 2.1. En-tête (Header) et bouton Français / Anglais (`FR | EN`)
 Sur toutes les pages du site, la barre supérieure comporte :
-- **4 entrées principales** :
+- **5 entrées principales** :
   1. **« Découvrir »** (`/`) : amène à la présentation du projet sur la page d'accueil ;
-  2. **« Le projet »** (`/articles`) : ouvre la liste des articles avec recherche par mots-clés, filtres par catégories et accès rapide au calendrier ;
-  3. **« Soutenir »** (`/soutenir`) : ouvre la page de collecte du *Clocher des Bâtisseurs* (22 mètres) ;
-  4. **« Faire un don »** : bouton doré menant directement à la plateforme sécurisée de don du Diocèse de Nice.
+  2. **« Le projet »** (`/articles`) : ouvre la liste des articles avec recherche par mots-clés et filtres par catégories ;
+  3. **« Calendrier »** (`/calendrier`) : ouvre le calendrier interactif des événements et temps forts ;
+  4. **« Soutenir »** (`/soutenir`) : ouvre la page de collecte du *Clocher des Bâtisseurs* (22 mètres) ;
+  5. **« Faire un don »** : bouton doré menant directement à la plateforme sécurisée de don du Diocèse de Nice.
 - **Bouton `FR | EN` en haut à droite de chaque page** :
   - Permet aux visiteurs anglophones (nombreux dans le Pays de Grasse et sur la Côte d'Azur) de basculer **tout le site en anglais** en un clic (menus, boutons, articles, calendrier et simulateur de don), sans que l'équipe paroissiale ait besoin de rédiger ses textes en double.
 

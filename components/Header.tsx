@@ -9,14 +9,14 @@ import LanguageSwitcher from "./LanguageSwitcher";
 
 type Props = {
   urlDon: string;
-  categories: { nom: string; slug: string }[];
+  categories?: { nom: string; slug: string }[];
 };
 
 /**
  * En-tête fixe : transparent sur le hero de l'accueil, opaque ailleurs ou
- * après défilement. Quatre entrées : Découvrir · Le projet · Soutenir · Faire un don.
+ * après défilement. Cinq entrées : Découvrir · Le projet · Calendrier · Soutenir · Faire un don.
  */
-export default function Header({ urlDon, categories }: Props) {
+export default function Header({ urlDon }: Props) {
   const pathname = usePathname() ?? "/";
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -43,6 +43,7 @@ export default function Header({ urlDon, categories }: Props) {
   const solid = pathname !== "/";
   const isHome = pathname === "/";
   const isProjet = pathname.startsWith("/articles");
+  const isCalendrier = pathname.startsWith("/calendrier");
   const isSoutenir = pathname.startsWith("/soutenir");
 
   return (
@@ -86,27 +87,19 @@ export default function Header({ urlDon, categories }: Props) {
             </div>
 
             <div className="nav__item">
-              <Link className={`nav__link${isProjet ? " active" : ""}`} href="/articles" aria-haspopup="true">
+              <Link className={`nav__link${isProjet ? " active" : ""}`} href="/articles" onClick={() => setOpen(false)}>
                 Le projet
-                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-                  <path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" />
-                </svg>
               </Link>
-              <div className="nav__sub">
-                {categories.map((c) => (
-                  <Link key={c.slug} href={`/articles?categorie=${encodeURIComponent(c.slug)}`}>
-                    {c.nom}
-                  </Link>
-                ))}
-                <Link href="/calendrier">Calendrier des événements</Link>
-                <Link className="all" href="/articles">
-                  Tous les articles
-                </Link>
-              </div>
             </div>
 
             <div className="nav__item">
-              <Link className={`nav__link${isSoutenir ? " active" : ""}`} href="/soutenir">
+              <Link className={`nav__link${isCalendrier ? " active" : ""}`} href="/calendrier" onClick={() => setOpen(false)}>
+                Calendrier
+              </Link>
+            </div>
+
+            <div className="nav__item">
+              <Link className={`nav__link${isSoutenir ? " active" : ""}`} href="/soutenir" onClick={() => setOpen(false)}>
                 Soutenir
               </Link>
             </div>

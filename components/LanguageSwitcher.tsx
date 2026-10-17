@@ -19,6 +19,7 @@ declare global {
 const UI_DICTIONARY: Record<string, string> = {
   "Découvrir": "Discover",
   "Le projet": "The Project",
+  "Calendrier": "Calendar",
   "Soutenir": "Support Us",
   "Faire un don": "Donate",
   "Faire un don en ligne": "Donate Online",
