@@ -15,12 +15,14 @@ const display = Fraunces({
   variable: "--font-display",
   display: "swap",
   style: ["normal", "italic"],
+  axes: ["opsz"],
 });
 
 const body = Hanken_Grotesk({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {

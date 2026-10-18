@@ -41,11 +41,13 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--font-body), "Hanken Grotesk", system-ui, sans-serif;
+  font-family: var(--font-body), "Hanken Grotesk", -apple-system, sans-serif;
   color: var(--ink);
   background: var(--parchment);
   line-height: 1.6;
-  font-size: 17px;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   position: relative;
   overflow-x: hidden;
 }
@@ -67,8 +69,8 @@ h3,
 h4,
 .display {
   font-family: var(--font-display), "Fraunces", Georgia, serif;
-  font-weight: 500;
-  line-height: 1.12;
+  font-weight: 400;
+  line-height: 1.08;
   letter-spacing: -0.01em;
   color: var(--navy);
   margin: 0 0 0.5em;
@@ -93,6 +95,9 @@ h2 em,
 .h2 em {
   font-style: italic;
   color: var(--gold);
+}
+.hero h1 em {
+  color: var(--gold-soft);
 }
 
 p {
@@ -244,13 +249,14 @@ button {
 }
 
 .eyebrow {
+  font-family: var(--font-body), sans-serif;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.7em;
   text-transform: uppercase;
   letter-spacing: 0.28em;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--gold);
   margin-bottom: 14px;
 }
@@ -268,6 +274,7 @@ button {
 }
 .section--navy .lead {
   color: var(--cream-dim);
+  font-weight: 300;
 }
 
 .section-head {
@@ -644,15 +651,17 @@ body {
 }
 .brand__text strong {
   font-family: var(--font-display), serif;
-  font-weight: 600;
-  font-size: 1.2rem;
+  font-weight: 500;
+  font-size: 1.12rem;
+  letter-spacing: 0.02em;
   display: block;
 }
 .brand__text span {
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  opacity: 0.85;
+  color: var(--cream-dim);
+  font-weight: 500;
 }
 
 .nav {
@@ -669,8 +678,8 @@ body {
   gap: 6px;
   padding: 10px 14px;
   color: var(--cream);
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 500;
+  font-size: 0.85rem;
   border-radius: 10px;
   text-decoration: none !important;
   position: relative;
@@ -976,15 +985,16 @@ body {
 }
 .hero h1 {
   color: var(--cream);
-  font-size: clamp(2.5rem, 6vw, 4.6rem);
+  font-size: clamp(2.6rem, 6.2vw, 5rem);
+  font-weight: 400;
   margin-bottom: 26px;
 }
 .hero__meta {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px 26px;
-  font-size: 0.95rem;
+  gap: 14px 30px;
+  font-size: 0.86rem;
   color: var(--cream-dim);
   margin-bottom: 34px;
 }
@@ -1113,15 +1123,18 @@ body {
 }
 .counter__value {
   font-family: var(--font-display), serif;
-  font-size: 2.2rem;
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
   color: var(--navy);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
 }
 .counter__label {
   color: var(--ink-soft);
-  font-size: 0.9rem;
-  margin-top: 8px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 12px;
 }
 @media (max-width: 760px) {
   .counters {
@@ -1145,12 +1158,14 @@ body {
 }
 .phase-card h3 {
   color: var(--cream);
+  font-size: 1.7rem;
+  font-weight: 400;
   margin-bottom: 4px;
 }
 .phase-card__cap {
   display: inline-block;
   color: var(--gold-soft);
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -1160,6 +1175,8 @@ body {
   padding-left: 0;
   list-style: none;
   color: var(--cream-dim);
+  font-size: 0.92rem;
+  font-weight: 300;
   display: grid;
   gap: 8px;
 }
@@ -1265,16 +1282,20 @@ body {
   background: var(--gold);
 }
 .tl__title {
-  font-weight: 700;
-  font-size: 1.08rem;
+  font-family: var(--font-display), serif;
+  font-weight: 500;
+  font-size: 1.2rem;
   margin: 4px 0 2px;
 }
 .tl__text {
   color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 300;
   margin: 0;
 }
 .section--navy .tl__text {
   color: var(--cream-dim);
+  font-weight: 300;
 }
 
 /* ---------- Valeurs ---------- */
