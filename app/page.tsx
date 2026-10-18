@@ -116,7 +116,7 @@ export default async function HomePage() {
       </section>
 
       {/* ---------- Soutenir (résumé de la collecte) ---------- */}
-      <section id="clocher" className="section section--navy" aria-labelledby="clocher-title">
+      <section id="clocher" className="section" aria-labelledby="clocher-title">
         <div className="container">
           <div className="collecte-layout">
             <div className="panel reveal">
@@ -139,7 +139,7 @@ export default async function HomePage() {
                 <a className="btn btn--gold btn--lg" href={config.urlDon} target="_blank" rel="noopener">
                   Donner
                 </a>
-                <Link className="btn btn--ghost" href="/soutenir">
+                <Link className="btn btn--outline" href="/soutenir">
                   Toutes les façons de soutenir
                 </Link>
               </div>
@@ -149,7 +149,7 @@ export default async function HomePage() {
       </section>
 
       {/* ---------- Derniers articles (Le projet) ---------- */}
-      <section id="projet" className="section" aria-labelledby="articles-title">
+      <section id="projet" className="section section--white" aria-labelledby="articles-title">
         <div className="container">
           <div className="section-head reveal">
             <span className="eyebrow">Le projet</span>
@@ -170,7 +170,7 @@ export default async function HomePage() {
       </section>
 
       {/* ---------- Prochains rendez-vous (Calendrier) ---------- */}
-      <section id="calendrier" className="section section--white section--tight" aria-labelledby="rdv-title">
+      <section id="calendrier" className="section section--tight" aria-labelledby="rdv-title">
         <div className="container">
           <div className="section-head reveal">
             <span className="eyebrow">Calendrier</span>

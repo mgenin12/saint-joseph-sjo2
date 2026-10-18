@@ -84,7 +84,7 @@ export async function ClocherBlock() {
   const config = await getSiteConfig();
   const data = computeClocher(config.montantCollecte, config.objectif);
   return (
-    <div className="block section--navy" style={{ borderRadius: "var(--radius)", padding: 26 }}>
+    <div className="block">
       <div className="collecte-layout">
         <div className="panel">
           <h3>Le clocher s&apos;élève</h3>

@@ -51,7 +51,7 @@ export default async function SoutenirPage() {
       </section>
 
       {/* ---------- Clocher + mur ---------- */}
-      <section className="section section--navy" aria-labelledby="collecte-title">
+      <section className="section" aria-labelledby="collecte-title">
         <div className="container">
           <h2 id="collecte-title" className="sr-only">
             État de la collecte
@@ -82,7 +82,7 @@ export default async function SoutenirPage() {
       </section>
 
       {/* ---------- Paliers ---------- */}
-      <section className="section" aria-labelledby="paliers-title">
+      <section className="section section--white" aria-labelledby="paliers-title">
         <div className="container">
           <div className="section-head reveal">
             <span className="eyebrow">Les paliers</span>
