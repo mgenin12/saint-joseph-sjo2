@@ -8,6 +8,7 @@ import UpcomingEvents from "@/components/UpcomingEvents";
 import ConcoursArchitectes from "@/components/ConcoursArchitectes";
 import Testimonials from "@/components/Testimonials";
 import LegacyHashRedirect from "@/components/LegacyHashRedirect";
+import HomeSectionNav from "@/components/HomeSectionNav";
 import { SITE } from "@/content/site";
 import { getArticles } from "@/lib/articles";
 import { getUpcomingEvents, getPastEvents } from "@/lib/events";
@@ -59,6 +60,8 @@ export default async function HomePage() {
         </div>
         <a className="hero__scroll" href="#decouvrir" aria-label="Défiler vers le projet" />
       </section>
+
+      <HomeSectionNav />
 
       {/* ---------- Découvrir ---------- */}
       <section id="decouvrir" className="section" aria-labelledby="decouvrir-title">
