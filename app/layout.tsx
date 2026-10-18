@@ -44,7 +44,11 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [DEFAULT_OG_IMAGE],
   },
-  icons: { icon: "/assets/img/eglise-saint-joseph-batisseurs-du-seigneur.png" },
+  icons: {
+    icon: "/assets/img/favicon-dark.png?v=2",
+    shortcut: "/assets/img/favicon-dark.png?v=2",
+    apple: "/assets/img/favicon-dark.png?v=2",
+  },
   robots: { index: true, follow: true },
 };
 
