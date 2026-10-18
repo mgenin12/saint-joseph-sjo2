@@ -31,6 +31,55 @@ export default async function BulletinDeDonPage({ searchParams }: { searchParams
           size: A4 portrait;
           margin: 0;
         }
+        .bulletin-amounts {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+          margin-bottom: 14px;
+        }
+        .bulletin-coords {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          margin-bottom: 14px;
+          font-size: 0.86rem;
+        }
+        .bulletin-coords > div {
+          overflow-wrap: anywhere;
+        }
+        .bulletin-modes {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          margin-bottom: 14px;
+        }
+        .bulletin-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 14px;
+          background: #f8f6f1;
+          padding: 10px 12px;
+          border-radius: 8px;
+        }
+        @media screen and (max-width: 640px) {
+          .print-sheet {
+            padding: 18px 16px !important;
+          }
+          .bulletin-amounts {
+            grid-template-columns: 1fr;
+          }
+          .bulletin-coords {
+            grid-template-columns: 1fr;
+          }
+          .bulletin-modes {
+            grid-template-columns: 1fr;
+          }
+          .bulletin-footer {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+        }
         @media print {
           header, footer, .cta-band, .no-print {
             display: none !important;
@@ -111,7 +160,7 @@ export default async function BulletinDeDonPage({ searchParams }: { searchParams
             <p className="small" style={{ marginTop: 0, marginBottom: 8 }}>
               Je souhaite soutenir la construction de l&apos;église Saint-Joseph et du centre paroissial au Rouret par un don de :
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 14 }}>
+            <div className="bulletin-amounts">
               {[
                 { m: 50, label: "50 € (coût réel 17 €)" },
                 { m: 100, label: "100 € · 10 pierres (coût réel 34 €)" },
@@ -143,7 +192,7 @@ export default async function BulletinDeDonPage({ searchParams }: { searchParams
             <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: "1rem" }}>
               2. Mes coordonnées (indispensables pour l&apos;envoi du reçu fiscal)
             </h3>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14, fontSize: "0.86rem" }}>
+            <div className="bulletin-coords">
               <div style={{ borderBottom: "1px dotted #999", paddingBottom: 4 }}>Nom : ………………………………………………………………</div>
               <div style={{ borderBottom: "1px dotted #999", paddingBottom: 4 }}>Prénom : …………………………………………………………</div>
               <div style={{ borderBottom: "1px dotted #999", paddingBottom: 4, gridColumn: "1 / -1" }}>
@@ -161,7 +210,7 @@ export default async function BulletinDeDonPage({ searchParams }: { searchParams
 
             {/* 3. Modalités de règlement */}
             <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: "1rem" }}>3. Mode de règlement choisi</h3>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+            <div className="bulletin-modes">
               <div style={{ border: "1px solid #e6e0d4", borderRadius: 8, padding: "10px 12px" }}>
                 <strong style={{ fontSize: "0.9rem" }}>☐ Par chèque bancaire</strong>
                 <p className="small" style={{ margin: "4px 0 0", fontSize: "0.82rem", lineHeight: 1.4 }}>
@@ -184,17 +233,7 @@ export default async function BulletinDeDonPage({ searchParams }: { searchParams
             </div>
 
             {/* Bas de page : QR code + fiscalité */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: 14,
-                background: "#f8f6f1",
-                padding: "10px 12px",
-                borderRadius: 8,
-              }}
-            >
+            <div className="bulletin-footer">
               <div style={{ fontSize: "0.78rem", lineHeight: 1.4 }}>
                 <b>Déduction fiscale :</b>
                 <br />• <b>Particuliers :</b> réduction d&apos;impôt sur le revenu de <b>66 %</b> du don (dans la limite de 20 % du revenu imposable).

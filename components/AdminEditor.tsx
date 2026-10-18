@@ -385,7 +385,7 @@ export default function AdminEditor() {
 
       {/* ONGLET 1 : ARTICLES */}
       {activeTab === "articles" && (
-        <div className="grid" style={{ gridTemplateColumns: "280px 1fr", gap: 24, alignItems: "start" }}>
+        <div className="grid admin-split">
           <div className="card" style={{ padding: 16 }}>
             <button type="button" className="btn btn--gold btn--sm" style={{ width: "100%", marginBottom: 12 }} onClick={addNewArticle}>
               + Nouvel article
@@ -633,7 +633,7 @@ export default function AdminEditor() {
 
       {/* ONGLET 2 : ÉVÉNEMENTS DU CALENDRIER */}
       {activeTab === "evenements" && (
-        <div className="grid" style={{ gridTemplateColumns: "280px 1fr", gap: 24, alignItems: "start" }}>
+        <div className="grid admin-split">
           <div className="card" style={{ padding: 16 }}>
             <button type="button" className="btn btn--gold btn--sm" style={{ width: "100%", marginBottom: 12 }} onClick={addNewEvent}>
               + Nouvel événement

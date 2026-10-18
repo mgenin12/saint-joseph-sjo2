@@ -1,10 +1,36 @@
 "use client";
 
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type PointerEvent } from "react";
+import { createPortal } from "react-dom";
 
 const FEEDBACK_EMAIL = "max.ac.genin@gmail.com";
 
+export function OpenFeedbackLink({ label = "🐞 Signaler un bug / Feedback" }: { label?: string }) {
+  return (
+    <button
+      type="button"
+      onClick={() => window.dispatchEvent(new CustomEvent("sjo2:open-feedback"))}
+      style={{
+        background: "none",
+        border: "none",
+        padding: 0,
+        color: "var(--gold-soft)",
+        fontWeight: 600,
+        fontSize: "inherit",
+        cursor: "pointer",
+        textAlign: "left",
+        textDecoration: "underline",
+        textUnderlineOffset: "3px",
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
 export default function BugFeedbackButton() {
+  const [mounted, setMounted] = useState(false);
+  const [canCaptureTab, setCanCaptureTab] = useState(false);
   const [open, setOpen] = useState(false);
   const [capturingMode, setCapturingMode] = useState(false);
   const [capturingBusy, setCapturingBusy] = useState(false);
@@ -24,6 +50,19 @@ export default function BugFeedbackButton() {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const lastPtRef = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    setCanCaptureTab(Boolean(navigator.mediaDevices?.getDisplayMedia));
+    const onOpenEvent = () => {
+      setSent(false);
+      setError(null);
+      setCapturingMode(false);
+      setOpen(true);
+    };
+    window.addEventListener("sjo2:open-feedback", onOpenEvent);
+    return () => window.removeEventListener("sjo2:open-feedback", onOpenEvent);
+  }, []);
 
   // Redessine l'image de base dans le canvas d'annotation dès qu'un screenshot est pris
   useEffect(() => {
@@ -284,22 +323,8 @@ export default function BugFeedbackButton() {
     setCapturingMode(false);
   }
 
-  return (
+  const overlays = (
     <>
-      <button
-        type="button"
-        className="feedback-trigger no-print"
-        data-feedback-ignore="true"
-        onClick={() => {
-          setSent(false);
-          setError(null);
-          setOpen(true);
-        }}
-        title="Signaler un problème ou envoyer un commentaire sur cette page"
-      >
-        <span aria-hidden="true">🐞</span> Bug &amp; Feedback
-      </button>
-
       {/* Barre flottante sur la page originale pour prendre un screenshot à l'endroit exact */}
       {capturingMode && (
         <div className="feedback-capture-bar no-print" data-feedback-ignore="true">
@@ -316,15 +341,17 @@ export default function BugFeedbackButton() {
               >
                 {capturingBusy ? "Capture en cours…" : "📸 Capturer cette vue de la page"}
               </button>
-              <button
-                type="button"
-                className="btn btn--outline btn--sm"
-                style={{ color: "#fff", borderColor: "rgba(255,255,255,0.4)" }}
-                disabled={capturingBusy}
-                onClick={captureBrowserTab}
-              >
-                🖥️ Capturer l&apos;onglet exact
-              </button>
+              {canCaptureTab && (
+                <button
+                  type="button"
+                  className="btn btn--outline btn--sm"
+                  style={{ color: "#fff", borderColor: "rgba(255,255,255,0.4)" }}
+                  disabled={capturingBusy}
+                  onClick={captureBrowserTab}
+                >
+                  🖥️ Capturer l&apos;onglet exact
+                </button>
+              )}
               <button
                 type="button"
                 className="btn btn--ghost btn--sm"
@@ -524,6 +551,26 @@ export default function BugFeedbackButton() {
           </div>
         </div>
       )}
+    </>
+  );
+
+  return (
+    <>
+      <button
+        type="button"
+        className="feedback-trigger no-print"
+        data-feedback-ignore="true"
+        onClick={() => {
+          setSent(false);
+          setError(null);
+          setOpen(true);
+        }}
+        title="Signaler un problème ou envoyer un commentaire sur cette page"
+      >
+        <span aria-hidden="true">🐞</span>{" "}
+        <span className="feedback-trigger__long">Bug &amp; </span>Feedback
+      </button>
+      {mounted && typeof document !== "undefined" ? createPortal(overlays, document.body) : null}
     </>
   );
 }

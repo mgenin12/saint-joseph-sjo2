@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SECTIONS = [
   { id: "decouvrir", label: "Découvrir" },
@@ -15,6 +15,7 @@ const SECTIONS = [
 
 export default function HomeSectionNav() {
   const [activeId, setActiveId] = useState<string>("decouvrir");
+  const navInnerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -36,9 +37,19 @@ export default function HomeSectionNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const container = navInnerRef.current;
+    if (!container) return;
+    const activeLink = container.querySelector<HTMLElement>(".subnav__link.active");
+    if (!activeLink) return;
+    const targetLeft =
+      activeLink.offsetLeft - container.clientWidth / 2 + activeLink.offsetWidth / 2;
+    container.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
+  }, [activeId]);
+
   return (
     <nav className="subnav no-print" aria-label="Sommaire de la page d'accueil">
-      <div className="container subnav__inner">
+      <div ref={navInnerRef} className="container subnav__inner">
         {SECTIONS.map((s) => (
           <a
             key={s.id}

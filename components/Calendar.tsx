@@ -114,47 +114,36 @@ function buildOutlookCalUrl(e: Evenement, host: "outlook.live.com" | "outlook.of
 
 function AddToCalendarMenu({ e }: { e: Evenement }) {
   const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDocClick = (ev: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(ev.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", onDocClick);
+    return () => document.removeEventListener("pointerdown", onDocClick);
+  }, [open]);
+
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
+    <div ref={wrapRef} className="cal-add-wrap">
       <button
         type="button"
-        className="btn btn--gold btn--sm"
+        className="btn btn--gold btn--sm cal-add-btn"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
         📅 Ajouter à mon agenda ▾
       </button>
       {open && (
-        <div
-          style={{
-            position: "absolute",
-            top: "calc(100% + 6px)",
-            left: 0,
-            zIndex: 50,
-            background: "#fff",
-            border: "1px solid rgba(0,32,78,0.16)",
-            borderRadius: 10,
-            boxShadow: "0 12px 32px rgba(0,0,0,0.18)",
-            minWidth: 250,
-            padding: 6,
-            display: "grid",
-            gap: 4,
-          }}
-        >
+        <div className="cal-add-menu">
           <a
             href={buildGoogleCalUrl(e)}
             target="_blank"
             rel="noopener"
             onClick={() => setOpen(false)}
-            style={{
-              display: "block",
-              padding: "8px 12px",
-              borderRadius: 7,
-              color: "var(--navy)",
-              fontWeight: 600,
-              fontSize: "0.88rem",
-              textDecoration: "none",
-            }}
           >
             📅 Google Calendar
           </a>
@@ -163,15 +152,6 @@ function AddToCalendarMenu({ e }: { e: Evenement }) {
             target="_blank"
             rel="noopener"
             onClick={() => setOpen(false)}
-            style={{
-              display: "block",
-              padding: "8px 12px",
-              borderRadius: 7,
-              color: "var(--navy)",
-              fontWeight: 600,
-              fontSize: "0.88rem",
-              textDecoration: "none",
-            }}
           >
             🟦 Microsoft Calendar (Outlook.com)
           </a>
@@ -180,30 +160,13 @@ function AddToCalendarMenu({ e }: { e: Evenement }) {
             target="_blank"
             rel="noopener"
             onClick={() => setOpen(false)}
-            style={{
-              display: "block",
-              padding: "8px 12px",
-              borderRadius: 7,
-              color: "var(--navy)",
-              fontWeight: 600,
-              fontSize: "0.88rem",
-              textDecoration: "none",
-            }}
           >
             🏢 Microsoft 365 (Professionnel)
           </a>
           <a
             href={`/calendrier/${e.slug}/ics`}
+            className="cal-add-menu__ics"
             onClick={() => setOpen(false)}
-            style={{
-              display: "block",
-              padding: "8px 12px",
-              borderRadius: 7,
-              color: "var(--ink-soft)",
-              fontSize: "0.84rem",
-              textDecoration: "none",
-              borderTop: "1px solid rgba(0,32,78,0.08)",
-            }}
           >
             🍎 Apple Calendar / Autre (.ics)
           </a>

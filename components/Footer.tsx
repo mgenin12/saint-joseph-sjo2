@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { SiteConfig } from "@/lib/types";
 import { SITE, FOOTER_LINKS } from "@/content/site";
+import { OpenFeedbackLink } from "./BugFeedbackButton";
 
 const RESEAUX_LABELS: Record<string, string> = {
   facebook: "Facebook",
@@ -94,6 +95,9 @@ export default function Footer({ config }: { config: SiteConfig }) {
             <ul>
               <li>
                 <Link href="/contact">Nous écrire</Link>
+              </li>
+              <li>
+                <OpenFeedbackLink label="🐞 Signaler un bug / Feedback" />
               </li>
               {config.emailContact && (
                 <li>

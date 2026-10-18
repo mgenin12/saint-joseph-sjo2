@@ -46,6 +46,8 @@ export default function Header({ urlDon }: Props) {
   const isProjet = pathname.startsWith("/articles");
   const isCalendrier = pathname.startsWith("/calendrier");
   const isSoutenir = pathname.startsWith("/soutenir");
+  const isNewsletter = pathname.startsWith("/newsletter");
+  const isContact = pathname.startsWith("/contact");
 
   return (
     <header className={`header${scrolled ? " scrolled" : ""}${solid ? " solid" : ""}`}>
@@ -72,9 +74,10 @@ export default function Header({ urlDon }: Props) {
           <a className="btn btn--gold nav__cta nav__cta--mobile" href={urlDon} target="_blank" rel="noopener">
             Faire un don
           </a>
+          <LanguageSwitcher />
           <button
             type="button"
-            className="burger"
+            className={`burger${open ? " open" : ""}`}
             aria-expanded={open}
             aria-controls="navigation"
             aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
@@ -108,12 +111,52 @@ export default function Header({ urlDon }: Props) {
               </Link>
             </div>
 
+            <div className="nav__item nav__item--mobile-only">
+              <Link className={`nav__link${isNewsletter ? " active" : ""}`} href="/newsletter" onClick={() => setOpen(false)}>
+                Newsletter
+              </Link>
+            </div>
+
+            <div className="nav__item nav__item--mobile-only">
+              <Link className={`nav__link${isContact ? " active" : ""}`} href="/contact" onClick={() => setOpen(false)}>
+                Contact
+              </Link>
+            </div>
+
+            <div className="nav__item nav__item--mobile-only">
+              <Link className="nav__link" href="/soutenir/bulletin-de-don" onClick={() => setOpen(false)}>
+                🖨️ Bulletin de don papier (PDF)
+              </Link>
+            </div>
+
+            <div className="nav__mobile-actions">
+              <a
+                className="btn btn--gold btn--lg"
+                style={{ width: "100%" }}
+                href={urlDon}
+                target="_blank"
+                rel="noopener"
+                onClick={() => setOpen(false)}
+              >
+                Faire un don en ligne
+              </a>
+              <button
+                type="button"
+                className="btn btn--ghost"
+                style={{ width: "100%" }}
+                onClick={() => {
+                  setOpen(false);
+                  window.dispatchEvent(new CustomEvent("sjo2:open-feedback"));
+                }}
+              >
+                🐞 Signaler un bug / Donner un avis
+              </button>
+            </div>
+
             <a className="btn btn--gold nav__cta nav__cta--desktop" href={urlDon} target="_blank" rel="noopener">
               Faire un don
             </a>
           </nav>
-
-          <LanguageSwitcher />
         </div>
       </div>
     </header>
