@@ -64,7 +64,7 @@ export const SITE = {
   hero: {
     titre: ["Bâtir un lieu de ", "Foi", ", de ", "Vie", " et d'", "Espérance", "."],
     meta: [
-      "≈ 1 000 m² sur 1 ha de terrain",
+      "1000 m² de bati sur 1 ha de terrain",
       "Un budget global de 6 M€",
       "400 personnes accueillies",
       "Livraison prévue en 2030",
